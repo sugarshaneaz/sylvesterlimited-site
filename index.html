@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sylvester Limited — Software for East Africa</title>
+<meta name="description" content="Sylvester Limited builds and operates software for East Africa: KaziLaw, Dino IG, Chuma and Sema. Web platforms, mobile applications and AI agent systems, run on infrastructure we administer ourselves.">
+<link rel="canonical" href="https://sylvesterlimited.tech/">
+<meta name="theme-color" content="#0e0c12">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sylvester Limited">
+<meta property="og:title" content="Sylvester Limited — Software for East Africa">
+<meta property="og:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated in Dar es Salaam. Everything is live or in build, and every claim links to something you can check.">
+<meta property="og:url" content="https://sylvesterlimited.tech/">
+<meta property="og:image" content="https://sylvesterlimited.tech/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sylvester Limited — software for East Africa, built and run in-house.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sylvester Limited — Software for East Africa">
+<meta name="twitter:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated in Dar es Salaam.">
+<meta name="twitter:image" content="https://sylvesterlimited.tech/og.png">
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<style>
+  :root{
+    /* Palette taken verbatim from the previous sylvesterlimited.tech build */
+    --ground:      hsl(252 20% 6%);
+    --surface:     hsl(252 20% 8%);
+    --raised:      hsl(252 20% 11%);
+    --border:      hsl(255 15% 16%);
+    --border-soft: hsl(255 15% 13%);
+    --text:        hsl(0 0% 97%);
+    --muted:       hsl(255 10% 58%);
+    --dim:         hsl(255 10% 42%);
+    --accent:      hsl(270 80% 65%);
+    --accent-deep: hsl(263 83% 58%);
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --page: 1120px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .wrap{
+    width: 100%;
+    max-width: var(--page);
+    margin-inline: auto;
+    padding-inline: 28px;
+  }
+
+  /* ---------- label / chip vocabulary ---------- */
+  .label{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 0;
+  }
+
+  .chip{
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .chip .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--dim);
+    flex: none;
+  }
+  .chip.live{ color: var(--text); border-color: hsl(270 40% 32%); }
+  .chip.live .dot{ background: var(--accent); box-shadow: 0 0 0 3px hsl(270 80% 65% / 0.18); }
+  .chip.build .dot{ background: hsl(38 80% 60%); }
+  .chip.open .dot{ background: hsl(160 50% 52%); }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: hsl(252 20% 6% / 0.86);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav-inner{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 68px;
+  }
+  .brand{
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    font-size: 1.02rem;
+  }
+  .nav-links{
+    display: flex;
+    gap: 30px;
+    font-size: 0.95rem;
+  }
+  .nav-links a{
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .15s ease;
+  }
+  .nav-links a:hover{ color: var(--text); }
+
+  .btn{
+    display: inline-block;
+    font-size: 0.93rem;
+    font-weight: 550;
+    padding: 9px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+    border: 1px solid hsl(270 80% 70% / 0.5);
+    transition: filter .15s ease, transform .15s ease;
+  }
+  .btn:hover{ filter: brightness(1.12); }
+  .btn:active{ transform: translateY(1px); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position: relative;
+    padding: clamp(72px, 12vw, 132px) 0 clamp(56px, 8vw, 92px);
+    overflow: hidden;
+  }
+  .hero::before{
+    content:"";
+    position: absolute;
+    inset: -30% 0 auto -10%;
+    height: 620px;
+    background: radial-gradient(46% 52% at 22% 42%, hsl(270 80% 55% / 0.20), transparent 70%);
+    pointer-events: none;
+  }
+  .hero .wrap{ position: relative; }
+
+  .eyebrow{
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 6px 14px;
+  }
+  .eyebrow .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+  }
+
+  h1{
+    font-size: clamp(2.5rem, 6.4vw, 4.15rem);
+    line-height: 1.04;
+    letter-spacing: -0.032em;
+    font-weight: 640;
+    margin: 30px 0 0;
+    max-width: 17ch;
+    text-wrap: balance;
+  }
+  h1 .accent{
+    background: linear-gradient(100deg, var(--accent), hsl(285 75% 72%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lede{
+    margin: 26px 0 0;
+    max-width: 62ch;
+    font-size: 1.12rem;
+    color: var(--muted);
+  }
+  .lede strong{ color: var(--text); font-weight: 550; }
+
+  .hero-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 36px;
+  }
+  .btn-ghost{
+    display: inline-block;
+    font-size: 0.93rem;
+    font-weight: 500;
+    padding: 9px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .btn-ghost:hover{ border-color: hsl(270 40% 40%); background: var(--raised); }
+
+  /* ---------- sections ---------- */
+  section{ padding: clamp(56px, 8vw, 92px) 0; }
+  .section-head{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 44px;
+    max-width: 66ch;
+  }
+  h2{
+    font-size: clamp(1.6rem, 3vw, 2.15rem);
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+    font-weight: 620;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .section-head p{
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ---------- evidence rows ---------- */
+  .rows{
+    border-top: 1px solid var(--border-soft);
+  }
+  .row{
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 32px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .row-meta{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .stack{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    line-height: 1.9;
+    color: var(--dim);
+    margin: 0;
+  }
+  .row h3{
+    margin: 0;
+    font-size: 1.22rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+  }
+  .row p{
+    margin: 9px 0 0;
+    color: var(--muted);
+    max-width: 64ch;
+  }
+  .row .note{
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--dim);
+  }
+  .proof{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid hsl(270 80% 65% / 0.32);
+    padding-bottom: 1px;
+    transition: border-color .15s ease;
+  }
+  .proof:hover{ border-color: var(--accent); }
+  .proof .arrow{ font-size: 0.9em; }
+
+  /* ---------- infrastructure ---------- */
+  .agents{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
+  }
+  .agent{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px;
+  }
+  .agent h3{
+    margin: 14px 0 0;
+    font-size: 1.16rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .agent p{
+    margin: 9px 0 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .stack-grid{
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1px;
+    background: var(--border-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .stack-item{
+    background: var(--ground);
+    padding: 22px 24px;
+  }
+  .stack-item dt{
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .stack-item dd{
+    margin: 8px 0 0;
+    font-size: 0.97rem;
+    color: var(--text);
+  }
+
+  /* ---------- services ---------- */
+  .services{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+  }
+  .service h3{
+    margin: 0 0 10px;
+    font-size: 1.08rem;
+    font-weight: 600;
+  }
+  .service p{
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+  .service .rule{
+    height: 2px;
+    width: 34px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 16px;
+  }
+
+  /* ---------- contact ---------- */
+  .contact-card{
+    background:
+      radial-gradient(70% 130% at 12% 0%, hsl(270 80% 55% / 0.16), transparent 62%),
+      var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: clamp(30px, 5vw, 52px);
+  }
+  .contact-card h2{ max-width: 20ch; }
+  .contact-card p{
+    margin: 14px 0 0;
+    color: var(--muted);
+    max-width: 56ch;
+  }
+  .mail{
+    display: inline-block;
+    margin-top: 26px;
+    font-family: var(--mono);
+    font-size: 1.02rem;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid hsl(270 80% 65% / 0.45);
+    padding-bottom: 2px;
+  }
+  .mail:hover{ border-color: var(--accent); }
+
+  footer{
+    border-top: 1px solid var(--border-soft);
+    padding: 34px 0 54px;
+  }
+  .foot-inner{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .foot-inner a{ text-decoration: none; }
+  .foot-inner a:hover{ color: var(--text); }
+
+  @media (max-width: 760px){
+    .nav-links{ display: none; }
+    .row{ grid-template-columns: 1fr; gap: 16px; }
+    .row-meta{ flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .stack{ line-height: 1.6; }
+    .agents{ grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Sylvester Limited</a>
+    <nav class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#build">What we build</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn" href="mailto:support@sylvesterlimited.tech">Start a project</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot"></span>Dar es Salaam, Tanzania</span>
+      <h1>We build software for East Africa <span class="accent">and run it ourselves.</span></h1>
+      <p class="lede">Web platforms, mobile apps, and AI agent systems — designed, shipped, and operated on infrastructure we administer. <strong>Everything on this page is live or in build, and every claim links to something you can check.</strong></p>
+      <div class="hero-actions">
+        <a class="btn" href="#work">See the work</a>
+        <a class="btn-ghost" href="#infrastructure">How we run it</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">Shipped</p>
+        <h2>Work you can open in a browser.</h2>
+        <p>Products we designed, built, and still operate. Where the code is public, the link goes to the repository; where it isn't, the link goes to the running product.</p>
+      </div>
+
+      <div class="rows">
+
+        <article class="row">
+          <div class="row-meta">
+            <span class="chip live"><span class="dot"></span>Live</span>
+            <p class="stack">Next.js<br>Postgres + pgvector<br>Retrieval over statute</p>
+          </div>
+          <div>
+            <h3>KaziLaw</h3>
+            <p>Tanzanian employment law, answered with citations. Free question-and-answer plus a compliance check that walks an employer through what the Acts require. Answers cite the section they come from, so the reader can verify them against the law itself.</p>
+            <span class="note">KaziLaw is not a law firm and does not give legal advice. It is Tanzanian labour law, organized.</span>
+            <a class="proof" href="https://kazilaw.com/">kazilaw.com <span class="arrow">↗</span></a>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="row-meta">
+            <span class="chip live"><span class="dot"></span>Live · App Store</span>
+            <p class="stack">React Native<br>OpenAPI → typed client<br>No accounts</p>
+          </div>
+          <div>
+            <h3>Dino IG</h3>
+            <p>A dinosaur chat app for children, shipped on the Apple App Store. Built contract-first — the OpenAPI schema generates the typed client, so the app and the API cannot drift apart. Identity is derived on-device instead of collected, so a child never creates an account.</p>
+            <a class="proof" href="https://github.com/sugarshaneaz/DinoIG">github.com/sugarshaneaz/DinoIG <span class="arrow">↗</span></a>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="row-meta">
+            <span class="chip build"><span class="dot"></span>In build</span>
+            <p class="stack">React Native / Expo<br>Swahili-first<br>Self-hosted media</p>
+          </div>
+          <div>
+            <h3>Chuma</h3>
+            <p>A training app written for East Africa rather than translated into it: Swahili first, bodyweight-first programming for people without a gym, and East African food in the nutrition side. Rotating trainer-led programs, set-by-set logging, and a licensed exercise library served from our own infrastructure instead of a third-party quota.</p>
+            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine">Its programming engine is open source <span class="arrow">↗</span></a>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="row-meta">
+            <span class="chip open"><span class="dot"></span>Open source</span>
+            <p class="stack">TypeScript<br>Knowledge packs<br>Escalation rules</p>
+          </div>
+          <div>
+            <h3>Sema &amp; Sema-API</h3>
+            <p>Customer-facing AI for small businesses, with the guardrails written down instead of hoped for. Each industry pack declares what the assistant must never invent and when it has to hand off to a person — the pharmacy pack refuses dosage, drug interactions, and diagnosis outright. Blank onboarding fields are fed back into the prompt, so the model is told what it does not know.</p>
+            <a class="proof" href="https://github.com/sugarshaneaz/Sema-API">github.com/sugarshaneaz/Sema-API <span class="arrow">↗</span></a>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="row-meta">
+            <span class="chip open"><span class="dot"></span>Open source · MIT</span>
+            <p class="stack">TypeScript<br>Deterministic<br>25 tests</p>
+          </div>
+          <div>
+            <h3>routine-engine</h3>
+            <p>The training-program generator extracted from Chuma and released on its own. Given a catalogue and a configuration it produces a full rotating program deterministically — same input, same program — with a test suite that asserts both full coverage where movement patterns exist and graceful degradation where they don't.</p>
+            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine">github.com/sugarshaneaz/routine-engine <span class="arrow">↗</span></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="infrastructure">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">Infrastructure</p>
+        <h2>We run our own hardware, and our own agents on it.</h2>
+        <p>Two systems we built for ourselves and run in production. Neither is public — this page is the only place they're described.</p>
+      </div>
+
+      <div class="agents">
+        <div class="agent">
+          <span class="chip"><span class="dot"></span>Internal</span>
+          <h3>OpenClaw</h3>
+          <p>The agent runtime our automation runs on. Long-lived agents with their own memory, scheduled work, and tool access, sitting directly on our servers rather than behind someone else's platform — so the jobs keep their state and we keep the logs.</p>
+        </div>
+        <div class="agent">
+          <span class="chip"><span class="dot"></span>Internal</span>
+          <h3>Hermes</h3>
+          <p>The agent that directs production work: media pipelines, batch generation, and the routine operational jobs that would otherwise be a person copying numbers between systems. It briefs the tools, checks the output, and reports what it did.</p>
+        </div>
+      </div>
+
+      <dl class="stack-grid">
+        <div class="stack-item">
+          <dt>Servers</dt>
+          <dd>Dedicated and virtual hosts we administer ourselves, running 15+ containerized services.</dd>
+        </div>
+        <div class="stack-item">
+          <dt>Data</dt>
+          <dd>Postgres with pgvector for retrieval, on databases we can back up and inspect.</dd>
+        </div>
+        <div class="stack-item">
+          <dt>Inference</dt>
+          <dd>Self-hosted image, video, and speech models on our own GPU, alongside hosted APIs where they earn their cost.</dd>
+        </div>
+        <div class="stack-item">
+          <dt>Operations</dt>
+          <dd>Daily reporting automation for a three-location restaurant group: sales digests, cost variance flagging, and tax-receipt tracking.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="build">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">What we build</p>
+        <h2>Three kinds of work, and where to see each one running.</h2>
+      </div>
+      <div class="services">
+        <div class="service">
+          <div class="rule"></div>
+          <h3>Web platforms</h3>
+          <p>Applications that do real work — search over your own documents, gated content, payments, reporting. Built on Next.js and Postgres. See KaziLaw.</p>
+        </div>
+        <div class="service">
+          <div class="rule"></div>
+          <h3>Mobile applications</h3>
+          <p>React Native apps taken all the way to the store, including the review process and the on-device bugs that never appear in a simulator. See Dino IG.</p>
+        </div>
+        <div class="service">
+          <div class="rule"></div>
+          <h3>AI agent systems</h3>
+          <p>Retrieval over your own data, agents that run on a schedule, and explicit rules for what the model must not say. See Sema and OpenClaw.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-card">
+        <p class="label">Contact</p>
+        <h2>Tell us what you're trying to ship.</h2>
+        <p>Start with the problem rather than the spec — what should be true when it works, and who it has to work for. We'll tell you honestly whether we're the right people to build it.</p>
+        <a class="mail" href="mailto:support@sylvesterlimited.tech">support@sylvesterlimited.tech</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>Sylvester Limited · Dar es Salaam, Tanzania</span>
+    <a href="https://github.com/sugarshaneaz">github.com/sugarshaneaz</a>
+  </div>
+</footer>
+
+</body>
+</html>
