@@ -560,25 +560,6 @@
     max-width: 54ch;
   }
 
-  /* --- Principle: one full-bleed statement --- */
-  #principle{ text-align: left; }
-  #principle .wrap{ max-width: 1000px; }
-  .statement{
-    font-size: clamp(1.9rem, 5.6vw, 4.1rem);
-    font-weight: 500;
-    letter-spacing: -.036em;
-    line-height: 1.02;
-    margin: 28px 0 0;
-    text-wrap: balance;
-  }
-  .statement em{ font-style: normal; }
-  .statement-sub{
-    margin: 34px 0 0;
-    color: var(--muted);
-    font-size: 1.05rem;
-    max-width: 46ch;
-  }
-
   /* --- Work --- */
   .work-list{ border-top: 1px solid var(--line-soft); }
   .entry{
@@ -934,7 +915,6 @@
 <!-- ============================ RAIL ============================ -->
 <nav class="rail" aria-label="Page index">
   <a href="#top" data-rail="top"><span class="txt">Core</span><span class="tick"></span></a>
-  <a href="#principle" data-rail="principle"><span class="txt">Principle</span><span class="tick"></span></a>
   <a href="#work" data-rail="work"><span class="txt">Work</span><span class="tick"></span></a>
   <a href="#infrastructure" data-rail="infrastructure"><span class="txt">Infrastructure</span><span class="tick"></span></a>
   <a href="#capabilities" data-rail="capabilities"><span class="txt">Capabilities</span><span class="tick"></span></a>
@@ -982,23 +962,11 @@
     </div>
   </div>
 
-  <!-- ============================ PRINCIPLE ============================ -->
-  <section id="principle" data-section="principle" data-shard="principle">
-    <div class="wrap">
-      <p class="label rise"><i>001</i> Principle</p>
-      <h2 class="statement display">
-        <span class="line"><span>Every claim on this</span></span>
-        <span class="line"><span>page <em class="grad">opens in a new tab.</em></span></span>
-      </h2>
-      <p class="statement-sub rise">A live product, or a public repository. If a claim cannot be linked to something you can open and check for yourself, it does not go on this page.</p>
-    </div>
-  </section>
-
   <!-- ============================ WORK ============================ -->
   <section id="work" data-section="work">
     <div class="wrap">
       <div class="section-head">
-        <p class="label rise"><i>002</i> The work</p>
+        <p class="label rise"><i>001</i> The work</p>
         <h2 class="rise">Five things we designed, built, and still operate.</h2>
         <p class="rise">Where the code is public the link goes to the repository. Where it isn't, the link goes to the running product.</p>
       </div>
@@ -1104,10 +1072,10 @@
   </div>
 
   <!-- ============================ INFRASTRUCTURE ============================ -->
-  <section id="infrastructure" data-section="infrastructure" data-shard="infra">
+  <section id="infrastructure" data-section="infrastructure">
     <div class="wrap">
-      <div class="section-head">
-        <p class="label rise"><i>003</i> Infrastructure</p>
+      <div class="section-head" data-shard="infra">
+        <p class="label rise"><i>002</i> Infrastructure</p>
         <h2 class="rise">We run our own hardware, and our own agents on it.</h2>
         <p class="rise">Two systems we built for ourselves and run in production. Neither is public — this page is the only place they are described.</p>
       </div>
@@ -1150,7 +1118,7 @@
   <section id="capabilities" data-section="capabilities">
     <div class="wrap">
       <div class="section-head" data-shard="caps">
-        <p class="label rise"><i>004</i> Capabilities</p>
+        <p class="label rise"><i>003</i> Capabilities</p>
         <h2 class="rise">Three kinds of work — and where to see each one running.</h2>
       </div>
 
@@ -1181,7 +1149,7 @@
   <section id="contact" data-section="contact" data-shard="contact">
     <div class="wrap">
       <div class="contact-inner">
-        <p class="label rise"><i>005</i> Contact</p>
+        <p class="label rise"><i>004</i> Contact</p>
         <h2 class="display">
           <span class="line"><span>Tell us what you're</span></span>
           <span class="line"><span class="grad">trying to ship.</span></span>
@@ -1704,7 +1672,6 @@ if (root.classList.contains('no-webgl')) {
     boot.progress(38, 'Loading renderer');
 
     const THREE = await import('three');
-    const { mergeGeometries } = await import('three/addons/utils/BufferGeometryUtils.js');
     const { EffectComposer }  = await import('three/addons/postprocessing/EffectComposer.js');
     const { RenderPass }      = await import('three/addons/postprocessing/RenderPass.js');
     const { ShaderPass }      = await import('three/addons/postprocessing/ShaderPass.js');
@@ -1839,38 +1806,149 @@ if (root.classList.contains('no-webgl')) {
       };
     }
 
-    function growCrystal(seed, cells) {
-      const r = rand(seed);
-      const parts = [];
-      for (let i = 0; i < cells; i++) {
-        const g = new THREE.IcosahedronGeometry(1, 0);
-        g.scale(0.30 + r() * 0.34, 0.55 + r() * 1.05, 0.30 + r() * 0.34);
-        g.applyQuaternion(new THREE.Quaternion().setFromEuler(
-          new THREE.Euler(r() * Math.PI, r() * Math.PI, r() * Math.PI)
-        ));
-        const dir = new THREE.Vector3(r() * 2 - 1, r() * 2 - 1, r() * 2 - 1)
-          .normalize().multiplyScalar(r() * 0.72);
-        g.translate(dir.x, dir.y, dir.z);
-        parts.push(g);
-      }
-      let merged = mergeGeometries(parts, false);
-      if (merged.index) merged = merged.toNonIndexed();
-      parts.forEach(p => p.dispose());
-
-      // Jitter each facet a little so no two faces catch light the same way.
-      const pos = merged.attributes.position;
-      for (let t = 0; t < pos.count; t += 3) {
-        const jx = (r() - 0.5) * 0.05, jy = (r() - 0.5) * 0.05, jz = (r() - 0.5) * 0.05;
-        for (let k = 0; k < 3; k++) {
-          pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
+    /* Forms. Each returns a list of cells — scale, rotation, position —
+       and, for parts that turn together, a layer. The hero, the
+       capabilities and the contact crystals stay as random clusters; each
+       product gets a shape that says what it is.                        */
+    const TAU = Math.PI * 2;
+    const FORMS = {
+      cluster(r, n) {
+        const cells = [];
+        for (let i = 0; i < n; i++) {
+          const d = new THREE.Vector3(r() * 2 - 1, r() * 2 - 1, r() * 2 - 1).normalize().multiplyScalar(r() * 0.72);
+          cells.push({ s: [0.30 + r() * 0.34, 0.55 + r() * 1.05, 0.30 + r() * 0.34],
+                       rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI], p: [d.x, d.y, d.z] });
         }
+        return cells;
+      },
+      // KaziLaw — statute: a row of obelisks, tallest in the middle.
+      // Columns, or the spines of the Acts on a shelf.
+      statute(r, n) {
+        const cells = [];
+        for (let i = 0; i < n; i++) {
+          const t = n > 1 ? i / (n - 1) : 0.5;
+          const h = 0.72 + Math.sin(t * Math.PI) * 0.62 + r() * 0.18;
+          cells.push({ s: [0.21 + r() * 0.07, h, 0.30 + r() * 0.12],
+                       rot: [0, (r() - 0.5) * 0.3, (r() - 0.5) * 0.05],
+                       p: [(i - (n - 1) / 2) * 0.54, h - 1.05, (r() - 0.5) * 0.18] });
+        }
+        return cells;
+      },
+      // Dino IG — a dorsal ridge: a low back with plates that peak mid-arc.
+      spine(r, n) {
+        const cells = [{ s: [1.6, 0.34, 0.44], rot: [0, 0, 0.1], p: [0, -0.58, 0] }];
+        for (let i = 0; i < n; i++) {
+          const t = i / (n - 1);
+          const a = (t - 0.5) * 1.95;
+          const len = 0.40 + Math.sin(t * Math.PI) * 0.80;
+          const bx = Math.sin(a) * 1.30, by = Math.cos(a) * 0.55 - 0.60;
+          cells.push({ s: [0.16, len, 0.20], rot: [0, 0, -a],
+                       p: [bx + Math.sin(a) * len * 0.45, by + Math.cos(a) * len * 0.45, 0] });
+        }
+        return cells;
+      },
+      // Chuma — iron (that is what the word means): two heavy heads on a bar.
+      iron(r) {
+        const cells = [{ s: [1.1, 0.13, 0.13], rot: [0, 0, 0], p: [0, 0, 0] }];
+        for (const side of [-1, 1]) {
+          cells.push({ s: [0.52, 0.60, 0.52], rot: [r() * 0.4, r() * 0.4, r() * 0.4], p: [side * 0.95, 0, 0] });
+          cells.push({ s: [0.26, 0.42, 0.26], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
+                       p: [side * 1.28, (r() > 0.5 ? 1 : -1) * 0.28, 0.22] });
+          cells.push({ s: [0.22, 0.34, 0.22], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
+                       p: [side * 0.72, -0.34, -0.24] });
+        }
+        return cells;
+      },
+      // Sema — signal: one voice at the centre, two rings radiating out.
+      // The rings turn against each other.
+      signal(r) {
+        const cells = [{ s: [0.30, 0.52, 0.30], rot: [0, 0, 0], p: [0, 0, 0] }];
+        for (let i = 0; i < 6; i++) {
+          const a = (i / 6) * TAU;
+          cells.push({ s: [0.10, 0.28, 0.10], rot: [0, 0, a], p: [-Math.sin(a) * 0.74, Math.cos(a) * 0.74, 0], layer: 1 });
+        }
+        for (let i = 0; i < 10; i++) {
+          const a = (i / 10) * TAU + 0.3;
+          cells.push({ s: [0.07, 0.22, 0.07], rot: [0, 0, a], p: [-Math.sin(a) * 1.24, Math.cos(a) * 1.24, 0], layer: 2 });
+        }
+        return cells;
+      },
+      // routine-engine — rotor: identical teeth around a hub, turning at a
+      // constant rate. Same input, same program.
+      rotor(r, n) {
+        const cells = [{ s: [0.42, 0.42, 0.42], rot: [0.3, 0.2, 0], p: [0, 0, 0] }];
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * TAU;
+          cells.push({ s: [0.20, 0.50, 0.20], rot: [0, 0, a], p: [-Math.sin(a) * 0.88, Math.cos(a) * 0.88, 0], layer: 1 });
+        }
+        return cells;
+      },
+      // Infrastructure — rack: a lattice of near-cubes. Rows of containers.
+      rack(r, n) {
+        const cells = [];
+        const nz = n >= 18 ? 2 : 1;
+        for (let x = 0; x < 3; x++) for (let y = 0; y < 3; y++) for (let z = 0; z < nz; z++) {
+          cells.push({ box: true, s: [0.40 + r() * 0.06, 0.40 + r() * 0.06, 0.40 + r() * 0.06],
+                       rot: [(r() - 0.5) * 0.16, (r() - 0.5) * 0.16, (r() - 0.5) * 0.16],
+                       p: [(x - 1) * 0.62, (y - 1) * 0.62, (z - (nz - 1) / 2) * 0.62] });
+        }
+        return cells;
       }
-      merged.computeVertexNormals();
-      merged.center();
-      merged.computeBoundingSphere();
-      const rad = merged.boundingSphere.radius || 1;
-      merged.scale(1 / rad, 1 / rad, 1 / rad);
-      return merged;
+    };
+
+    /* Build one crystal: a body group holding every cell as its own mesh,
+       so the cells can be pushed apart under the pointer and come back.  */
+    function buildCrystal(cfg) {
+      const r = rand(cfg.seed);
+      const spec = FORMS[cfg.form || 'cluster'](r, cfg.cells);
+      const body = new THREE.Group();
+      const layers = {};
+      const cells = [];
+      let radius = 0;
+
+      for (const c of spec) {
+        let geo = c.box ? new THREE.BoxGeometry(1, 1, 1) : new THREE.IcosahedronGeometry(1, 0);
+        if (geo.index) geo = geo.toNonIndexed();
+        geo.scale(c.s[0], c.s[1], c.s[2]);
+        // Jitter each facet a little so no two faces catch light the same way.
+        const pos = geo.attributes.position, j = c.box ? 0.012 : 0.05;
+        for (let t = 0; t < pos.count; t += 3) {
+          const jx = (r() - 0.5) * j, jy = (r() - 0.5) * j, jz = (r() - 0.5) * j;
+          for (let k = 0; k < 3; k++) pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
+        }
+        geo.computeVertexNormals();
+        geo.computeBoundingSphere();
+
+        const mesh = new THREE.Mesh(geo, iceMaterial);
+        const core = new THREE.Mesh(geo, coreMaterial);
+        core.scale.setScalar(0.9);
+        core.renderOrder = -1;
+        mesh.add(core);
+        mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 24), edgeMaterial));
+        mesh.rotation.set(c.rot[0], c.rot[1], c.rot[2]);
+        mesh.position.set(c.p[0], c.p[1], c.p[2]);
+
+        let parent = body;
+        if (c.layer) {
+          if (!layers[c.layer]) { layers[c.layer] = new THREE.Group(); body.add(layers[c.layer]); }
+          parent = layers[c.layer];
+        }
+        parent.add(mesh);
+
+        const home = mesh.position.clone();
+        const dir = home.lengthSq() > 1e-4
+          ? home.clone().normalize()
+          : new THREE.Vector3(r() - 0.5, r() - 0.5, r() - 0.5).normalize();
+        cells.push({
+          mesh, home, dir,
+          out: 0.32 + r() * 0.5,
+          tilt: new THREE.Euler((r() - 0.5) * 1.3, (r() - 0.5) * 1.3, (r() - 0.5) * 1.3),
+          base: mesh.rotation.clone()
+        });
+        radius = Math.max(radius, home.length() + geo.boundingSphere.radius);
+      }
+      body.scale.setScalar(1 / radius);
+      return { body, cells, layers: Object.values(layers) };
     }
 
     const iceMaterial = new THREE.MeshPhysicalMaterial({
@@ -1938,16 +2016,15 @@ if (root.classList.contains('no-webgl')) {
     /* Anchor table: which element each crystal follows, and where it sits
        relative to the descent axis. Sides match the column the copy is in. */
     const PLAN = {
-      hero:      { seed:  1013, cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
-      principle: { seed:  2027, cells: lowPower ? 4 : 6,  scale: 1.05, x: -3.10, z: -2.2, spin: 0.09  },
-      kazilaw:   { seed:  3041, cells: lowPower ? 5 : 8,  scale: 1.45, x:  2.35, z: -0.5, spin: 0.07  },
-      dinoig:    { seed:  4051, cells: lowPower ? 4 : 7,  scale: 1.30, x: -2.35, z: -0.5, spin: -0.08 },
-      chuma:     { seed:  5077, cells: lowPower ? 5 : 9,  scale: 1.40, x:  2.35, z: -0.5, spin: 0.065 },
-      sema:      { seed:  6091, cells: lowPower ? 4 : 7,  scale: 1.32, x: -2.35, z: -0.5, spin: -0.07 },
-      routine:   { seed:  7103, cells: lowPower ? 4 : 6,  scale: 1.22, x:  2.35, z: -0.5, spin: 0.085 },
-      infra:     { seed:  8117, cells: lowPower ? 7 : 13, scale: 1.75, x: -3.15, z: -1.7, spin: 0.05  },
-      caps:      { seed:  9133, cells: lowPower ? 4 : 6,  scale: 1.30, x:  3.10, z: -1.6, spin: 0.075 },
-      contact:   { seed: 10151, cells: lowPower ? 6 : 11, scale: 2.40, x:  0.00, z: -4.4, spin: 0.04  }
+      hero:    { form: 'cluster', seed: 1013,  cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
+      kazilaw: { form: 'statute', seed: 3041,  cells: 5,                 scale: 1.50, x:  2.35, z: -0.5, face: [0.14, -0.55, 0.03] },
+      dinoig:  { form: 'spine',   seed: 4051,  cells: lowPower ? 5 : 7,  scale: 1.45, x: -2.35, z: -0.5, face: [0.12,  0.42, 0.02] },
+      chuma:   { form: 'iron',    seed: 5077,  cells: 7,                 scale: 1.45, x:  2.35, z: -0.5, face: [0.34, -0.62, 0.16] },
+      sema:    { form: 'signal',  seed: 6091,  cells: 17,                scale: 1.40, x: -2.35, z: -0.5, face: [0.22,  0.38, 0.00] },
+      routine: { form: 'rotor',   seed: 7103,  cells: 8,                 scale: 1.30, x:  2.35, z: -0.5, face: [0.30, -0.38, 0.00] },
+      infra:   { form: 'rack',    seed: 8117,  cells: lowPower ? 9 : 18, scale: 1.45, x:  3.10, z: -1.6, face: [0.36, -0.62, 0.10] },
+      caps:    { form: 'cluster', seed: 9133,  cells: lowPower ? 4 : 6,  scale: 1.30, x:  3.10, z: -1.6, spin: 0.075 },
+      contact: { form: 'cluster', seed: 10151, cells: lowPower ? 6 : 11, scale: 2.40, x:  0.00, z: -4.4, spin: 0.04  }
     };
 
     const shards = [];
@@ -1955,25 +2032,19 @@ if (root.classList.contains('no-webgl')) {
       const host = document.querySelector('[data-shard="' + key + '"]');
       if (!host) continue;
 
-      const geo = growCrystal(cfg.seed, cfg.cells);
-      const mesh = new THREE.Mesh(geo, iceMaterial);
-      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 24), edgeMaterial);
-      const core = new THREE.Mesh(geo, coreMaterial);
-      core.scale.setScalar(0.9);
-      core.renderOrder = -1;
-      mesh.add(core);
-      mesh.add(edges);
-
+      const { body, cells, layers } = buildCrystal(cfg);
       const group = new THREE.Group();
-      group.add(mesh);
+      group.add(body);
       const s = cfg.scale * (narrow ? 0.56 : 1);
       group.scale.setScalar(s);
       group.position.x = narrow ? (cfg.mx || 0) : cfg.x;
       group.position.z = (narrow ? cfg.z - 4.0 : cfg.z);
-      group.rotation.set(Math.random() * 0.4, cfg.seed % 6, Math.random() * 0.3);
+      if (cfg.face) group.rotation.set(cfg.face[0], cfg.face[1], cfg.face[2]);
+      else group.rotation.set(Math.random() * 0.4, cfg.seed % 6, Math.random() * 0.3);
 
       scene.add(group);
-      shards.push({ host, group, mesh, cfg, baseScale: s, anchor: 0 });
+      shards.push({ key, host, group, body, cells, layers, cfg, baseScale: s, anchor: 0,
+                    burst: 0, pulse: 0, kick: 0, pushX: 0, pushY: 0 });
     }
 
     /* ---------------------------------------------------------- dust */
@@ -2089,10 +2160,16 @@ if (root.classList.contains('no-webgl')) {
     }
 
     /* ---------------------------------------------------------- loop */
-    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    const pointer = { x: 0, y: 0, tx: 0, ty: 0, px: -1e4, py: -1e4, on: false, tap: false };
     window.addEventListener('mousemove', e => {
       pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+      pointer.px = e.clientX; pointer.py = e.clientY; pointer.on = true;
+    }, { passive: true });
+    // A touch can't hover, so a tap on a crystal breaks it for a moment.
+    window.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse') return;
+      pointer.px = e.clientX; pointer.py = e.clientY; pointer.tap = true;
     }, { passive: true });
 
     let camY = 0, lastScroll = window.scrollY, velocity = 0;
@@ -2130,16 +2207,71 @@ if (root.classList.contains('no-webgl')) {
       dust.position.y = (camY * 0.35) % 4;
       if (!reduce) dust.rotation.y = t * 0.006;
 
+      const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      const scrollBurst = Math.min(0.4, Math.abs(velocity) * 0.001);
+
       for (const s of shards) {
-        const near = 1 - Math.min(1, Math.abs(s.group.position.y - camY) / 9);
+        const dy = Math.abs(s.group.position.y - camY);
+        const near = 1 - Math.min(1, dy / 9);
         const k = 0.80 + near * 0.20;
         s.group.scale.setScalar(s.baseScale * k);
-        if (!reduce) {
-          s.mesh.rotation.y += s.cfg.spin * dt * 0.9;
-          s.mesh.rotation.x = Math.sin(t * 0.18 + s.cfg.seed) * 0.10;
+
+        // Hit test in screen space. Cheap, and it works through the copy
+        // sitting on top of the canvas.
+        let hot = false;
+        if (dy < 8 && (pointer.on || pointer.tap)) {
+          const v = s.group.position.clone().project(camera);
+          const sx = (v.x + 1) / 2 * window.innerWidth;
+          const sy = (1 - v.y) / 2 * window.innerHeight;
+          const dist = camera.position.distanceTo(s.group.position);
+          const rPx = (s.baseScale * k / dist) * (window.innerHeight / 2) / tanHalf;
+          const ox = pointer.px - sx, oy = pointer.py - sy;
+          if (ox * ox + oy * oy < rPx * rPx * 1.15) {
+            hot = pointer.on;
+            if (pointer.tap) s.pulse = 1.1;
+            s.pushX = Math.max(-1, Math.min(1, ox / rPx));
+            s.pushY = Math.max(-1, Math.min(1, -oy / rPx));
+          }
         }
-        s.mesh.rotation.y += velocity * 0.00035;
+        if (s.pulse > 0) { s.pulse -= dt; hot = true; }
+
+        const target = hot ? 1 : scrollBurst;
+        s.burst += (target - s.burst) * ease(hot ? 6.5 : 3);
+        const b = s.burst;
+
+        // Cells fly out along their own axis and tumble; the whole body
+        // also shies away from the pointer.
+        for (const c of s.cells) {
+          c.mesh.position.set(c.home.x + c.dir.x * c.out * b,
+                              c.home.y + c.dir.y * c.out * b,
+                              c.home.z + c.dir.z * c.out * b);
+          c.mesh.rotation.set(c.base.x + c.tilt.x * b, c.base.y + c.tilt.y * b, c.base.z + c.tilt.z * b);
+        }
+        s.body.position.set(-s.pushX * 0.28 * b, -s.pushY * 0.28 * b, 0);
+
+        // Rings and rotors turn on their own; scrolling spins them harder.
+        s.layers.forEach((L, i) => {
+          const sign = i % 2 ? -1 : 1;
+          if (!reduce) L.rotation.z += sign * (0.22 + i * 0.1) * dt;
+          L.rotation.z += sign * velocity * 0.0005;
+        });
+
+        // Clusters spin. Shaped crystals sway, so the shape stays readable,
+        // and take a kick from the scroll that settles back.
+        s.kick += velocity * 0.00035;
+        s.kick += (0 - s.kick) * ease(1.6);
+        if (s.cfg.spin) {
+          if (!reduce) {
+            s.body.rotation.y += s.cfg.spin * dt * 0.9;
+            s.body.rotation.x = Math.sin(t * 0.18 + s.cfg.seed) * 0.10;
+          }
+          s.body.rotation.y += velocity * 0.00035;
+        } else {
+          s.body.rotation.y = (reduce ? 0 : Math.sin(t * 0.26 + s.cfg.seed) * 0.42) + s.kick;
+          s.body.rotation.x = reduce ? 0 : Math.sin(t * 0.19 + s.cfg.seed * 0.7) * 0.08;
+        }
       }
+      pointer.tap = false;
 
       keyLight.position.y = camY + 3;
       rimLight.position.y = camY - 2;
@@ -2159,7 +2291,7 @@ if (root.classList.contains('no-webgl')) {
         const v = sh.group.position.clone().project(camera);
         const r = sh.host.getBoundingClientRect();
         return {
-          key: Object.keys(PLAN).find(k => PLAN[k] === sh.cfg),
+          key: sh.key,
           screen: [Math.round((v.x + 1) / 2 * window.innerWidth), Math.round((1 - v.y) / 2 * window.innerHeight)],
           host: [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)]
         };
