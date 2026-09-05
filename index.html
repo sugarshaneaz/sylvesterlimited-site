@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sylvester Limited — Software for East Africa</title>
-<meta name="description" content="Sylvester Limited builds and operates software for East Africa: KaziLaw, Dino IG, Chuma and Sema. Web platforms, mobile applications and AI agent systems, run on infrastructure we administer ourselves.">
+<title>Sylvester Limited — Software, built and run in-house</title>
+<meta name="description" content="Sylvester Limited designs, ships and operates software for East Africa: KaziLaw, Dino IG, Chuma and Sema. Web platforms, mobile applications and AI agent systems, running on infrastructure we administer ourselves in Dar es Salaam.">
 <link rel="canonical" href="https://sylvesterlimited.tech/">
-<meta name="theme-color" content="#0e0c12">
+<meta name="theme-color" content="#05050a">
+<meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sylvester Limited">
-<meta property="og:title" content="Sylvester Limited — Software for East Africa">
-<meta property="og:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated in Dar es Salaam. Everything is live or in build, and every claim links to something you can check.">
+<meta property="og:title" content="Sylvester Limited — Software, built and run in-house">
+<meta property="og:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated from Dar es Salaam. Everything here is live or in build, and every claim opens in a new tab.">
 <meta property="og:url" content="https://sylvesterlimited.tech/">
 <meta property="og:image" content="https://sylvesterlimited.tech/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,566 +20,1115 @@
 <meta property="og:image:alt" content="Sylvester Limited — software for East Africa, built and run in-house.">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sylvester Limited — Software for East Africa">
-<meta name="twitter:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated in Dar es Salaam.">
+<meta name="twitter:title" content="Sylvester Limited — Software, built and run in-house">
+<meta name="twitter:description" content="Web platforms, mobile applications and AI agent systems — designed, shipped and operated from Dar es Salaam.">
 <meta name="twitter:image" content="https://sylvesterlimited.tech/og.png">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+
+<script>
+  /* Set before paint so the enhanced states never flash their un-enhanced form. */
+  document.documentElement.classList.add('js');
+  try {
+    var c = document.createElement('canvas');
+    if (!(window.WebGL2RenderingContext && c.getContext('webgl2'))) {
+      document.documentElement.classList.add('no-webgl');
+    }
+  } catch (e) { document.documentElement.classList.add('no-webgl'); }
+</script>
+
 <style>
   :root{
-    /* Palette taken verbatim from the previous sylvesterlimited.tech build */
-    --ground:      hsl(252 20% 6%);
-    --surface:     hsl(252 20% 8%);
-    --raised:      hsl(252 20% 11%);
-    --border:      hsl(255 15% 16%);
-    --border-soft: hsl(255 15% 13%);
-    --text:        hsl(0 0% 97%);
-    --muted:       hsl(255 10% 58%);
-    --dim:         hsl(255 10% 42%);
+    /* The void. Darker and cooler than the previous build so refracted
+       light off the crystals is the only real colour on the page. */
+    --void:        #05050a;
+    --void-2:      #0a0a12;
+    --raised:      #10101a;
+
+    --ink:         #f3f3f8;
+    --muted:       #9c9cb2;
+    --dim:         #62627a;
+
+    --line:        rgba(255,255,255,.10);
+    --line-soft:   rgba(255,255,255,.055);
+
+    /* Carried over from the original site, plus an ice tone for the
+       chromatic split the crystals throw. */
     --accent:      hsl(270 80% 65%);
     --accent-deep: hsl(263 83% 58%);
+    --ice:         hsl(196 92% 74%);
 
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-    --page: 1120px;
+    --page: 1240px;
+    --gut: clamp(20px, 4vw, 52px);
   }
 
-  *, *::before, *::after { box-sizing: border-box; }
+  *, *::before, *::after{ box-sizing: border-box; }
 
   html{ scroll-behavior: smooth; }
 
   body{
-    margin:0;
-    background: var(--ground);
-    color: var(--text);
+    margin: 0;
+    background: var(--void);
+    color: var(--ink);
     font-family: var(--sans);
     font-size: 17px;
-    line-height: 1.65;
+    line-height: 1.62;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
   }
 
   a{ color: inherit; }
 
+  ::selection{ background: hsl(270 80% 65% / .32); color: #fff; }
+
   :focus-visible{
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline: 2px solid var(--ice);
+    outline-offset: 4px;
     border-radius: 2px;
   }
+
+  .skip{
+    position: fixed; top: 10px; left: 10px; z-index: 999;
+    transform: translateY(-200%);
+    background: var(--raised); color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 10px 16px; border-radius: 999px;
+    font-family: var(--mono); font-size: .78rem; text-decoration: none;
+  }
+  .skip:focus{ transform: none; }
 
   .wrap{
     width: 100%;
     max-width: var(--page);
     margin-inline: auto;
-    padding-inline: 28px;
+    padding-inline: var(--gut);
   }
 
-  /* ---------- label / chip vocabulary ---------- */
-  .label{
+  /* ============================================================
+     THE VOID — fixed WebGL stage everything else sits on top of
+     ============================================================ */
+  #stage{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.4s ease 0.1s;
+  }
+  .ready #stage{ opacity: 1; }
+  #stage canvas{ display: block; width: 100%; height: 100%; }
+
+  /* When there is no WebGL (or no JS) the void still has weather. */
+  .ambient{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(46% 38% at 22% 14%, hsl(270 80% 55% / .20), transparent 68%),
+      radial-gradient(40% 34% at 82% 62%, hsl(196 92% 60% / .11), transparent 70%),
+      radial-gradient(60% 50% at 50% 108%, hsl(263 83% 58% / .16), transparent 70%);
+  }
+  .js:not(.no-webgl) .ambient{ opacity: .45; }
+
+  /* Fine grain over the whole page, so DOM and WebGL share a surface. */
+  .grain{
+    position: fixed;
+    inset: -50%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .js .grain{ animation: grain 6s steps(6) infinite; }
+  @keyframes grain{
+    0%{ transform: translate(0,0) }      20%{ transform: translate(-3%,2%) }
+    40%{ transform: translate(2%,-3%) }  60%{ transform: translate(-2%,-2%) }
+    80%{ transform: translate(3%,1%) }   100%{ transform: translate(0,0) }
+  }
+
+  main, header, footer{ position: relative; z-index: 2; }
+
+  /* ============================================================
+     LOADER
+     ============================================================ */
+  #loader{
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--void);
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--gut);
+  }
+  .js #loader{ display: flex; }
+  .ready #loader{
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .9s cubic-bezier(.4,0,.2,1), visibility 0s linear .9s;
+  }
+  .load-top{
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .load-mid{
+    display: flex; align-items: baseline; gap: 18px;
     font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin: 0;
+  }
+  #count{
+    font-size: clamp(3.6rem, 15vw, 11rem);
+    line-height: .84;
+    letter-spacing: -.05em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+  }
+  .load-mid .unit{
+    font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim);
+  }
+  .load-bar{
+    height: 1px; width: 100%; background: var(--line-soft);
+    position: relative; overflow: hidden; margin-top: 26px;
+  }
+  .load-bar span{
+    position: absolute; inset: 0 100% 0 0;
+    background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--ice));
+    transition: right .28s cubic-bezier(.22,1,.36,1);
+  }
+  .load-foot{
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim);
+    display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
   }
 
-  .chip{
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .chip .dot{
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--dim);
-    flex: none;
-  }
-  .chip.live{ color: var(--text); border-color: hsl(270 40% 32%); }
-  .chip.live .dot{ background: var(--accent); box-shadow: 0 0 0 3px hsl(270 80% 65% / 0.18); }
-  .chip.build .dot{ background: hsl(38 80% 60%); }
-  .chip.open .dot{ background: hsl(160 50% 52%); }
-
-  /* ---------- nav ---------- */
-  header.nav{
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: hsl(252 20% 6% / 0.86);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-soft);
-  }
-  .nav-inner{
+  /* ============================================================
+     CHROME — corner instrumentation, kept thin on purpose
+     ============================================================ */
+  header.chrome{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 40;
+    padding: clamp(16px, 2.4vw, 26px) var(--gut);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    height: 68px;
+    gap: 20px;
+    mix-blend-mode: normal;
   }
-  .brand{
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    text-decoration: none;
-    font-size: 1.02rem;
-  }
-  .nav-links{
-    display: flex;
-    gap: 30px;
-    font-size: 0.95rem;
-  }
-  .nav-links a{
-    color: var(--muted);
-    text-decoration: none;
-    transition: color .15s ease;
-  }
-  .nav-links a:hover{ color: var(--text); }
-
-  .btn{
-    display: inline-block;
-    font-size: 0.93rem;
-    font-weight: 550;
-    padding: 9px 20px;
-    border-radius: 999px;
-    text-decoration: none;
-    color: #fff;
-    background: linear-gradient(135deg, var(--accent-deep), var(--accent));
-    border: 1px solid hsl(270 80% 70% / 0.5);
-    transition: filter .15s ease, transform .15s ease;
-  }
-  .btn:hover{ filter: brightness(1.12); }
-  .btn:active{ transform: translateY(1px); }
-
-  /* ---------- hero ---------- */
-  .hero{
-    position: relative;
-    padding: clamp(72px, 12vw, 132px) 0 clamp(56px, 8vw, 92px);
-    overflow: hidden;
-  }
-  .hero::before{
-    content:"";
-    position: absolute;
-    inset: -30% 0 auto -10%;
-    height: 620px;
-    background: radial-gradient(46% 52% at 22% 42%, hsl(270 80% 55% / 0.20), transparent 70%);
+  header.chrome::before{
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, hsl(240 30% 3% / .82), transparent);
+    -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent);
+    mask-image: linear-gradient(180deg, #000 40%, transparent);
     pointer-events: none;
   }
-  .hero .wrap{ position: relative; }
+  .chrome > *{ position: relative; }
 
-  .eyebrow{
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    font-family: var(--mono);
-    font-size: 0.74rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .mark{
+    display: inline-flex; align-items: center; gap: 11px;
+    text-decoration: none;
+    font-weight: 600; letter-spacing: -.012em; font-size: 1rem;
+  }
+  .mark .glyph{
+    width: 26px; height: 26px; flex: none;
+    border: 1px solid hsl(270 60% 60% / .55);
+    border-radius: 7px;
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: .62rem; letter-spacing: .04em;
+    color: var(--accent);
+    background: hsl(270 80% 60% / .07);
+  }
+  .mark .full{ white-space: nowrap; }
+
+  .chrome-nav{
+    display: flex; gap: clamp(18px, 2.4vw, 34px);
+    font-family: var(--mono); font-size: .72rem;
+    letter-spacing: .12em; text-transform: uppercase;
+  }
+  .chrome-nav a{
+    color: var(--muted); text-decoration: none;
+    display: inline-flex; gap: 7px; align-items: baseline;
+    transition: color .2s ease;
+  }
+  .chrome-nav a i{ font-style: normal; color: var(--dim); font-size: .9em; }
+  .chrome-nav a:hover{ color: var(--ink); }
+  .chrome-nav a:hover i{ color: var(--accent); }
+
+  .chrome-right{ display: flex; align-items: center; gap: 14px; }
+
+  .readout{
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+    color: var(--dim); font-variant-numeric: tabular-nums;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .readout .pip{
+    width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px hsl(270 80% 65% / .16);
+  }
+  .js .readout .pip{ animation: pulse 2.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity: 1 } 50%{ opacity: .35 } }
+
+  .toggle{
+    appearance: none;
+    background: hsl(255 20% 10% / .6);
+    border: 1px solid var(--line);
     color: var(--muted);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 999px;
-    padding: 6px 14px;
+    font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 7px 13px; border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: color .2s ease, border-color .2s ease;
   }
-  .eyebrow .dot{
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
+  .toggle:hover{ color: var(--ink); border-color: hsl(270 50% 50% / .6); }
+  .toggle .bars{ display: flex; align-items: flex-end; gap: 2px; height: 9px; }
+  .toggle .bars b{
+    display: block; width: 2px; height: 3px; background: currentColor; border-radius: 1px;
+  }
+  .toggle[aria-pressed="true"]{ color: var(--ice); border-color: hsl(196 70% 60% / .5); }
+  .toggle[aria-pressed="true"] .bars b{ animation: eq .9s ease-in-out infinite alternate; }
+  .toggle[aria-pressed="true"] .bars b:nth-child(2){ animation-delay: .18s }
+  .toggle[aria-pressed="true"] .bars b:nth-child(3){ animation-delay: .36s }
+  .toggle[aria-pressed="true"] .bars b:nth-child(4){ animation-delay: .1s }
+  @keyframes eq{ from{ height: 2px } to{ height: 9px } }
+
+  .cta{
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .14em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 9px 17px; border-radius: 999px;
+    color: #fff;
+    background: linear-gradient(120deg, var(--accent-deep), var(--accent) 62%, hsl(285 78% 70%));
+    border: 1px solid hsl(275 85% 74% / .6);
+    box-shadow: 0 0 0 0 hsl(270 80% 65% / .5);
+    transition: box-shadow .3s ease, filter .2s ease, transform .2s ease;
+  }
+  .cta:hover{ filter: brightness(1.1); box-shadow: 0 0 28px -6px hsl(270 80% 65% / .75); }
+  .cta:active{ transform: translateY(1px); }
+
+  /* Right-hand section index */
+  .rail{
+    position: fixed;
+    right: max(14px, calc(var(--gut) - 16px));
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .js:not(.no-webgl) .rail{ display: flex; }
+  .rail a{
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+    text-decoration: none;
+    font-family: var(--mono); font-size: .62rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--dim);
+    padding: 5px 0;
+    transition: color .25s ease;
+  }
+  .rail a .txt{
+    opacity: 0; transform: translateX(6px);
+    transition: opacity .3s ease, transform .3s ease;
+    white-space: nowrap;
+  }
+  .rail a .tick{
+    display: block; width: 22px; height: 1px; background: currentColor;
+    transition: width .3s cubic-bezier(.22,1,.36,1);
+  }
+  .rail a:hover, .rail a[aria-current="true"]{ color: var(--ink); }
+  .rail a:hover .txt, .rail a[aria-current="true"] .txt{ opacity: 1; transform: none; }
+  .rail a[aria-current="true"] .tick{ width: 40px; background: var(--accent); }
+
+  /* Bottom-left scroll cue */
+  .cue{
+    position: fixed;
+    left: var(--gut); bottom: clamp(16px, 2.4vw, 26px);
+    z-index: 40;
+    display: none; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: .64rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--dim);
+    transition: opacity .5s ease;
+  }
+  .js:not(.no-webgl) .cue{ display: flex; }
+  .cue.gone{ opacity: 0; pointer-events: none; }
+  .cue .shaft{
+    display: block; width: 1px; height: 34px;
+    background: linear-gradient(180deg, transparent, var(--accent));
+  }
+  .js .cue .shaft{ animation: drop 2.2s cubic-bezier(.6,0,.3,1) infinite; transform-origin: top; }
+  @keyframes drop{
+    0%{ transform: scaleY(0); opacity: 0 }
+    35%{ transform: scaleY(1); opacity: 1 }
+    100%{ transform: scaleY(1) translateY(34px); opacity: 0 }
   }
 
-  h1{
-    font-size: clamp(2.5rem, 6.4vw, 4.15rem);
-    line-height: 1.04;
-    letter-spacing: -0.032em;
-    font-weight: 640;
-    margin: 30px 0 0;
-    max-width: 17ch;
+  /* Cursor */
+  .cur, .cur-ring{
+    position: fixed; top: 0; left: 0; z-index: 200;
+    pointer-events: none;
+    border-radius: 50%;
+    will-change: transform;
+    display: none;
+  }
+  .cur{ width: 5px; height: 5px; background: var(--ink); margin: -2.5px 0 0 -2.5px; }
+  .cur-ring{
+    width: 34px; height: 34px; margin: -17px 0 0 -17px;
+    border: 1px solid hsl(270 70% 70% / .5);
+    transition: width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .cur-ring.hot{
+    width: 58px; height: 58px; margin: -29px 0 0 -29px;
+    border-color: hsl(196 92% 74% / .7);
+    background: hsl(196 92% 74% / .07);
+  }
+  @media (hover: hover) and (pointer: fine){
+    .js.ready .cur, .js.ready .cur-ring{ display: block; }
+    .js.ready.cursor-on, .js.ready.cursor-on a, .js.ready.cursor-on button{ cursor: none; }
+  }
+
+  /* ============================================================
+     TYPE
+     ============================================================ */
+  .label{
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .label::after{
+    content: ""; flex: 1; height: 1px; max-width: 120px;
+    background: linear-gradient(90deg, var(--line), transparent);
+  }
+  .label i{ font-style: normal; color: var(--accent); }
+
+  .display{
+    font-weight: 600;
+    letter-spacing: -.038em;
+    line-height: .98;
+    margin: 0;
     text-wrap: balance;
   }
-  h1 .accent{
-    background: linear-gradient(100deg, var(--accent), hsl(285 75% 72%));
+  .line{ display: block; overflow: hidden; }
+  .line > span{ display: block; }
+  .js .line > span{
+    transform: translateY(105%);
+    opacity: 0;
+    transition: transform 1.05s cubic-bezier(.16,1,.3,1), opacity .8s ease;
+  }
+  .js .in .line > span{ transform: none; opacity: 1; }
+  .js .in .line:nth-child(2) > span{ transition-delay: .09s }
+  .js .in .line:nth-child(3) > span{ transition-delay: .18s }
+  .js .in .line:nth-child(4) > span{ transition-delay: .27s }
+
+  .grad{
+    background: linear-gradient(96deg, var(--accent) 6%, hsl(285 78% 74%) 46%, var(--ice) 96%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
+  .js .rise{
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .9s ease, transform 1s cubic-bezier(.16,1,.3,1);
+  }
+  .js .in .rise, .js .rise.in{ opacity: 1; transform: none; }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 128px 0 96px;
+    overflow: hidden;            /* the scrim below overhangs the wrap */
+  }
+  .hero .wrap{ position: relative; }
+  .hero-scrim{
+    position: absolute;
+    inset: -14% -20% -20% -24%;
+    background: radial-gradient(52% 60% at 24% 52%, hsl(240 40% 3% / .82), transparent 72%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .eyebrow{
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--line);
+    background: hsl(255 25% 8% / .55);
+    backdrop-filter: blur(8px);
+    border-radius: 999px;
+    padding: 7px 15px;
+  }
+  .eyebrow .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px 1px hsl(270 80% 65% / .9);
+  }
+  .hero h1{
+    font-size: clamp(2.35rem, 7.4vw, 5.4rem);
+    margin: 30px 0 0;
+    max-width: 15ch;
+  }
   .lede{
-    margin: 26px 0 0;
-    max-width: 62ch;
-    font-size: 1.12rem;
+    margin: 30px 0 0;
+    max-width: 56ch;
+    font-size: clamp(1rem, 1.15vw, 1.14rem);
     color: var(--muted);
   }
-  .lede strong{ color: var(--text); font-weight: 550; }
-
+  .lede strong{ color: var(--ink); font-weight: 500; }
   .hero-actions{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 36px;
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-top: 38px;
   }
-  .btn-ghost{
-    display: inline-block;
-    font-size: 0.93rem;
-    font-weight: 500;
-    padding: 9px 20px;
-    border-radius: 999px;
-    text-decoration: none;
-    color: var(--text);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    transition: border-color .15s ease, background .15s ease;
+  .ghost{
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .14em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 9px 17px; border-radius: 999px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background: hsl(255 25% 9% / .5);
+    backdrop-filter: blur(8px);
+    transition: border-color .2s ease, background .2s ease;
   }
-  .btn-ghost:hover{ border-color: hsl(270 40% 40%); background: var(--raised); }
+  .ghost:hover{ border-color: hsl(196 70% 60% / .55); background: var(--raised); }
 
-  /* ---------- sections ---------- */
-  section{ padding: clamp(56px, 8vw, 92px) 0; }
-  .section-head{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 44px;
-    max-width: 66ch;
+  .facts{
+    display: flex; flex-wrap: wrap;
+    gap: 0;
+    margin-top: 56px;
+    border-top: 1px solid var(--line-soft);
+    max-width: 780px;
   }
-  h2{
-    font-size: clamp(1.6rem, 3vw, 2.15rem);
-    line-height: 1.15;
-    letter-spacing: -0.022em;
-    font-weight: 620;
+  .fact{
+    padding: 20px 30px 0 0;
+    margin-right: 30px;
+    border-right: 1px solid var(--line-soft);
+  }
+  .fact:last-child{ border-right: 0; margin-right: 0; padding-right: 0; }
+  .fact dt{
+    font-family: var(--mono); font-size: .64rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .fact dd{
+    margin: 7px 0 0;
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============================================================
+     SECTIONS
+     ============================================================ */
+  section{ padding: clamp(88px, 13vw, 190px) 0; scroll-margin-top: 72px; }
+  #work{ padding-top: clamp(120px, 16vw, 220px); }
+  .section-head{
+    display: flex; flex-direction: column; gap: 20px;
+    margin-bottom: clamp(48px, 7vw, 88px);
+    max-width: 60ch;
+  }
+  .section-head h2{
+    font-size: clamp(1.85rem, 4.2vw, 3.3rem);
+    font-weight: 600;
+    letter-spacing: -.034em;
+    line-height: 1.05;
     margin: 0;
     text-wrap: balance;
   }
   .section-head p{
     margin: 0;
     color: var(--muted);
-    font-size: 1.05rem;
+    font-size: 1.04rem;
+    max-width: 54ch;
   }
 
-  /* ---------- evidence rows ---------- */
-  .rows{
-    border-top: 1px solid var(--border-soft);
+  /* --- Principle: one full-bleed statement --- */
+  #principle{ text-align: left; }
+  #principle .wrap{ max-width: 1000px; }
+  .statement{
+    font-size: clamp(1.9rem, 5.6vw, 4.1rem);
+    font-weight: 500;
+    letter-spacing: -.036em;
+    line-height: 1.02;
+    margin: 28px 0 0;
+    text-wrap: balance;
   }
-  .row{
-    display: grid;
-    grid-template-columns: 210px 1fr;
-    gap: 32px;
-    padding: 30px 0;
-    border-bottom: 1px solid var(--border-soft);
-  }
-  .row-meta{
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    align-items: flex-start;
-  }
-  .stack{
-    font-family: var(--mono);
-    font-size: 0.74rem;
-    line-height: 1.9;
-    color: var(--dim);
-    margin: 0;
-  }
-  .row h3{
-    margin: 0;
-    font-size: 1.22rem;
-    font-weight: 600;
-    letter-spacing: -0.012em;
-  }
-  .row p{
-    margin: 9px 0 0;
+  .statement em{ font-style: normal; }
+  .statement-sub{
+    margin: 34px 0 0;
     color: var(--muted);
-    max-width: 64ch;
+    font-size: 1.05rem;
+    max-width: 46ch;
   }
-  .row .note{
-    display: block;
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: var(--dim);
-  }
-  .proof{
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 14px;
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid hsl(270 80% 65% / 0.32);
-    padding-bottom: 1px;
-    transition: border-color .15s ease;
-  }
-  .proof:hover{ border-color: var(--accent); }
-  .proof .arrow{ font-size: 0.9em; }
 
-  /* ---------- infrastructure ---------- */
+  /* --- Work --- */
+  .work-list{ border-top: 1px solid var(--line-soft); }
+  .entry{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(28px, 5vw, 72px);
+    padding: clamp(52px, 8vw, 104px) 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .entry .void-slot{ min-height: 320px; }         /* the crystal shows through here */
+  .entry.flip .body{ order: 2 }
+  .entry.flip .void-slot{ order: 1 }
+
+  .entry .idx{
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .2em;
+    color: var(--dim); display: block; margin-bottom: 18px;
+  }
+  .entry h3{
+    margin: 0;
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    line-height: 1.04;
+  }
+  .entry .role{
+    margin: 12px 0 0;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .entry p.copy{
+    margin: 20px 0 0;
+    color: var(--muted);
+    max-width: 48ch;
+  }
+  .entry .note{
+    display: block; margin-top: 14px;
+    font-size: .88rem; color: var(--dim); max-width: 48ch;
+  }
+  .meta-row{
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    margin-top: 24px;
+  }
+  .chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: .62rem;
+    letter-spacing: .13em; text-transform: uppercase;
+    padding: 5px 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    white-space: nowrap;
+    background: hsl(255 25% 8% / .5);
+  }
+  .chip .dot{ width: 5px; height: 5px; border-radius: 50%; background: var(--dim); flex: none; }
+  .chip.live{ color: var(--ink); border-color: hsl(270 45% 40% / .8); }
+  .chip.live .dot{ background: var(--accent); box-shadow: 0 0 8px 1px hsl(270 80% 65% / .8); }
+  .chip.build .dot{ background: hsl(38 90% 62%); box-shadow: 0 0 8px 1px hsl(38 90% 62% / .7); }
+  .chip.open .dot{ background: hsl(158 60% 55%); box-shadow: 0 0 8px 1px hsl(158 60% 55% / .7); }
+  .chip.tech{ color: var(--dim); background: transparent; }
+
+  .proof{
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-top: 28px;
+    font-family: var(--mono); font-size: .74rem;
+    letter-spacing: .06em;
+    color: var(--ink);
+    text-decoration: none;
+    padding-bottom: 6px;
+    border-bottom: 1px solid hsl(270 70% 65% / .35);
+    transition: border-color .25s ease, color .25s ease, gap .25s ease;
+  }
+  .proof .arrow{ color: var(--accent); transition: transform .3s cubic-bezier(.22,1,.36,1); }
+  .proof:hover{ border-color: var(--ice); gap: 13px; }
+  .proof:hover .arrow{ transform: translate(3px,-3px); }
+
+  /* --- Marquee --- */
+  .marquee{
+    border-block: 1px solid var(--line-soft);
+    padding: 20px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .marquee-track{ display: inline-flex; }
+  .js .marquee-track{ animation: slide 34s linear infinite; }
+  .marquee span{
+    font-family: var(--mono); font-size: .78rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--dim);
+    padding-inline: 26px;
+  }
+  .marquee span b{ color: var(--accent); font-weight: 400; }
+  @keyframes slide{ to{ transform: translateX(-50%) } }
+
+  /* --- Infrastructure --- */
   .agents{
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
     gap: 18px;
   }
   .agent{
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 26px;
+    position: relative;
+    background: linear-gradient(165deg, hsl(255 25% 9% / .8), hsl(255 25% 6% / .6));
+    border: 1px solid var(--line-soft);
+    border-radius: 16px;
+    padding: clamp(24px, 3vw, 34px);
+    overflow: hidden;
+    transition: border-color .3s ease, transform .4s cubic-bezier(.22,1,.36,1);
   }
+  .agent::after{
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(70% 90% at var(--mx, 50%) var(--my, 0%), hsl(270 80% 62% / .16), transparent 62%);
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+  }
+  .agent:hover{ border-color: hsl(270 45% 40% / .7); transform: translateY(-3px); }
+  .agent:hover::after{ opacity: 1; }
   .agent h3{
-    margin: 14px 0 0;
-    font-size: 1.16rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    margin: 16px 0 0;
+    font-size: 1.35rem; font-weight: 600; letter-spacing: -.02em;
   }
-  .agent p{
-    margin: 9px 0 0;
-    color: var(--muted);
-    font-size: 0.98rem;
-  }
+  .agent p{ margin: 12px 0 0; color: var(--muted); font-size: .99rem; }
 
   .stack-grid{
-    margin-top: 34px;
+    margin-top: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
     gap: 1px;
-    background: var(--border-soft);
-    border: 1px solid var(--border-soft);
-    border-radius: 14px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    border-radius: 16px;
     overflow: hidden;
   }
   .stack-item{
-    background: var(--ground);
-    padding: 22px 24px;
+    background: hsl(250 25% 4% / .86);
+    padding: 26px;
+    transition: background .3s ease;
   }
+  .stack-item:hover{ background: hsl(255 25% 8% / .9); }
   .stack-item dt{
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--dim);
+    font-family: var(--mono); font-size: .64rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent);
   }
-  .stack-item dd{
-    margin: 8px 0 0;
-    font-size: 0.97rem;
-    color: var(--text);
-  }
+  .stack-item dd{ margin: 12px 0 0; font-size: .98rem; color: var(--ink); }
 
-  /* ---------- services ---------- */
-  .services{
+  /* --- Capabilities --- */
+  .caps{ border-top: 1px solid var(--line-soft); }
+  .cap{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 22px;
+    grid-template-columns: 90px minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(20px, 4vw, 56px);
+    align-items: start;
+    padding: clamp(28px, 4vw, 46px) 0;
+    border-bottom: 1px solid var(--line-soft);
+    transition: background .35s ease;
   }
-  .service h3{
-    margin: 0 0 10px;
-    font-size: 1.08rem;
-    font-weight: 600;
+  .cap:hover{ background: hsl(255 30% 8% / .35); }
+  .cap .n{
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; color: var(--dim);
+    padding-top: .5em;
   }
-  .service p{
+  .cap h3{
     margin: 0;
-    color: var(--muted);
-    font-size: 0.98rem;
+    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+    font-weight: 600; letter-spacing: -.024em;
   }
-  .service .rule{
-    height: 2px;
-    width: 34px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    margin-bottom: 16px;
+  .cap p{ margin: 0; color: var(--muted); }
+  .cap p .see{
+    display: block; margin-top: 12px;
+    font-family: var(--mono); font-size: .72rem; color: var(--dim);
   }
+  .cap p .see a{ color: var(--accent); text-decoration: none; border-bottom: 1px solid hsl(270 70% 65% / .3); }
+  .cap p .see a:hover{ border-color: var(--accent); }
 
-  /* ---------- contact ---------- */
-  .contact-card{
-    background:
-      radial-gradient(70% 130% at 12% 0%, hsl(270 80% 55% / 0.16), transparent 62%),
-      var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: clamp(30px, 5vw, 52px);
+  /* --- Contact --- */
+  #contact{ overflow: hidden; }
+  #contact .wrap{ max-width: 1000px; }
+  .contact-inner{ text-align: center; position: relative; }
+  .contact-inner::before{
+    content: "";
+    position: absolute; inset: -18% -12%;
+    background: radial-gradient(60% 60% at 50% 50%, hsl(240 40% 3% / .88), transparent 72%);
+    z-index: -1;
+    pointer-events: none;
   }
-  .contact-card h2{ max-width: 20ch; }
-  .contact-card p{
-    margin: 14px 0 0;
+  .contact-inner .label{ justify-content: center; }
+  .contact-inner .label::after{ display: none; }
+  .contact-inner h2{
+    font-size: clamp(2rem, 6vw, 4.4rem);
+    font-weight: 600; letter-spacing: -.038em; line-height: 1;
+    margin: 26px 0 0;
+    text-wrap: balance;
+  }
+  .contact-inner p{
+    margin: 26px auto 0;
     color: var(--muted);
-    max-width: 56ch;
+    max-width: 48ch;
   }
   .mail{
-    display: inline-block;
-    margin-top: 26px;
+    display: inline-flex; align-items: center; gap: 14px;
+    margin-top: 44px;
     font-family: var(--mono);
-    font-size: 1.02rem;
-    color: var(--text);
+    font-size: clamp(.86rem, 2.2vw, 1.15rem);
+    letter-spacing: -.01em;
+    color: var(--ink);
     text-decoration: none;
-    border-bottom: 1px solid hsl(270 80% 65% / 0.45);
-    padding-bottom: 2px;
+    padding: 16px 30px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: hsl(255 25% 8% / .5);
+    backdrop-filter: blur(8px);
+    transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
-  .mail:hover{ border-color: var(--accent); }
+  .mail:hover{
+    border-color: hsl(270 70% 65% / .7);
+    box-shadow: 0 0 40px -10px hsl(270 80% 65% / .6);
+    transform: translateY(-2px);
+  }
 
-  footer{
-    border-top: 1px solid var(--border-soft);
-    padding: 34px 0 54px;
+  /* --- Footer --- */
+  footer{ padding-bottom: 40px; }
+  .foot-canvas-wrap{
+    position: relative;
+    height: 260px;
+    margin-bottom: 22px;
+    -webkit-mask-image: radial-gradient(70% 100% at 50% 50%, #000 40%, transparent 78%);
+    mask-image: radial-gradient(70% 100% at 50% 50%, #000 40%, transparent 78%);
   }
+  #footfx{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .no-webgl .foot-canvas-wrap, html:not(.js) .foot-canvas-wrap{ display: none; }
+
+  .foot-links{
+    display: flex; flex-wrap: wrap; gap: 12px 30px;
+    justify-content: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .foot-links a{
+    font-family: var(--mono); font-size: .74rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color .2s ease;
+  }
+  .foot-links a:hover{ color: var(--ice); }
+
   .foot-inner{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 28px;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--mono);
-    font-size: 0.76rem;
-    letter-spacing: 0.06em;
-    color: var(--dim);
-    text-transform: uppercase;
+    display: flex; flex-wrap: wrap; gap: 12px 28px;
+    justify-content: space-between; align-items: center;
+    padding-top: 26px;
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .13em;
+    color: var(--dim); text-transform: uppercase;
   }
   .foot-inner a{ text-decoration: none; }
-  .foot-inner a:hover{ color: var(--text); }
+  .foot-inner a:hover{ color: var(--ink); }
 
-  @media (max-width: 760px){
-    .nav-links{ display: none; }
-    .row{ grid-template-columns: 1fr; gap: 16px; }
-    .row-meta{ flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .stack{ line-height: 1.6; }
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 1080px){
+    .chrome-nav{ display: none; }
+    .rail{ display: none !important; }
+  }
+  @media (max-width: 860px){
+    body{ font-size: 16px; }
+    .mark .full{ display: none; }
+    .entry{ grid-template-columns: 1fr; gap: 0; }
+    .entry .void-slot{ min-height: 200px; order: 0 !important; }
+    .entry .body{ order: 1 !important; }   /* crystal first, then the copy */
+    .cap{ grid-template-columns: 1fr; gap: 14px; }
+    .cap .n{ padding-top: 0 }
     .agents{ grid-template-columns: 1fr; }
+    .facts{ gap: 0 }
+    .fact{ padding-right: 22px; margin-right: 22px; }
+    .foot-canvas-wrap{ height: 190px; }
+    .cue{ display: none !important; }
+  }
+  @media (max-width: 520px){
+    .fact{ border-right: 0; margin-right: 0; padding-right: 0; width: 50%; }
+    .readout{ display: none; }
   }
 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior: auto; }
-    *{ transition: none !important; }
+    *, *::before, *::after{
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+    .js .line > span, .js .rise{ opacity: 1 !important; transform: none !important; }
+    .grain{ animation: none !important; }
   }
 </style>
 </head>
 <body>
 
-<header class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="#top">Sylvester Limited</a>
-    <nav class="nav-links">
-      <a href="#work">Work</a>
-      <a href="#infrastructure">Infrastructure</a>
-      <a href="#build">What we build</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <a class="btn" href="mailto:support@sylvesterlimited.tech">Start a project</a>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="ambient" aria-hidden="true"></div>
+<div id="stage" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============================ LOADER ============================ -->
+<div id="loader" role="status" aria-live="polite" aria-label="Loading">
+  <div class="load-top">
+    <span>Sylvester Limited</span>
+    <span>Dar es Salaam · 06°47′S 39°12′E</span>
+  </div>
+  <div>
+    <div class="load-mid">
+      <span id="count">000</span>
+      <span class="unit">Compiling the void</span>
+    </div>
+    <div class="load-bar"><span id="bar"></span></div>
+  </div>
+  <div class="load-foot">
+    <span id="load-task">Initialising</span>
+    <span>Software, built and run in-house</span>
+  </div>
+</div>
+
+<!-- ============================ CURSOR ============================ -->
+<div class="cur-ring" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div>
+
+<!-- ============================ CHROME ============================ -->
+<header class="chrome">
+  <a class="mark" href="#top" aria-label="Sylvester Limited — top of page">
+    <span class="glyph" aria-hidden="true">SL</span>
+    <span class="full">Sylvester Limited</span>
+  </a>
+
+  <nav class="chrome-nav" aria-label="Sections">
+    <a href="#work"><i>01</i>Work</a>
+    <a href="#infrastructure"><i>02</i>Infrastructure</a>
+    <a href="#capabilities"><i>03</i>Capabilities</a>
+    <a href="#contact"><i>04</i>Contact</a>
+  </nav>
+
+  <div class="chrome-right">
+    <span class="readout"><span class="pip"></span><span id="clock">--:--:--</span> EAT</span>
+    <button class="toggle" id="sound" type="button" aria-pressed="false" aria-label="Toggle ambient sound">
+      <span class="bars" aria-hidden="true"><b></b><b></b><b></b><b></b></span>
+      <span id="sound-label">Sound</span>
+    </button>
+    <a class="cta" href="mailto:support@sylvesterlimited.tech">Start a project</a>
   </div>
 </header>
 
-<main id="top">
+<!-- ============================ RAIL ============================ -->
+<nav class="rail" aria-label="Page index">
+  <a href="#top" data-rail="top"><span class="txt">Core</span><span class="tick"></span></a>
+  <a href="#principle" data-rail="principle"><span class="txt">Principle</span><span class="tick"></span></a>
+  <a href="#work" data-rail="work"><span class="txt">Work</span><span class="tick"></span></a>
+  <a href="#infrastructure" data-rail="infrastructure"><span class="txt">Infrastructure</span><span class="tick"></span></a>
+  <a href="#capabilities" data-rail="capabilities"><span class="txt">Capabilities</span><span class="tick"></span></a>
+  <a href="#contact" data-rail="contact"><span class="txt">Contact</span><span class="tick"></span></a>
+</nav>
 
-  <div class="hero">
+<div class="cue" aria-hidden="true"><span class="shaft"></span>Scroll to descend</div>
+
+<main id="main">
+
+  <!-- ============================ HERO ============================ -->
+  <div class="hero" id="top" data-section="top" data-shard="hero">
     <div class="wrap">
-      <span class="eyebrow"><span class="dot"></span>Dar es Salaam, Tanzania</span>
-      <h1>We build software for East Africa <span class="accent">and run it ourselves.</span></h1>
-      <p class="lede">Web platforms, mobile apps, and AI agent systems — designed, shipped, and operated on infrastructure we administer. <strong>Everything on this page is live or in build, and every claim links to something you can check.</strong></p>
-      <div class="hero-actions">
-        <a class="btn" href="#work">See the work</a>
-        <a class="btn-ghost" href="#infrastructure">How we run it</a>
+      <div class="hero-scrim" aria-hidden="true"></div>
+
+      <span class="eyebrow rise"><span class="dot"></span>Dar es Salaam, Tanzania</span>
+
+      <h1 class="display">
+        <span class="line"><span>We build software</span></span>
+        <span class="line"><span>for East Africa</span></span>
+        <span class="line"><span class="grad">and run it ourselves.</span></span>
+      </h1>
+
+      <p class="lede rise">Web platforms, mobile applications and AI agent systems — designed, shipped and operated on infrastructure we administer. <strong>Everything below is live or in build, and every claim opens in a new tab.</strong></p>
+
+      <div class="hero-actions rise">
+        <a class="cta" href="#work">Descend into the work</a>
+        <a class="ghost" href="#infrastructure">How we run it</a>
       </div>
+
+      <dl class="facts rise">
+        <div class="fact">
+          <dt>Products</dt>
+          <dd data-tally="5">05</dd>
+        </div>
+        <div class="fact">
+          <dt>Services we run</dt>
+          <dd data-tally="15" data-suffix="+">15+</dd>
+        </div>
+        <div class="fact">
+          <dt>Agent systems</dt>
+          <dd data-tally="2">02</dd>
+        </div>
+      </dl>
     </div>
   </div>
 
-  <section id="work">
+  <!-- ============================ PRINCIPLE ============================ -->
+  <section id="principle" data-section="principle" data-shard="principle">
+    <div class="wrap">
+      <p class="label rise"><i>001</i> Principle</p>
+      <h2 class="statement display">
+        <span class="line"><span>Every claim on this</span></span>
+        <span class="line"><span>page <em class="grad">opens in a new tab.</em></span></span>
+      </h2>
+      <p class="statement-sub rise">A live product, or a public repository. If a claim cannot be linked to something you can open and check for yourself, it does not go on this page.</p>
+    </div>
+  </section>
+
+  <!-- ============================ WORK ============================ -->
+  <section id="work" data-section="work">
     <div class="wrap">
       <div class="section-head">
-        <p class="label">Shipped</p>
-        <h2>Work you can open in a browser.</h2>
-        <p>Products we designed, built, and still operate. Where the code is public, the link goes to the repository; where it isn't, the link goes to the running product.</p>
+        <p class="label rise"><i>002</i> The work</p>
+        <h2 class="rise">Five things we designed, built, and still operate.</h2>
+        <p class="rise">Where the code is public the link goes to the repository. Where it isn't, the link goes to the running product.</p>
       </div>
 
-      <div class="rows">
+      <div class="work-list">
 
-        <article class="row">
-          <div class="row-meta">
-            <span class="chip live"><span class="dot"></span>Live</span>
-            <p class="stack">Next.js<br>Postgres + pgvector<br>Retrieval over statute</p>
+        <article class="entry">
+          <div class="body">
+            <span class="idx">Entry 01 / 05</span>
+            <h3 data-scramble>KaziLaw</h3>
+            <p class="role">Tanzanian employment law, with citations</p>
+            <p class="copy">Free question-and-answer over the Employment and Labour Relations Act, plus a compliance check that walks an employer through what the Acts actually require. Every answer cites the section it came from, so a reader can verify it against the law rather than trust the model.</p>
+            <span class="note">KaziLaw is not a law firm and does not give legal advice. It is Tanzanian labour law, organised.</span>
+            <div class="meta-row">
+              <span class="chip live"><span class="dot"></span>Live</span>
+              <span class="chip tech">Next.js</span>
+              <span class="chip tech">Postgres + pgvector</span>
+              <span class="chip tech">Retrieval over statute</span>
+            </div>
+            <a class="proof" href="https://kazilaw.com/" target="_blank" rel="noopener">kazilaw.com <span class="arrow">↗</span></a>
           </div>
-          <div>
-            <h3>KaziLaw</h3>
-            <p>Tanzanian employment law, answered with citations. Free question-and-answer plus a compliance check that walks an employer through what the Acts require. Answers cite the section they come from, so the reader can verify them against the law itself.</p>
-            <span class="note">KaziLaw is not a law firm and does not give legal advice. It is Tanzanian labour law, organized.</span>
-            <a class="proof" href="https://kazilaw.com/">kazilaw.com <span class="arrow">↗</span></a>
-          </div>
+          <div class="void-slot" aria-hidden="true" data-shard="kazilaw"></div>
         </article>
 
-        <article class="row">
-          <div class="row-meta">
-            <span class="chip live"><span class="dot"></span>Live · App Store</span>
-            <p class="stack">React Native<br>OpenAPI → typed client<br>No accounts</p>
+        <article class="entry flip">
+          <div class="body">
+            <span class="idx">Entry 02 / 05</span>
+            <h3 data-scramble>Dino IG</h3>
+            <p class="role">A dinosaur chat app for children</p>
+            <p class="copy">Shipped on the Apple App Store and built contract-first: the OpenAPI schema generates the typed client, so the app and the API cannot quietly drift apart. Identity is derived on the device instead of collected, so a child never creates an account.</p>
+            <div class="meta-row">
+              <span class="chip live"><span class="dot"></span>Live · App Store</span>
+              <span class="chip tech">React Native</span>
+              <span class="chip tech">OpenAPI → typed client</span>
+              <span class="chip tech">No accounts</span>
+            </div>
+            <a class="proof" href="https://github.com/sugarshaneaz/DinoIG" target="_blank" rel="noopener">github.com/sugarshaneaz/DinoIG <span class="arrow">↗</span></a>
           </div>
-          <div>
-            <h3>Dino IG</h3>
-            <p>A dinosaur chat app for children, shipped on the Apple App Store. Built contract-first — the OpenAPI schema generates the typed client, so the app and the API cannot drift apart. Identity is derived on-device instead of collected, so a child never creates an account.</p>
-            <a class="proof" href="https://github.com/sugarshaneaz/DinoIG">github.com/sugarshaneaz/DinoIG <span class="arrow">↗</span></a>
-          </div>
+          <div class="void-slot" aria-hidden="true" data-shard="dinoig"></div>
         </article>
 
-        <article class="row">
-          <div class="row-meta">
-            <span class="chip build"><span class="dot"></span>In build</span>
-            <p class="stack">React Native / Expo<br>Swahili-first<br>Self-hosted media</p>
+        <article class="entry">
+          <div class="body">
+            <span class="idx">Entry 03 / 05</span>
+            <h3 data-scramble>Chuma</h3>
+            <p class="role">Training, written for East Africa</p>
+            <p class="copy">Not translated into the region but written for it: Swahili first, bodyweight-first programming for people without a gym, and East African food in the nutrition side. Rotating trainer-led programs, set-by-set logging, and a licensed exercise library served from our own infrastructure instead of somebody else's quota.</p>
+            <div class="meta-row">
+              <span class="chip build"><span class="dot"></span>In build</span>
+              <span class="chip tech">React Native / Expo</span>
+              <span class="chip tech">Swahili-first</span>
+              <span class="chip tech">Self-hosted media</span>
+            </div>
+            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine" target="_blank" rel="noopener">Its programming engine is open source <span class="arrow">↗</span></a>
           </div>
-          <div>
-            <h3>Chuma</h3>
-            <p>A training app written for East Africa rather than translated into it: Swahili first, bodyweight-first programming for people without a gym, and East African food in the nutrition side. Rotating trainer-led programs, set-by-set logging, and a licensed exercise library served from our own infrastructure instead of a third-party quota.</p>
-            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine">Its programming engine is open source <span class="arrow">↗</span></a>
-          </div>
+          <div class="void-slot" aria-hidden="true" data-shard="chuma"></div>
         </article>
 
-        <article class="row">
-          <div class="row-meta">
-            <span class="chip open"><span class="dot"></span>Open source</span>
-            <p class="stack">TypeScript<br>Knowledge packs<br>Escalation rules</p>
+        <article class="entry flip">
+          <div class="body">
+            <span class="idx">Entry 04 / 05</span>
+            <h3 data-scramble>Sema &amp; Sema-API</h3>
+            <p class="role">Customer-facing AI with the guardrails written down</p>
+            <p class="copy">Each industry pack declares what the assistant must never invent and when it has to hand off to a person — the pharmacy pack refuses dosage, drug interactions and diagnosis outright. Blank onboarding fields are fed back into the prompt, so the model is told what it does not know instead of filling the gap itself.</p>
+            <div class="meta-row">
+              <span class="chip open"><span class="dot"></span>Open source</span>
+              <span class="chip tech">TypeScript</span>
+              <span class="chip tech">Knowledge packs</span>
+              <span class="chip tech">Escalation rules</span>
+            </div>
+            <a class="proof" href="https://github.com/sugarshaneaz/Sema-API" target="_blank" rel="noopener">github.com/sugarshaneaz/Sema-API <span class="arrow">↗</span></a>
           </div>
-          <div>
-            <h3>Sema &amp; Sema-API</h3>
-            <p>Customer-facing AI for small businesses, with the guardrails written down instead of hoped for. Each industry pack declares what the assistant must never invent and when it has to hand off to a person — the pharmacy pack refuses dosage, drug interactions, and diagnosis outright. Blank onboarding fields are fed back into the prompt, so the model is told what it does not know.</p>
-            <a class="proof" href="https://github.com/sugarshaneaz/Sema-API">github.com/sugarshaneaz/Sema-API <span class="arrow">↗</span></a>
-          </div>
+          <div class="void-slot" aria-hidden="true" data-shard="sema"></div>
         </article>
 
-        <article class="row">
-          <div class="row-meta">
-            <span class="chip open"><span class="dot"></span>Open source · MIT</span>
-            <p class="stack">TypeScript<br>Deterministic<br>25 tests</p>
+        <article class="entry">
+          <div class="body">
+            <span class="idx">Entry 05 / 05</span>
+            <h3 data-scramble>routine-engine</h3>
+            <p class="role">Deterministic program generation</p>
+            <p class="copy">The training-program generator extracted from Chuma and released on its own. Given a catalogue and a configuration it produces a full rotating program deterministically — same input, same program — with a test suite that asserts both full coverage where movement patterns exist and graceful degradation where they don't.</p>
+            <div class="meta-row">
+              <span class="chip open"><span class="dot"></span>Open source · MIT</span>
+              <span class="chip tech">TypeScript</span>
+              <span class="chip tech">Deterministic</span>
+              <span class="chip tech">25 tests</span>
+            </div>
+            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine" target="_blank" rel="noopener">github.com/sugarshaneaz/routine-engine <span class="arrow">↗</span></a>
           </div>
-          <div>
-            <h3>routine-engine</h3>
-            <p>The training-program generator extracted from Chuma and released on its own. Given a catalogue and a configuration it produces a full rotating program deterministically — same input, same program — with a test suite that asserts both full coverage where movement patterns exist and graceful degradation where they don't.</p>
-            <a class="proof" href="https://github.com/sugarshaneaz/routine-engine">github.com/sugarshaneaz/routine-engine <span class="arrow">↗</span></a>
-          </div>
+          <div class="void-slot" aria-hidden="true" data-shard="routine"></div>
         </article>
 
       </div>
     </div>
   </section>
 
-  <section id="infrastructure">
+  <!-- ============================ MARQUEE ============================ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Self-hosted <b>·</b> Self-operated <b>·</b> Shipped from Dar es Salaam <b>·</b> Web <b>·</b> Mobile <b>·</b> Agents <b>·</b> </span>
+      <span>Self-hosted <b>·</b> Self-operated <b>·</b> Shipped from Dar es Salaam <b>·</b> Web <b>·</b> Mobile <b>·</b> Agents <b>·</b> </span>
+    </div>
+  </div>
+
+  <!-- ============================ INFRASTRUCTURE ============================ -->
+  <section id="infrastructure" data-section="infrastructure" data-shard="infra">
     <div class="wrap">
       <div class="section-head">
-        <p class="label">Infrastructure</p>
-        <h2>We run our own hardware, and our own agents on it.</h2>
-        <p>Two systems we built for ourselves and run in production. Neither is public — this page is the only place they're described.</p>
+        <p class="label rise"><i>003</i> Infrastructure</p>
+        <h2 class="rise">We run our own hardware, and our own agents on it.</h2>
+        <p class="rise">Two systems we built for ourselves and run in production. Neither is public — this page is the only place they are described.</p>
       </div>
 
       <div class="agents">
-        <div class="agent">
+        <div class="agent rise" data-tilt>
           <span class="chip"><span class="dot"></span>Internal</span>
           <h3>OpenClaw</h3>
-          <p>The agent runtime our automation runs on. Long-lived agents with their own memory, scheduled work, and tool access, sitting directly on our servers rather than behind someone else's platform — so the jobs keep their state and we keep the logs.</p>
+          <p>The agent runtime our automation runs on. Long-lived agents with their own memory, scheduled work and tool access, sitting directly on our servers rather than behind someone else's platform — so the jobs keep their state and we keep the logs.</p>
         </div>
-        <div class="agent">
+        <div class="agent rise" data-tilt>
           <span class="chip"><span class="dot"></span>Internal</span>
           <h3>Hermes</h3>
-          <p>The agent that directs production work: media pipelines, batch generation, and the routine operational jobs that would otherwise be a person copying numbers between systems. It briefs the tools, checks the output, and reports what it did.</p>
+          <p>The agent that directs production work: media pipelines, batch generation, and the routine operational jobs that would otherwise be a person copying numbers between systems. It briefs the tools, checks the output and reports what it did.</p>
         </div>
       </div>
 
-      <dl class="stack-grid">
+      <dl class="stack-grid rise">
         <div class="stack-item">
           <dt>Servers</dt>
-          <dd>Dedicated and virtual hosts we administer ourselves, running 15+ containerized services.</dd>
+          <dd>Dedicated and virtual hosts we administer ourselves, running 15+ containerised services.</dd>
         </div>
         <div class="stack-item">
           <dt>Data</dt>
@@ -586,49 +1136,58 @@
         </div>
         <div class="stack-item">
           <dt>Inference</dt>
-          <dd>Self-hosted image, video, and speech models on our own GPU, alongside hosted APIs where they earn their cost.</dd>
+          <dd>Self-hosted image, video and speech models on our own GPU, alongside hosted APIs where they earn their cost.</dd>
         </div>
         <div class="stack-item">
           <dt>Operations</dt>
-          <dd>Daily reporting automation for a three-location restaurant group: sales digests, cost variance flagging, and tax-receipt tracking.</dd>
+          <dd>Daily reporting automation for a three-location restaurant group: sales digests, cost variance flagging and tax-receipt tracking.</dd>
         </div>
       </dl>
     </div>
   </section>
 
-  <section id="build">
+  <!-- ============================ CAPABILITIES ============================ -->
+  <section id="capabilities" data-section="capabilities">
     <div class="wrap">
-      <div class="section-head">
-        <p class="label">What we build</p>
-        <h2>Three kinds of work, and where to see each one running.</h2>
+      <div class="section-head" data-shard="caps">
+        <p class="label rise"><i>004</i> Capabilities</p>
+        <h2 class="rise">Three kinds of work — and where to see each one running.</h2>
       </div>
-      <div class="services">
-        <div class="service">
-          <div class="rule"></div>
+
+      <div class="caps">
+        <div class="cap rise">
+          <span class="n">01</span>
           <h3>Web platforms</h3>
-          <p>Applications that do real work — search over your own documents, gated content, payments, reporting. Built on Next.js and Postgres. See KaziLaw.</p>
+          <p>Applications that do real work: search over your own documents, gated content, payments, reporting. Built on Next.js and Postgres, deployed and monitored by the same people who wrote them.
+            <span class="see">See <a href="https://kazilaw.com/" target="_blank" rel="noopener">KaziLaw ↗</a></span></p>
         </div>
-        <div class="service">
-          <div class="rule"></div>
+        <div class="cap rise">
+          <span class="n">02</span>
           <h3>Mobile applications</h3>
-          <p>React Native apps taken all the way to the store, including the review process and the on-device bugs that never appear in a simulator. See Dino IG.</p>
+          <p>React Native apps taken all the way to the store — including the review process and the on-device bugs that never appear in a simulator.
+            <span class="see">See <a href="https://github.com/sugarshaneaz/DinoIG" target="_blank" rel="noopener">Dino IG ↗</a></span></p>
         </div>
-        <div class="service">
-          <div class="rule"></div>
+        <div class="cap rise">
+          <span class="n">03</span>
           <h3>AI agent systems</h3>
-          <p>Retrieval over your own data, agents that run on a schedule, and explicit rules for what the model must not say. See Sema and OpenClaw.</p>
+          <p>Retrieval over your own data, agents that run on a schedule, and explicit written rules for what the model must not say.
+            <span class="see">See <a href="https://github.com/sugarshaneaz/Sema-API" target="_blank" rel="noopener">Sema-API ↗</a></span></p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="contact">
+  <!-- ============================ CONTACT ============================ -->
+  <section id="contact" data-section="contact" data-shard="contact">
     <div class="wrap">
-      <div class="contact-card">
-        <p class="label">Contact</p>
-        <h2>Tell us what you're trying to ship.</h2>
-        <p>Start with the problem rather than the spec — what should be true when it works, and who it has to work for. We'll tell you honestly whether we're the right people to build it.</p>
-        <a class="mail" href="mailto:support@sylvesterlimited.tech">support@sylvesterlimited.tech</a>
+      <div class="contact-inner">
+        <p class="label rise"><i>005</i> Contact</p>
+        <h2 class="display">
+          <span class="line"><span>Tell us what you're</span></span>
+          <span class="line"><span class="grad">trying to ship.</span></span>
+        </h2>
+        <p class="rise">Start with the problem rather than the spec — what should be true when it works, and who it has to work for. We will tell you honestly whether we are the right people to build it.</p>
+        <a class="mail" href="mailto:support@sylvesterlimited.tech" data-shape="mail">support@sylvesterlimited.tech</a>
       </div>
     </div>
   </section>
@@ -636,11 +1195,996 @@
 </main>
 
 <footer>
-  <div class="wrap foot-inner">
-    <span>Sylvester Limited · Dar es Salaam, Tanzania</span>
-    <a href="https://github.com/sugarshaneaz">github.com/sugarshaneaz</a>
+  <div class="foot-canvas-wrap" aria-hidden="true"><canvas id="footfx"></canvas></div>
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="mailto:support@sylvesterlimited.tech" data-shape="mail">Email</a>
+      <a href="https://github.com/sugarshaneaz" target="_blank" rel="noopener" data-shape="git">GitHub</a>
+      <a href="https://kazilaw.com/" target="_blank" rel="noopener" data-shape="core">KaziLaw</a>
+      <a href="#top" data-shape="core">Back to top</a>
+    </div>
+    <div class="foot-inner">
+      <span>Sylvester Limited · Dar es Salaam, Tanzania</span>
+      <span>Built and run in-house</span>
+    </div>
   </div>
 </footer>
+
+<!-- ================================================================
+     Baseline behaviour. No dependencies: if the WebGL module below
+     never loads, the page still boots, reveals and reads correctly.
+     ================================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var coarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+  /* ---------------------------------------------------------- loader */
+  var loader   = document.getElementById('loader');
+  var countEl  = document.getElementById('count');
+  var barEl    = document.getElementById('bar');
+  var taskEl   = document.getElementById('load-task');
+  var TASKS = ['Initialising', 'Growing crystals', 'Lighting the void', 'Warming the lens', 'Ready'];
+
+  var shown = 0;        // what the counter is displaying
+  var target = 4;       // what it is climbing toward
+  var finished = false;
+  var raf, lastT = 0;
+
+  function setTarget(v, task) {
+    target = Math.max(target, Math.min(100, v));
+    if (task && taskEl) taskEl.textContent = task;
+  }
+
+  function tick(now) {
+    // Time-based, not frame-based: a slow first frame must not stall the count.
+    var dt = lastT ? Math.min(0.1, (now - lastT) / 1000) : 0.016;
+    lastT = now;
+    shown += (target - shown) * (1 - Math.exp(-dt * 7));
+    if (target - shown < 0.4) shown = target;
+    var n = Math.floor(shown);
+    if (countEl) countEl.textContent = (n < 10 ? '00' : n < 100 ? '0' : '') + n;
+    if (barEl) barEl.style.right = (100 - shown) + '%';
+    if (taskEl && !finished) taskEl.textContent = TASKS[Math.min(TASKS.length - 1, Math.floor(shown / 25))];
+    if (shown >= 99.5 && finished) { reveal(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function reveal() {
+    if (root.classList.contains('ready')) return;
+    cancelAnimationFrame(raf);
+    if (countEl) countEl.textContent = '100';
+    if (barEl) barEl.style.right = '0%';
+    if (taskEl) taskEl.textContent = 'Ready';
+    root.classList.add('ready');
+    if (!coarse) root.classList.add('cursor-on');
+    if (loader) loader.setAttribute('aria-hidden', 'true');
+    // Kick the first reveal pass now that the curtain is lifting.
+    setTimeout(function () { sweep(); }, 60);
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    setTarget(100, 'Ready');
+    // The count is a courtesy, not a gate.
+    setTimeout(reveal, 900);
+  }
+
+  // Expose a tiny handshake so the WebGL module can report progress.
+  window.__slBoot = {
+    progress: function (v, task) { setTarget(v, task); },
+    done: finish
+  };
+
+  raf = requestAnimationFrame(tick);
+  setTarget(22);
+
+  window.addEventListener('load', function () {
+    setTarget(72);
+    // The scene gets a short grace period; after that we open regardless.
+    setTimeout(finish, root.classList.contains('no-webgl') ? 260 : 3200);
+  });
+  // Absolute backstop — nothing keeps a visitor behind a black curtain.
+  setTimeout(finish, 7000);
+
+  /* ---------------------------------------------------------- clock */
+  var clockEl = document.getElementById('clock');
+  if (clockEl) {
+    var fmt;
+    try {
+      fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Africa/Dar_es_Salaam',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      });
+    } catch (e) { fmt = null; }
+    var beat = function () {
+      var d = new Date();
+      clockEl.textContent = fmt
+        ? fmt.format(d)
+        : new Date(d.getTime() + (3 * 60 + d.getTimezoneOffset()) * 60000)
+            .toTimeString().slice(0, 8);
+    };
+    beat();
+    setInterval(beat, 1000);
+  }
+
+  /* ---------------------------------------------------------- reveals */
+  var revealables = [].slice.call(document.querySelectorAll('.rise, .display'));
+
+  function activate(el) {
+    if (el.classList.contains('in')) return;
+    var sibs = el.parentNode ? [].slice.call(el.parentNode.children).filter(function (n) {
+      return n.classList && (n.classList.contains('rise') || n.classList.contains('display'));
+    }) : [];
+    var i = Math.max(0, sibs.indexOf(el));
+    el.style.transitionDelay = Math.min(i * 80, 320) + 'ms';
+    el.classList.add('in');
+  }
+
+  var revealIO = ('IntersectionObserver' in window)
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { activate(e.target); revealIO.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 })
+    : null;
+
+  function sweep() {
+    if (!revealIO) { revealables.forEach(activate); return; }
+    revealables.forEach(function (el) { revealIO.observe(el); });
+  }
+  if (reduce) { revealables.forEach(function (el) { el.classList.add('in'); }); }
+  else { sweep(); }
+
+  /* ---------------------------------------------------------- scramble */
+  var GLYPHS = '01<>/\\[]{}#*+=-_$%&|:;ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  function scramble(el) {
+    var final = el.getAttribute('data-final') || el.textContent;
+    el.setAttribute('data-final', final);
+    if (reduce) { el.textContent = final; return; }
+    // Clock-driven, so it resolves in under a second on any frame rate.
+    var t0 = performance.now(), DUR = 820;
+    var queue = [];
+    for (var i = 0; i < final.length; i++) {
+      var start = Math.random() * 0.35, end = 0.45 + Math.random() * 0.55;
+      queue.push({ ch: final[i], start: start, end: end });
+    }
+    (function run(now) {
+      var p = (now - t0) / DUR, out = '', done = 0;
+      for (var i = 0; i < queue.length; i++) {
+        var q = queue[i];
+        if (p >= q.end || q.ch === ' ') { out += q.ch; done++; }
+        else if (p >= q.start) { out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)]; }
+        else { out += '\u00a0'; }
+      }
+      el.textContent = out;
+      if (done < queue.length && p < 1.2) requestAnimationFrame(run);
+      else el.textContent = final;
+    })(t0);
+  }
+
+  var scrambles = [].slice.call(document.querySelectorAll('[data-scramble]'));
+  if ('IntersectionObserver' in window && scrambles.length) {
+    var sIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { scramble(e.target); sIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    scrambles.forEach(function (el) { sIO.observe(el); });
+  }
+
+  /* ---------------------------------------------------------- tallies */
+  var tallies = [].slice.call(document.querySelectorAll('[data-tally]'));
+  function runTally(el) {
+    var to = parseInt(el.getAttribute('data-tally'), 10) || 0;
+    var suffix = el.getAttribute('data-suffix') || '';
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (reduce) { el.textContent = pad(to) + suffix; return; }
+    var t0 = performance.now(), dur = 900;
+    (function step(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pad(Math.round(to * e)) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  if ('IntersectionObserver' in window && tallies.length) {
+    var tIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { runTally(e.target); tIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    tallies.forEach(function (el) { tIO.observe(el); });
+  }
+
+  /* ---------------------------------------------------------- rail + cue */
+  var railLinks = {};
+  [].slice.call(document.querySelectorAll('.rail a')).forEach(function (a) {
+    railLinks[a.getAttribute('data-rail')] = a;
+  });
+  var sections = [].slice.call(document.querySelectorAll('[data-section]'));
+  if ('IntersectionObserver' in window && sections.length) {
+    var current = null;
+    var rIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var key = e.target.getAttribute('data-section');
+        if (key === current) return;
+        if (current && railLinks[current]) railLinks[current].removeAttribute('aria-current');
+        current = key;
+        if (railLinks[key]) railLinks[key].setAttribute('aria-current', 'true');
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    sections.forEach(function (s) { rIO.observe(s); });
+  }
+
+  var cue = document.querySelector('.cue');
+  if (cue) {
+    var onScrollCue = function () {
+      if (window.scrollY > 80) { cue.classList.add('gone'); window.removeEventListener('scroll', onScrollCue); }
+    };
+    window.addEventListener('scroll', onScrollCue, { passive: true });
+  }
+
+  /* ---------------------------------------------------------- cursor */
+  if (!coarse && !reduce) {
+    var dot = document.querySelector('.cur');
+    var ring = document.querySelector('.cur-ring');
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (dot) dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0)';
+    }, { passive: true });
+    (function loop() {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      if (ring) ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+      requestAnimationFrame(loop);
+    })();
+    var hot = 'a, button, [data-tilt], .stack-item';
+    document.addEventListener('mouseover', function (e) {
+      if (ring && e.target.closest && e.target.closest(hot)) ring.classList.add('hot');
+    });
+    document.addEventListener('mouseout', function (e) {
+      if (ring && e.target.closest && e.target.closest(hot)) ring.classList.remove('hot');
+    });
+  }
+
+  /* ---------------------------------------------------------- card tilt */
+  [].slice.call(document.querySelectorAll('[data-tilt]')).forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+
+  /* ---------------------------------------------------------- ambient sound */
+  var soundBtn = document.getElementById('sound');
+  var soundLabel = document.getElementById('sound-label');
+  var audio = null, audioOn = false;
+
+  function buildAudio() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    var ctx = new AC();
+    var master = ctx.createGain();
+    master.gain.value = 0;
+    master.connect(ctx.destination);
+
+    var filt = ctx.createBiquadFilter();
+    filt.type = 'lowpass';
+    filt.frequency.value = 560;
+    filt.Q.value = 0.6;
+    filt.connect(master);
+
+    // A slow, cold pad: root, fifth, octave, tenth.
+    [55, 82.41, 110, 164.81].forEach(function (f, i) {
+      var osc = ctx.createOscillator();
+      osc.type = i % 2 ? 'sine' : 'triangle';
+      osc.frequency.value = f;
+      osc.detune.value = (i - 1.5) * 5;
+      var g = ctx.createGain();
+      g.gain.value = 0.13 / (i + 1);
+      var lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.031 + i * 0.019;
+      var lg = ctx.createGain();
+      lg.gain.value = 0.055 / (i + 1);
+      lfo.connect(lg); lg.connect(g.gain); lfo.start();
+      osc.connect(g); g.connect(filt); osc.start();
+    });
+
+    // Air moving over the surface.
+    var len = Math.floor(ctx.sampleRate * 4);
+    var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    var ch = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * 0.4;
+    var noise = ctx.createBufferSource();
+    noise.buffer = buf; noise.loop = true;
+    var nf = ctx.createBiquadFilter();
+    nf.type = 'bandpass'; nf.frequency.value = 820; nf.Q.value = 0.5;
+    var ng = ctx.createGain(); ng.gain.value = 0.05;
+    noise.connect(nf); nf.connect(ng); ng.connect(master); noise.start();
+
+    return { ctx: ctx, master: master };
+  }
+
+  if (soundBtn) {
+    soundBtn.addEventListener('click', function () {
+      if (!audio) audio = buildAudio();
+      if (!audio) { soundBtn.disabled = true; if (soundLabel) soundLabel.textContent = 'No audio'; return; }
+      if (audio.ctx.state === 'suspended') audio.ctx.resume();
+      audioOn = !audioOn;
+      var now = audio.ctx.currentTime;
+      audio.master.gain.cancelScheduledValues(now);
+      audio.master.gain.setValueAtTime(audio.master.gain.value, now);
+      audio.master.gain.linearRampToValueAtTime(audioOn ? 0.16 : 0, now + (audioOn ? 2.2 : 0.9));
+      soundBtn.setAttribute('aria-pressed', audioOn ? 'true' : 'false');
+      if (soundLabel) soundLabel.textContent = audioOn ? 'Sound on' : 'Sound';
+    });
+  }
+
+  /* ---------------------------------------------------------- footer field
+     A particle field that re-forms into a different shape depending on
+     which footer link the pointer is over. Colour tracks particle speed.  */
+  var fc = document.getElementById('footfx');
+  if (fc && !root.classList.contains('no-webgl')) {
+    var g2 = fc.getContext('2d');
+    var wrapEl = fc.parentNode;
+    var W = 0, H = 0, dpr = 1;
+    var COUNT = window.innerWidth < 760 ? 420 : 1100;
+    var parts = [];
+    var shape = 'core';
+    var targets = {};
+    var live = false;
+
+    var shapeDrawers = {
+      core: function (o, w, h) {
+        o.fillStyle = '#fff';
+        o.textAlign = 'center';
+        o.textBaseline = 'middle';
+        var size = Math.min(h * 0.86, w * 0.30);
+        o.font = '700 ' + size + 'px "Space Grotesk", Helvetica, Arial, sans-serif';
+        o.fillText('SL', w / 2, h / 2 + size * 0.02);
+      },
+      mail: function (o, w, h) {
+        var bw = Math.min(w * 0.34, h * 1.5), bh = bw * 0.62;
+        var x = (w - bw) / 2, y = (h - bh) / 2;
+        o.strokeStyle = '#fff';
+        o.lineWidth = Math.max(3, bh * 0.055);
+        o.strokeRect(x, y, bw, bh);
+        o.beginPath();
+        o.moveTo(x, y); o.lineTo(x + bw / 2, y + bh * 0.58); o.lineTo(x + bw, y);
+        o.stroke();
+      },
+      git: function (o, w, h) {
+        var cx = w / 2, cy = h / 2;
+        var s = Math.min(w * 0.11, h * 0.34);
+        o.strokeStyle = '#fff';
+        o.lineWidth = Math.max(3, s * 0.11);
+        o.beginPath();
+        o.moveTo(cx - s * 1.6, cy); o.lineTo(cx + s * 1.6, cy);
+        o.moveTo(cx, cy); o.lineTo(cx + s * 0.9, cy - s * 1.15);
+        o.moveTo(cx, cy); o.lineTo(cx + s * 0.9, cy + s * 1.15);
+        o.stroke();
+        [[cx - s * 1.6, cy], [cx + s * 1.6, cy], [cx + s * 0.9, cy - s * 1.15], [cx + s * 0.9, cy + s * 1.15]]
+          .forEach(function (p) {
+            o.beginPath(); o.arc(p[0], p[1], s * 0.24, 0, Math.PI * 2); o.fill();
+          });
+      }
+    };
+
+    function sample(drawer, count) {
+      var oc = document.createElement('canvas');
+      oc.width = Math.max(2, W); oc.height = Math.max(2, H);
+      var o = oc.getContext('2d');
+      o.fillStyle = '#fff';
+      drawer(o, oc.width, oc.height);
+      var data;
+      try { data = o.getImageData(0, 0, oc.width, oc.height).data; }
+      catch (e) { return []; }
+      var pts = [];
+      var step = Math.max(2, Math.round(Math.sqrt(oc.width * oc.height / (count * 5))));
+      for (var y = 0; y < oc.height; y += step) {
+        for (var x = 0; x < oc.width; x += step) {
+          if (data[(y * oc.width + x) * 4 + 3] > 120) pts.push([x, y]);
+        }
+      }
+      if (!pts.length) return [];
+      for (var i = pts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = pts[i]; pts[i] = pts[j]; pts[j] = t;
+      }
+      var out = [];
+      for (var k = 0; k < count; k++) out.push(pts[k % pts.length]);
+      return out;
+    }
+
+    function build() {
+      var r = wrapEl.getBoundingClientRect();
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.max(2, Math.round(r.width * dpr));
+      H = Math.max(2, Math.round(r.height * dpr));
+      fc.width = W; fc.height = H;
+      Object.keys(shapeDrawers).forEach(function (k) {
+        targets[k] = sample(shapeDrawers[k], COUNT);
+      });
+      if (!parts.length) {
+        var seed = targets.core || [];
+        for (var i = 0; i < COUNT; i++) {
+          var t = seed[i % seed.length] || [W / 2, H / 2];
+          parts.push({
+            x: t[0] + (Math.random() - 0.5) * 90 * dpr,
+            y: t[1] + (Math.random() - 0.5) * 90 * dpr,
+            vx: 0, vy: 0, s: 0.6 + Math.random() * 1.1
+          });
+        }
+      }
+    }
+
+    var lastFrame = 0;
+
+    function frame(now) {
+      if (!live) return;
+      requestAnimationFrame(frame);
+      var tg = targets[shape];
+      if (!tg || !tg.length) return;
+      var dt = lastFrame ? Math.min(0.1, (now - lastFrame) / 1000) : 0.016;
+      lastFrame = now;
+      var ease = reduce ? 1 : Math.min(0.5, dt * 3.4);
+      var damp = Math.pow(0.82, dt * 60);
+      g2.clearRect(0, 0, W, H);
+      g2.globalCompositeOperation = 'lighter';
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i], t = tg[i % tg.length];
+        p.vx = (p.vx + (t[0] - p.x) * ease) * damp;
+        p.vy = (p.vy + (t[1] - p.y) * ease) * damp;
+        p.x += p.vx; p.y += p.vy;
+        var sp = Math.min(1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) / 7);
+        // slow = ice violet, fast = hot white-cyan
+        var rr = Math.round(120 + 135 * sp);
+        var gg = Math.round(90 + 150 * sp);
+        var bb = Math.round(200 + 55 * sp);
+        g2.fillStyle = 'rgba(' + rr + ',' + gg + ',' + bb + ',' + (0.30 + 0.55 * sp) + ')';
+        var rad = p.s * dpr * (1 + sp * 1.2);
+        g2.fillRect(p.x - rad / 2, p.y - rad / 2, rad, rad);
+      }
+      g2.globalCompositeOperation = 'source-over';
+    }
+
+    build();
+    window.addEventListener('resize', build);
+
+    [].slice.call(document.querySelectorAll('[data-shape]')).forEach(function (el) {
+      el.addEventListener('mouseenter', function () { shape = el.getAttribute('data-shape'); });
+      el.addEventListener('focus', function () { shape = el.getAttribute('data-shape'); });
+      el.addEventListener('mouseleave', function () { shape = 'core'; });
+      el.addEventListener('blur', function () { shape = 'core'; });
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && !live) { live = true; lastFrame = 0; requestAnimationFrame(frame); }
+          else if (!e.isIntersecting) { live = false; }
+        });
+      }, { threshold: 0.02 }).observe(wrapEl);
+    } else { live = true; requestAnimationFrame(frame); }
+  }
+})();
+</script>
+
+<!-- ================================================================
+     THE VOID — one descent, lit by crystals grown from a seed.
+     Purely decorative: every shard is anchored to an element in the
+     document, so the scene and the copy can never fall out of sync.
+     ================================================================ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+const boot = window.__slBoot || { progress(){}, done(){} };
+const root = document.documentElement;
+
+if (root.classList.contains('no-webgl')) {
+  boot.done();
+} else {
+  try {
+    boot.progress(38, 'Loading renderer');
+
+    const THREE = await import('three');
+    const { mergeGeometries } = await import('three/addons/utils/BufferGeometryUtils.js');
+    const { EffectComposer }  = await import('three/addons/postprocessing/EffectComposer.js');
+    const { RenderPass }      = await import('three/addons/postprocessing/RenderPass.js');
+    const { ShaderPass }      = await import('three/addons/postprocessing/ShaderPass.js');
+    const { UnrealBloomPass } = await import('three/addons/postprocessing/UnrealBloomPass.js');
+    const { OutputPass }      = await import('three/addons/postprocessing/OutputPass.js');
+
+    boot.progress(56, 'Growing crystals');
+
+    const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const narrow   = window.matchMedia('(max-width: 860px)').matches;
+    const lowPower = narrow || (navigator.hardwareConcurrency || 8) <= 4;
+
+    const VOID   = 0x05050a;
+    const ACCENT = new THREE.Color('#a855f7');
+    const ICE    = new THREE.Color('#7dd3fc');
+
+    /* ---------------------------------------------------------- renderer */
+    const stage = document.getElementById('stage');
+    const renderer = new THREE.WebGLRenderer({
+      antialias: !lowPower,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPower ? 1 : 1.75));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    stage.appendChild(renderer.domElement);
+
+    const scene  = new THREE.Scene();
+    scene.fog = new THREE.Fog(VOID, 11, 30);
+
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
+    camera.position.set(0, 0, 7);
+
+    /* ---------------------------------------------------------- environment
+       A procedural sky, drawn to a canvas and pre-filtered. No HDRI to
+       download, and the crystals still have something to reflect.       */
+    function envTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 256;
+      const g = c.getContext('2d');
+      g.fillStyle = '#04040a';
+      g.fillRect(0, 0, 512, 256);
+      const blobs = [
+        [ 90,  70, 150, 'rgba(138,60,255,0.95)'],
+        [330,  40, 130, 'rgba(120,220,255,0.85)'],
+        [430, 170, 170, 'rgba(80,40,190,0.75)'],
+        [200, 210, 130, 'rgba(255,255,255,0.30)'],
+        [ 20, 190, 110, 'rgba(60,30,140,0.7)']
+      ];
+      for (const [x, y, r, col] of blobs) {
+        const rg = g.createRadialGradient(x, y, 0, x, y, r);
+        rg.addColorStop(0, col);
+        rg.addColorStop(1, 'rgba(0,0,0,0)');
+        g.fillStyle = rg;
+        g.fillRect(0, 0, 512, 256);
+      }
+      // Two soft highlights give the facets something to catch without
+      // any single face blowing out to flat white.
+      for (const [x, y, r, a] of [[300, 96, 46, 0.55], [110, 150, 34, 0.35]]) {
+        const hot = g.createRadialGradient(x, y, 0, x, y, r);
+        hot.addColorStop(0, 'rgba(255,255,255,' + a + ')');
+        hot.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = hot;
+        g.fillRect(0, 0, 512, 256);
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envMap = pmrem.fromEquirectangular(envTexture()).texture;
+    scene.environment = envMap;
+    pmrem.dispose();
+
+    /* ---------------------------------------------------------- backdrop
+       A far shell of soft light so refraction has colour to bend.       */
+    const backdrop = new THREE.Mesh(
+      new THREE.SphereGeometry(60, 32, 24),
+      new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        depthWrite: false,
+        fog: false,
+        uniforms: { uA: { value: ACCENT }, uB: { value: ICE } },
+        vertexShader: `
+          varying vec3 vPos;
+          void main(){ vPos = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+        `,
+        fragmentShader: `
+          uniform vec3 uA; uniform vec3 uB;
+          varying vec3 vPos;
+          void main(){
+            float a = smoothstep(-0.6, 0.9, vPos.y);
+            float b = smoothstep(0.2, 1.0, vPos.x * 0.5 + 0.5);
+            // Barely there. The void has to stay matte black, or the
+            // crystals stop being the only source of colour on the page.
+            vec3 col = mix(uA * 0.020, uB * 0.011, b);
+            col += uA * 0.013 * (1.0 - a);
+            col += vec3(0.003);
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `
+      })
+    );
+    backdrop.renderOrder = -1;
+    scene.add(backdrop);
+
+    /* ---------------------------------------------------------- lights */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+    const keyLight = new THREE.PointLight(ACCENT, 90, 40, 2);
+    keyLight.position.set(4, 3, 6);
+    scene.add(keyLight);
+    const rimLight = new THREE.PointLight(ICE, 55, 40, 2);
+    rimLight.position.set(-5, -2, 4);
+    scene.add(rimLight);
+
+    /* ---------------------------------------------------------- crystals
+       Procedural growth: elongated cells pushed out along random axes
+       from a seeded generator, merged and re-faceted. Same seed, same
+       crystal — so a reload never reshuffles the page.                  */
+    function rand(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a |= 0; a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function growCrystal(seed, cells) {
+      const r = rand(seed);
+      const parts = [];
+      for (let i = 0; i < cells; i++) {
+        const g = new THREE.IcosahedronGeometry(1, 0);
+        g.scale(0.30 + r() * 0.34, 0.55 + r() * 1.05, 0.30 + r() * 0.34);
+        g.applyQuaternion(new THREE.Quaternion().setFromEuler(
+          new THREE.Euler(r() * Math.PI, r() * Math.PI, r() * Math.PI)
+        ));
+        const dir = new THREE.Vector3(r() * 2 - 1, r() * 2 - 1, r() * 2 - 1)
+          .normalize().multiplyScalar(r() * 0.72);
+        g.translate(dir.x, dir.y, dir.z);
+        parts.push(g);
+      }
+      let merged = mergeGeometries(parts, false);
+      if (merged.index) merged = merged.toNonIndexed();
+      parts.forEach(p => p.dispose());
+
+      // Jitter each facet a little so no two faces catch light the same way.
+      const pos = merged.attributes.position;
+      for (let t = 0; t < pos.count; t += 3) {
+        const jx = (r() - 0.5) * 0.05, jy = (r() - 0.5) * 0.05, jz = (r() - 0.5) * 0.05;
+        for (let k = 0; k < 3; k++) {
+          pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
+        }
+      }
+      merged.computeVertexNormals();
+      merged.center();
+      merged.computeBoundingSphere();
+      const rad = merged.boundingSphere.radius || 1;
+      merged.scale(1 / rad, 1 / rad, 1 / rad);
+      return merged;
+    }
+
+    const iceMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      metalness: 0,
+      roughness: 0.13,
+      transmission: 0.88,
+      thickness: lowPower ? 0.7 : 1.15,
+      ior: 1.62,
+      dispersion: lowPower ? 0 : 3.2,
+      iridescence: 1,
+      iridescenceIOR: 1.30,
+      iridescenceThicknessRange: [140, 720],
+      clearcoat: 1,
+      clearcoatRoughness: 0.10,
+      specularIntensity: 1,
+      envMapIntensity: 3.1,
+      attenuationColor: new THREE.Color('#7c4dff'),
+      attenuationDistance: 5.5,
+      side: THREE.FrontSide
+    });
+
+    const edgeMaterial = new THREE.LineBasicMaterial({
+      color: new THREE.Color('#c9b6ff'),
+      transparent: true,
+      opacity: 0.26,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    /* A fresnel shell sitting just inside each crystal. Without it the
+       glass is only edges: transmission against a black void has nothing
+       to refract, so the body has to make its own light.               */
+    const coreMaterial = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      fog: false,
+      uniforms: {
+        uA: { value: new THREE.Color('#5b21b6') },
+        uB: { value: new THREE.Color('#a5f3ff') },
+        uI: { value: 1.0 }
+      },
+      vertexShader: `
+        varying vec3 vN; varying vec3 vV;
+        void main(){
+          vN = normalize(normalMatrix * normal);
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vV = normalize(-mv.xyz);
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uA; uniform vec3 uB; uniform float uI;
+        varying vec3 vN; varying vec3 vV;
+        void main(){
+          float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.0);
+          vec3 col = mix(uA, uB, f) * (0.16 + f * 1.25) * uI;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `
+    });
+
+    /* Anchor table: which element each crystal follows, and where it sits
+       relative to the descent axis. Sides match the column the copy is in. */
+    const PLAN = {
+      hero:      { seed:  1013, cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
+      principle: { seed:  2027, cells: lowPower ? 4 : 6,  scale: 1.05, x: -3.10, z: -2.2, spin: 0.09  },
+      kazilaw:   { seed:  3041, cells: lowPower ? 5 : 8,  scale: 1.45, x:  2.35, z: -0.5, spin: 0.07  },
+      dinoig:    { seed:  4051, cells: lowPower ? 4 : 7,  scale: 1.30, x: -2.35, z: -0.5, spin: -0.08 },
+      chuma:     { seed:  5077, cells: lowPower ? 5 : 9,  scale: 1.40, x:  2.35, z: -0.5, spin: 0.065 },
+      sema:      { seed:  6091, cells: lowPower ? 4 : 7,  scale: 1.32, x: -2.35, z: -0.5, spin: -0.07 },
+      routine:   { seed:  7103, cells: lowPower ? 4 : 6,  scale: 1.22, x:  2.35, z: -0.5, spin: 0.085 },
+      infra:     { seed:  8117, cells: lowPower ? 7 : 13, scale: 1.75, x: -3.15, z: -1.7, spin: 0.05  },
+      caps:      { seed:  9133, cells: lowPower ? 4 : 6,  scale: 1.30, x:  3.10, z: -1.6, spin: 0.075 },
+      contact:   { seed: 10151, cells: lowPower ? 6 : 11, scale: 2.40, x:  0.00, z: -4.4, spin: 0.04  }
+    };
+
+    const shards = [];
+    for (const [key, cfg] of Object.entries(PLAN)) {
+      const host = document.querySelector('[data-shard="' + key + '"]');
+      if (!host) continue;
+
+      const geo = growCrystal(cfg.seed, cfg.cells);
+      const mesh = new THREE.Mesh(geo, iceMaterial);
+      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 24), edgeMaterial);
+      const core = new THREE.Mesh(geo, coreMaterial);
+      core.scale.setScalar(0.9);
+      core.renderOrder = -1;
+      mesh.add(core);
+      mesh.add(edges);
+
+      const group = new THREE.Group();
+      group.add(mesh);
+      const s = cfg.scale * (narrow ? 0.56 : 1);
+      group.scale.setScalar(s);
+      group.position.x = narrow ? (cfg.mx || 0) : cfg.x;
+      group.position.z = (narrow ? cfg.z - 4.0 : cfg.z);
+      group.rotation.set(Math.random() * 0.4, cfg.seed % 6, Math.random() * 0.3);
+
+      scene.add(group);
+      shards.push({ host, group, mesh, cfg, baseScale: s, anchor: 0 });
+    }
+
+    /* ---------------------------------------------------------- dust */
+    const DUST = lowPower ? 700 : 2200;
+    const dustPos = new Float32Array(DUST * 3);
+    const dustCol = new Float32Array(DUST * 3);
+    const dr = rand(4242);
+    for (let i = 0; i < DUST; i++) {
+      dustPos[i * 3]     = (dr() - 0.5) * 26;
+      dustPos[i * 3 + 1] = (dr() - 0.5) * 2;   // stretched to depth after layout
+      dustPos[i * 3 + 2] = (dr() - 0.5) * 16 - 2;
+      const c = dr() < 0.35 ? ICE : ACCENT;
+      const k = 0.35 + dr() * 0.65;
+      dustCol[i * 3] = c.r * k; dustCol[i * 3 + 1] = c.g * k; dustCol[i * 3 + 2] = c.b * k;
+    }
+    const dustGeo = new THREE.BufferGeometry();
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    dustGeo.setAttribute('color', new THREE.BufferAttribute(dustCol, 3));
+    const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+      size: lowPower ? 0.035 : 0.028,
+      sizeAttenuation: true,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    }));
+    scene.add(dust);
+
+    /* ---------------------------------------------------------- post */
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+
+    let bloom = null;
+    if (!lowPower) {
+      bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.72, 0.68, 0.62);
+      composer.addPass(bloom);
+    }
+
+    const lensPass = new ShaderPass({
+      uniforms: {
+        tDiffuse: { value: null },
+        uTime:    { value: 0 },
+        uShift:   { value: 0 },
+        uGrain:   { value: lowPower ? 0.016 : 0.028 },
+        uVig:     { value: 0.55 }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+      `,
+      fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float uTime, uShift, uGrain, uVig;
+        varying vec2 vUv;
+        void main(){
+          vec2 c = vUv - 0.5;
+          float d = dot(c, c);
+          vec2 off = c * (0.0005 + uShift) * (0.30 + d * 2.4);
+          vec4 mid = texture2D(tDiffuse, vUv);
+          float r = texture2D(tDiffuse, vUv + off).r;
+          float b = texture2D(tDiffuse, vUv - off).b;
+          vec3 col = vec3(r, mid.g, b);
+          col *= 1.0 - uVig * d * 1.45;
+          float n = fract(sin(dot(vUv * vec2(97.3, 41.7) + uTime, vec2(12.9898, 78.233))) * 43758.5453);
+          col += (n - 0.5) * uGrain;
+          gl_FragColor = vec4(col, mid.a);
+        }
+      `
+    });
+    composer.addPass(lensPass);
+    composer.addPass(new OutputPass());
+
+    boot.progress(82, 'Lighting the void');
+
+    /* ---------------------------------------------------------- layout
+       Depth is derived from the document, not guessed: each crystal's
+       anchor is the scroll progress at which its element is centred.   */
+    let DEPTH = 100;
+    let scrollSpan = 1;
+
+    function measure() {
+      const w = window.innerWidth, h = window.innerHeight;
+      renderer.setSize(w, h, false);
+      composer.setSize(w, h);
+      if (bloom) bloom.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+
+      const docH = document.documentElement.scrollHeight;
+      scrollSpan = Math.max(1, docH - h);
+      // One screen of scroll moves the camera 0.86 of a screen's worth of
+      // world units at the crystals' depth, so they lag the page slightly.
+      // On narrow screens the entries are tall and stacked, so the crystals
+      // track the page exactly and stay inside their slots.
+      const unitsPerScreen = 2 * (7 + 0.5) * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      DEPTH = Math.max(10, (scrollSpan / h) * unitsPerScreen * (narrow ? 1.0 : 0.86));
+
+      for (const s of shards) {
+        const box = s.host.getBoundingClientRect();
+        const centre = box.top + window.scrollY + box.height / 2 - h / 2;
+        s.anchor = -(Math.min(Math.max(centre / scrollSpan, 0), 1)) * DEPTH
+                   + (narrow ? (s.cfg.my || 0) : 0);
+        s.group.position.y = s.anchor;
+      }
+
+      // Spread the dust evenly over the whole shaft.
+      const pos = dust.geometry.attributes.position;
+      for (let i = 0; i < DUST; i++) {
+        pos.array[i * 3 + 1] = -((i + Math.random()) / DUST) * (DEPTH + 8) + 4;
+      }
+      pos.needsUpdate = true;
+    }
+
+    /* ---------------------------------------------------------- loop */
+    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    window.addEventListener('mousemove', e => {
+      pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+    }, { passive: true });
+
+    let camY = 0, lastScroll = window.scrollY, velocity = 0;
+    let visible = true;
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
+
+    const clock = new THREE.Clock();
+    let first = true;
+
+    function frame() {
+      if (!visible) return;
+      // getDelta() first: getElapsedTime() would consume the delta itself.
+      const dt = Math.min(clock.getDelta(), 0.1);
+      const t = clock.elapsedTime;
+      // Frame-rate independent easing: k per second, not per frame.
+      const ease = k => 1 - Math.exp(-dt * k);
+
+      const progress = Math.min(Math.max(window.scrollY / scrollSpan, 0), 1);
+      const targetY = -progress * DEPTH;
+
+      velocity += ((window.scrollY - lastScroll) - velocity) * ease(12);
+      lastScroll = window.scrollY;
+
+      camY += (targetY - camY) * (reduce ? 1 : ease(5.5));
+      camera.position.y = camY;
+
+      pointer.x += (pointer.tx - pointer.x) * ease(3);
+      pointer.y += (pointer.ty - pointer.y) * ease(3);
+      camera.position.x = pointer.x * (narrow ? 0 : 0.45);
+      camera.position.z = 7 + Math.min(1.2, Math.abs(velocity) * 0.003);
+      camera.rotation.z = -Math.max(-0.03, Math.min(0.03, velocity * 0.00012));
+      camera.lookAt(camera.position.x * 0.4, camY - pointer.y * 0.25, -1.5);
+
+      backdrop.position.y = camY;
+      dust.position.y = (camY * 0.35) % 4;
+      if (!reduce) dust.rotation.y = t * 0.006;
+
+      for (const s of shards) {
+        const near = 1 - Math.min(1, Math.abs(s.group.position.y - camY) / 9);
+        const k = 0.80 + near * 0.20;
+        s.group.scale.setScalar(s.baseScale * k);
+        if (!reduce) {
+          s.mesh.rotation.y += s.cfg.spin * dt * 0.9;
+          s.mesh.rotation.x = Math.sin(t * 0.18 + s.cfg.seed) * 0.10;
+        }
+        s.mesh.rotation.y += velocity * 0.00035;
+      }
+
+      keyLight.position.y = camY + 3;
+      rimLight.position.y = camY - 2;
+
+      lensPass.uniforms.uTime.value = reduce ? 0 : t;
+      lensPass.uniforms.uShift.value = Math.min(0.006, Math.abs(velocity) * 0.00009);
+
+      composer.render();
+
+      if (first) { first = false; boot.done(); }
+    }
+
+    renderer.setAnimationLoop(frame);
+
+    window.__slStage = {
+      shards: () => shards.map(sh => {
+        const v = sh.group.position.clone().project(camera);
+        const r = sh.host.getBoundingClientRect();
+        return {
+          key: Object.keys(PLAN).find(k => PLAN[k] === sh.cfg),
+          screen: [Math.round((v.x + 1) / 2 * window.innerWidth), Math.round((1 - v.y) / 2 * window.innerHeight)],
+          host: [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)]
+        };
+      }),
+      depth: () => DEPTH, camY: () => camY
+    };
+
+    let resizeTimer;
+    const remeasure = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(measure, 120); };
+    window.addEventListener('resize', remeasure);
+    window.addEventListener('orientationchange', remeasure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+    // Reveal animations change the document height; re-measure once they settle.
+    setTimeout(measure, 900);
+    setTimeout(measure, 2600);
+
+    measure();
+    boot.progress(96, 'Warming the lens');
+  } catch (err) {
+    console.warn('[stage] falling back to the flat void:', err);
+    document.documentElement.classList.add('no-webgl');
+    boot.done();
+  }
+}
+</script>
 
 </body>
 </html>
