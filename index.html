@@ -34,6 +34,10 @@
   /* Set before paint so the enhanced states never flash their un-enhanced form. */
   document.documentElement.classList.add('js');
   try {
+    var th = new URLSearchParams(location.search).get('theme');
+    if (th === 'light' || th === 'dark') document.documentElement.setAttribute('data-theme', th);
+  } catch (e) {}
+  try {
     var c = document.createElement('canvas');
     if (!(window.WebGL2RenderingContext && c.getContext('webgl2'))) {
       document.documentElement.classList.add('no-webgl');
@@ -61,6 +65,15 @@
     --accent:      hsl(270 80% 65%);
     --accent-deep: hsl(263 83% 58%);
     --ice:         hsl(196 92% 74%);
+
+    /* Surfaces that sit over the stage. Tokenised so a light theme can
+       swap them without touching every rule. */
+    --glass:   hsl(255 25% 8% / .52);
+    --scrim:   hsl(240 40% 3% / .84);
+    --panel:   hsl(255 25% 9% / .8);
+    --panel-2: hsl(250 25% 4% / .86);
+    --chrome:  hsl(240 30% 3% / .82);
+    --grad-mid: hsl(285 78% 74%);
 
     --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
@@ -228,7 +241,7 @@
   header.chrome::before{
     content: "";
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, hsl(240 30% 3% / .82), transparent);
+    background: linear-gradient(180deg, var(--chrome), transparent);
     -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent);
     mask-image: linear-gradient(180deg, #000 40%, transparent);
     pointer-events: none;
@@ -281,7 +294,7 @@
 
   .toggle{
     appearance: none;
-    background: hsl(255 20% 10% / .6);
+    background: var(--glass);
     border: 1px solid var(--line);
     color: var(--muted);
     font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
@@ -435,7 +448,7 @@
   .js .in .line:nth-child(4) > span{ transition-delay: .27s }
 
   .grad{
-    background: linear-gradient(96deg, var(--accent) 6%, hsl(285 78% 74%) 46%, var(--ice) 96%);
+    background: linear-gradient(96deg, var(--accent) 6%, var(--grad-mid) 46%, var(--ice) 96%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -462,7 +475,7 @@
   .hero-scrim{
     position: absolute;
     inset: -14% -20% -20% -24%;
-    background: radial-gradient(52% 60% at 24% 52%, hsl(240 40% 3% / .82), transparent 72%);
+    background: radial-gradient(52% 60% at 24% 52%, var(--scrim), transparent 72%);
     pointer-events: none;
     z-index: -1;
   }
@@ -471,7 +484,7 @@
     font-family: var(--mono); font-size: .68rem;
     letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
     border: 1px solid var(--line);
-    background: hsl(255 25% 8% / .55);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     border-radius: 999px;
     padding: 7px 15px;
@@ -504,7 +517,7 @@
     padding: 9px 17px; border-radius: 999px;
     color: var(--ink);
     border: 1px solid var(--line);
-    background: hsl(255 25% 9% / .5);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     transition: border-color .2s ease, background .2s ease;
   }
@@ -612,7 +625,7 @@
     border-radius: 999px;
     color: var(--muted);
     white-space: nowrap;
-    background: hsl(255 25% 8% / .5);
+    background: var(--glass);
   }
   .chip .dot{ width: 5px; height: 5px; border-radius: 50%; background: var(--dim); flex: none; }
   .chip.live{ color: var(--ink); border-color: hsl(270 45% 40% / .8); }
@@ -665,7 +678,7 @@
   }
   .agent{
     position: relative;
-    background: linear-gradient(165deg, hsl(255 25% 9% / .8), hsl(255 25% 6% / .6));
+    background: var(--panel);
     border: 1px solid var(--line-soft);
     border-radius: 16px;
     padding: clamp(24px, 3vw, 34px);
@@ -699,11 +712,11 @@
     overflow: hidden;
   }
   .stack-item{
-    background: hsl(250 25% 4% / .86);
+    background: var(--panel-2);
     padding: 26px;
     transition: background .3s ease;
   }
-  .stack-item:hover{ background: hsl(255 25% 8% / .9); }
+  .stack-item:hover{ background: var(--panel); }
   .stack-item dt{
     font-family: var(--mono); font-size: .64rem; letter-spacing: .18em;
     text-transform: uppercase; color: var(--accent);
@@ -721,7 +734,7 @@
     border-bottom: 1px solid var(--line-soft);
     transition: background .35s ease;
   }
-  .cap:hover{ background: hsl(255 30% 8% / .35); }
+  .cap:hover{ background: var(--glass); }
   .cap .n{
     font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; color: var(--dim);
     padding-top: .5em;
@@ -746,7 +759,7 @@
   .contact-inner::before{
     content: "";
     position: absolute; inset: -18% -12%;
-    background: radial-gradient(60% 60% at 50% 50%, hsl(240 40% 3% / .88), transparent 72%);
+    background: radial-gradient(60% 60% at 50% 50%, var(--scrim), transparent 72%);
     z-index: -1;
     pointer-events: none;
   }
@@ -774,7 +787,7 @@
     padding: 16px 30px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: hsl(255 25% 8% / .5);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
@@ -818,6 +831,58 @@
   }
   .foot-inner a{ text-decoration: none; }
   .foot-inner a:hover{ color: var(--ink); }
+
+  /* ============================================================
+     LIGHT CANVAS — the 60-30-10 B2B reading of the same page.
+     Off-white ground, navy-charcoal structure, one violet accent.
+     ============================================================ */
+  html[data-theme="light"]{
+    --void:        #f5f5f9;
+    --void-2:      #ebebf2;
+    --raised:      #ffffff;
+    --ink:         #0e1020;
+    --muted:       #4a4e66;
+    --dim:         #7c8099;
+    --line:        rgba(14,16,32,.13);
+    --line-soft:   rgba(14,16,32,.075);
+    --accent:      hsl(262 70% 48%);
+    --accent-deep: hsl(258 68% 40%);
+    --ice:         hsl(198 78% 40%);
+    --glass:       rgba(255,255,255,.66);
+    --scrim:       rgba(245,245,249,.86);
+    --panel:       rgba(255,255,255,.78);
+    --panel-2:     rgba(255,255,255,.82);
+    --chrome:      rgba(245,245,249,.88);
+    --grad-mid:    hsl(276 62% 52%);
+  }
+  html[data-theme="light"] .ambient{
+    background:
+      radial-gradient(46% 38% at 22% 14%, hsl(262 70% 60% / .10), transparent 68%),
+      radial-gradient(40% 34% at 82% 62%, hsl(198 78% 50% / .08), transparent 70%);
+  }
+  html[data-theme="light"] .grain{ opacity: .05; mix-blend-mode: multiply; }
+  html[data-theme="light"] ::selection{ background: hsl(262 70% 48% / .18); color: var(--ink); }
+  html[data-theme="light"] .cta{
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 1px 2px rgba(14,16,32,.12);
+  }
+  html[data-theme="light"] .cta:hover{ filter: none; background: var(--accent-deep); box-shadow: 0 6px 20px -8px hsl(262 70% 48% / .55); }
+  html[data-theme="light"] .mark .glyph{ background: hsl(262 70% 48% / .08); border-color: hsl(262 70% 48% / .35); }
+  html[data-theme="light"] .eyebrow .dot,
+  html[data-theme="light"] .readout .pip{ box-shadow: none; }
+  html[data-theme="light"] .chip.live{ border-color: hsl(262 70% 48% / .45); }
+  html[data-theme="light"] .chip.live .dot,
+  html[data-theme="light"] .chip.build .dot,
+  html[data-theme="light"] .chip.open .dot{ box-shadow: none; }
+  html[data-theme="light"] .agent{ border-color: var(--line); box-shadow: 0 1px 2px rgba(14,16,32,.05); }
+  html[data-theme="light"] .agent::after{ background: radial-gradient(70% 90% at var(--mx, 50%) var(--my, 0%), hsl(262 70% 60% / .10), transparent 62%); }
+  html[data-theme="light"] .stack-grid{ border-color: var(--line); background: var(--line); }
+  html[data-theme="light"] .cur{ background: var(--ink); }
+  html[data-theme="light"] .cur-ring{ border-color: hsl(262 70% 48% / .5); }
+  html[data-theme="light"] .mail:hover{ box-shadow: 0 8px 28px -12px hsl(262 70% 48% / .5); }
+  html[data-theme="light"] .load-bar span{ background: var(--accent); }
+  html[data-theme="light"] .toggle[aria-pressed="true"]{ color: var(--accent); border-color: hsl(262 70% 48% / .5); }
 
   /* ============================================================
      RESPONSIVE
@@ -1684,9 +1749,10 @@ if (root.classList.contains('no-webgl')) {
     const narrow   = window.matchMedia('(max-width: 860px)').matches;
     const lowPower = narrow || (navigator.hardwareConcurrency || 8) <= 4;
 
-    const VOID   = 0x05050a;
-    const ACCENT = new THREE.Color('#a855f7');
-    const ICE    = new THREE.Color('#7dd3fc');
+    const LIGHT  = root.getAttribute('data-theme') === 'light';
+    const VOID   = LIGHT ? 0xf5f5f9 : 0x05050a;
+    const ACCENT = new THREE.Color(LIGHT ? '#6d3fd6' : '#a855f7');
+    const ICE    = new THREE.Color(LIGHT ? '#1d8fb8' : '#7dd3fc');
 
     /* ---------------------------------------------------------- renderer */
     const stage = document.getElementById('stage');
@@ -1695,9 +1761,11 @@ if (root.classList.contains('no-webgl')) {
       alpha: true,
       powerPreference: 'high-performance'
     });
-    renderer.setClearColor(0x000000, 0);
+    // Light canvas: an opaque clear so refraction sees the page colour,
+    // and no filmic curve so off-white stays off-white.
+    if (LIGHT) renderer.setClearColor(VOID, 1); else renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPower ? 1 : 1.75));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMapping = LIGHT ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     stage.appendChild(renderer.domElement);
 
@@ -1759,17 +1827,24 @@ if (root.classList.contains('no-webgl')) {
         side: THREE.BackSide,
         depthWrite: false,
         fog: false,
-        uniforms: { uA: { value: ACCENT }, uB: { value: ICE } },
+        uniforms: { uA: { value: ACCENT }, uB: { value: ICE }, uLight: { value: LIGHT ? 1 : 0 } },
         vertexShader: `
           varying vec3 vPos;
           void main(){ vPos = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
         `,
         fragmentShader: `
-          uniform vec3 uA; uniform vec3 uB;
+          uniform vec3 uA; uniform vec3 uB; uniform float uLight;
           varying vec3 vPos;
           void main(){
             float a = smoothstep(-0.6, 0.9, vPos.y);
             float b = smoothstep(0.2, 1.0, vPos.x * 0.5 + 0.5);
+            if (uLight > 0.5) {
+              // Off-white with the faintest violet and cyan weather.
+              vec3 paper = vec3(0.961, 0.961, 0.976);
+              vec3 tint = mix(uA, uB, b) * 0.06 * (1.0 - a) ;
+              gl_FragColor = vec4(paper - tint * 0.5, 1.0);
+              return;
+            }
             // Barely there. The void has to stay matte black, or the
             // crystals stop being the only source of colour on the page.
             vec3 col = mix(uA * 0.020, uB * 0.011, b);
@@ -1784,7 +1859,7 @@ if (root.classList.contains('no-webgl')) {
     scene.add(backdrop);
 
     /* ---------------------------------------------------------- lights */
-    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+    scene.add(new THREE.AmbientLight(0xffffff, LIGHT ? 0.9 : 0.35));
     const keyLight = new THREE.PointLight(ACCENT, 90, 40, 2);
     keyLight.position.set(4, 3, 6);
     scene.add(keyLight);
@@ -1965,17 +2040,17 @@ if (root.classList.contains('no-webgl')) {
       clearcoat: 1,
       clearcoatRoughness: 0.10,
       specularIntensity: 1,
-      envMapIntensity: 3.1,
-      attenuationColor: new THREE.Color('#7c4dff'),
-      attenuationDistance: 5.5,
+      envMapIntensity: LIGHT ? 1.7 : 3.1,
+      attenuationColor: new THREE.Color(LIGHT ? '#8f74ee' : '#7c4dff'),
+      attenuationDistance: LIGHT ? 4.2 : 5.5,
       side: THREE.FrontSide
     });
 
     const edgeMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#c9b6ff'),
+      color: new THREE.Color(LIGHT ? '#2a2352' : '#c9b6ff'),
       transparent: true,
-      opacity: 0.26,
-      blending: THREE.AdditiveBlending,
+      opacity: LIGHT ? 0.38 : 0.26,
+      blending: LIGHT ? THREE.NormalBlending : THREE.AdditiveBlending,
       depthWrite: false
     });
 
@@ -1986,12 +2061,13 @@ if (root.classList.contains('no-webgl')) {
       transparent: true,
       depthWrite: false,
       side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
+      blending: LIGHT ? THREE.MultiplyBlending : THREE.AdditiveBlending,
       fog: false,
       uniforms: {
-        uA: { value: new THREE.Color('#5b21b6') },
-        uB: { value: new THREE.Color('#a5f3ff') },
-        uI: { value: 1.0 }
+        uA: { value: new THREE.Color(LIGHT ? '#3b2a86' : '#5b21b6') },
+        uB: { value: new THREE.Color(LIGHT ? '#8bd3ea' : '#a5f3ff') },
+        uI: { value: 1.0 },
+        uLight: { value: LIGHT ? 1 : 0 }
       },
       vertexShader: `
         varying vec3 vN; varying vec3 vV;
@@ -2003,10 +2079,16 @@ if (root.classList.contains('no-webgl')) {
         }
       `,
       fragmentShader: `
-        uniform vec3 uA; uniform vec3 uB; uniform float uI;
+        uniform vec3 uA; uniform vec3 uB; uniform float uI; uniform float uLight;
         varying vec3 vN; varying vec3 vV;
         void main(){
           float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.0);
+          if (uLight > 0.5) {
+            // Multiply: the rim darkens toward the tint instead of glowing.
+            vec3 col = mix(vec3(1.0), mix(uA, uB, f), (0.10 + f * 0.75) * uI);
+            gl_FragColor = vec4(col, 1.0);
+            return;
+          }
           vec3 col = mix(uA, uB, f) * (0.16 + f * 1.25) * uI;
           gl_FragColor = vec4(col, 1.0);
         }
@@ -2068,9 +2150,9 @@ if (root.classList.contains('no-webgl')) {
       sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85,
+      opacity: LIGHT ? 0.55 : 0.85,
       depthWrite: false,
-      blending: THREE.AdditiveBlending
+      blending: LIGHT ? THREE.NormalBlending : THREE.AdditiveBlending
     }));
     scene.add(dust);
 
@@ -2079,7 +2161,7 @@ if (root.classList.contains('no-webgl')) {
     composer.addPass(new RenderPass(scene, camera));
 
     let bloom = null;
-    if (!lowPower) {
+    if (!lowPower && !LIGHT) {
       bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.72, 0.68, 0.62);
       composer.addPass(bloom);
     }
@@ -2089,8 +2171,8 @@ if (root.classList.contains('no-webgl')) {
         tDiffuse: { value: null },
         uTime:    { value: 0 },
         uShift:   { value: 0 },
-        uGrain:   { value: lowPower ? 0.016 : 0.028 },
-        uVig:     { value: 0.55 }
+        uGrain:   { value: LIGHT ? 0.012 : (lowPower ? 0.016 : 0.028) },
+        uVig:     { value: LIGHT ? 0.12 : 0.55 }
       },
       vertexShader: `
         varying vec2 vUv;
