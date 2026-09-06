@@ -68,8 +68,13 @@ page.
 
 ## Colour
 
-Tokens are defined once at the top of `index.html`. The accent
-`hsl(270 80% 65%)` is carried over from the original site; the ground moved
-from `hsl(252 20% 6%)` to a matte `#05050a` so refracted light off the
-crystals is the only real colour on the page, and an ice tone
-`hsl(196 92% 74%)` was added for the chromatic split they throw.
+Tokens are defined once at the top of `index.html`, following a 60-30-10
+split: an off-white ground (`#f5f5f9`), navy-charcoal structure (`#0e1020`
+for text, headings and panels), and a single violet (`hsl(262 70% 48%)`)
+reserved for actions — the CTA, the email button, links. Everything
+decorative (labels, chips, rail, dots) is neutral, so the eye goes to the
+one thing it can click. The crystals carry the colour; they are artwork,
+not interface.
+
+The original dark reading is kept behind `?theme=dark` as a block of token
+overrides at the bottom of the stylesheet.

@@ -6,8 +6,8 @@
 <title>Sylvester Limited — Software, built and run in-house</title>
 <meta name="description" content="Sylvester Limited designs, ships and operates software for East Africa: KaziLaw, Dino IG, Chuma and Sema. Web platforms, mobile applications and AI agent systems, running on infrastructure we administer ourselves in Dar es Salaam.">
 <link rel="canonical" href="https://sylvesterlimited.tech/">
-<meta name="theme-color" content="#05050a">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#f5f5f9">
+<meta name="color-scheme" content="light dark">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sylvester Limited">
@@ -34,6 +34,10 @@
   /* Set before paint so the enhanced states never flash their un-enhanced form. */
   document.documentElement.classList.add('js');
   try {
+    var th = new URLSearchParams(location.search).get('theme');
+    document.documentElement.setAttribute('data-theme', th === 'dark' ? 'dark' : 'light');
+  } catch (e) {}
+  try {
     var c = document.createElement('canvas');
     if (!(window.WebGL2RenderingContext && c.getContext('webgl2'))) {
       document.documentElement.classList.add('no-webgl');
@@ -43,24 +47,30 @@
 
 <style>
   :root{
-    /* The void. Darker and cooler than the previous build so refracted
-       light off the crystals is the only real colour on the page. */
-    --void:        #05050a;
-    --void-2:      #0a0a12;
-    --raised:      #10101a;
+    /* The canvas, 60-30-10: off-white ground, navy-charcoal structure,
+       one violet reserved for actions. The crystals carry the colour. */
+    --void:        #f5f5f9;
+    --void-2:      #ebebf2;
+    --raised:      #ffffff;
 
-    --ink:         #f3f3f8;
-    --muted:       #9c9cb2;
-    --dim:         #62627a;
+    --ink:         #0e1020;
+    --muted:       #4a4e66;
+    --dim:         #7c8099;
 
-    --line:        rgba(255,255,255,.10);
-    --line-soft:   rgba(255,255,255,.055);
+    --line:        rgba(14,16,32,.13);
+    --line-soft:   rgba(14,16,32,.075);
 
-    /* Carried over from the original site, plus an ice tone for the
-       chromatic split the crystals throw. */
-    --accent:      hsl(270 80% 65%);
-    --accent-deep: hsl(263 83% 58%);
-    --ice:         hsl(196 92% 74%);
+    --accent:      hsl(262 70% 48%);
+    --accent-deep: hsl(258 68% 40%);
+    --ice:         hsl(198 78% 40%);
+
+    /* Surfaces that sit over the stage. */
+    --glass:   rgba(255,255,255,.66);
+    --scrim:   rgba(245,245,249,.86);
+    --panel:   rgba(255,255,255,.78);
+    --panel-2: rgba(255,255,255,.82);
+    --chrome:  rgba(245,245,249,.88);
+    --grad-mid: hsl(276 62% 52%);
 
     --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
@@ -87,10 +97,10 @@
 
   a{ color: inherit; }
 
-  ::selection{ background: hsl(270 80% 65% / .32); color: #fff; }
+  ::selection{ background: hsl(262 70% 48% / .18); color: var(--ink); }
 
   :focus-visible{
-    outline: 2px solid var(--ice);
+    outline: 2px solid var(--accent);
     outline-offset: 4px;
     border-radius: 2px;
   }
@@ -133,9 +143,8 @@
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(46% 38% at 22% 14%, hsl(270 80% 55% / .20), transparent 68%),
-      radial-gradient(40% 34% at 82% 62%, hsl(196 92% 60% / .11), transparent 70%),
-      radial-gradient(60% 50% at 50% 108%, hsl(263 83% 58% / .16), transparent 70%);
+      radial-gradient(46% 38% at 22% 14%, hsl(262 70% 60% / .10), transparent 68%),
+      radial-gradient(40% 34% at 82% 62%, hsl(198 78% 50% / .08), transparent 70%);
   }
   .js:not(.no-webgl) .ambient{ opacity: .45; }
 
@@ -145,7 +154,8 @@
     inset: -50%;
     z-index: 1;
     pointer-events: none;
-    opacity: .035;
+    opacity: .05;
+    mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .js .grain{ animation: grain 6s steps(6) infinite; }
@@ -202,7 +212,7 @@
   }
   .load-bar span{
     position: absolute; inset: 0 100% 0 0;
-    background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--ice));
+    background: var(--ink);
     transition: right .28s cubic-bezier(.22,1,.36,1);
   }
   .load-foot{
@@ -228,7 +238,7 @@
   header.chrome::before{
     content: "";
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, hsl(240 30% 3% / .82), transparent);
+    background: linear-gradient(180deg, var(--chrome), transparent);
     -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent);
     mask-image: linear-gradient(180deg, #000 40%, transparent);
     pointer-events: none;
@@ -242,12 +252,12 @@
   }
   .mark .glyph{
     width: 26px; height: 26px; flex: none;
-    border: 1px solid hsl(270 60% 60% / .55);
+    border: 1px solid var(--line);
     border-radius: 7px;
     display: grid; place-items: center;
     font-family: var(--mono); font-size: .62rem; letter-spacing: .04em;
-    color: var(--accent);
-    background: hsl(270 80% 60% / .07);
+    color: var(--ink);
+    background: var(--glass);
   }
   .mark .full{ white-space: nowrap; }
 
@@ -263,7 +273,7 @@
   }
   .chrome-nav a i{ font-style: normal; color: var(--dim); font-size: .9em; }
   .chrome-nav a:hover{ color: var(--ink); }
-  .chrome-nav a:hover i{ color: var(--accent); }
+  .chrome-nav a:hover i{ color: var(--ink); }
 
   .chrome-right{ display: flex; align-items: center; gap: 14px; }
 
@@ -273,15 +283,14 @@
     display: inline-flex; align-items: center; gap: 8px;
   }
   .readout .pip{
-    width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
-    box-shadow: 0 0 0 3px hsl(270 80% 65% / .16);
+    width: 5px; height: 5px; border-radius: 50%; background: var(--dim);
   }
   .js .readout .pip{ animation: pulse 2.6s ease-in-out infinite; }
   @keyframes pulse{ 0%,100%{ opacity: 1 } 50%{ opacity: .35 } }
 
   .toggle{
     appearance: none;
-    background: hsl(255 20% 10% / .6);
+    background: var(--glass);
     border: 1px solid var(--line);
     color: var(--muted);
     font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
@@ -291,12 +300,12 @@
     display: inline-flex; align-items: center; gap: 8px;
     transition: color .2s ease, border-color .2s ease;
   }
-  .toggle:hover{ color: var(--ink); border-color: hsl(270 50% 50% / .6); }
+  .toggle:hover{ color: var(--ink); border-color: var(--ink); }
   .toggle .bars{ display: flex; align-items: flex-end; gap: 2px; height: 9px; }
   .toggle .bars b{
     display: block; width: 2px; height: 3px; background: currentColor; border-radius: 1px;
   }
-  .toggle[aria-pressed="true"]{ color: var(--ice); border-color: hsl(196 70% 60% / .5); }
+  .toggle[aria-pressed="true"]{ color: var(--ink); border-color: var(--ink); }
   .toggle[aria-pressed="true"] .bars b{ animation: eq .9s ease-in-out infinite alternate; }
   .toggle[aria-pressed="true"] .bars b:nth-child(2){ animation-delay: .18s }
   .toggle[aria-pressed="true"] .bars b:nth-child(3){ animation-delay: .36s }
@@ -309,12 +318,12 @@
     text-transform: uppercase; text-decoration: none;
     padding: 9px 17px; border-radius: 999px;
     color: #fff;
-    background: linear-gradient(120deg, var(--accent-deep), var(--accent) 62%, hsl(285 78% 70%));
-    border: 1px solid hsl(275 85% 74% / .6);
-    box-shadow: 0 0 0 0 hsl(270 80% 65% / .5);
-    transition: box-shadow .3s ease, filter .2s ease, transform .2s ease;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    box-shadow: 0 1px 2px rgba(14,16,32,.12);
+    transition: box-shadow .3s ease, background .2s ease, transform .2s ease;
   }
-  .cta:hover{ filter: brightness(1.1); box-shadow: 0 0 28px -6px hsl(270 80% 65% / .75); }
+  .cta:hover{ background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: 0 6px 20px -8px hsl(262 70% 48% / .55); }
   .cta:active{ transform: translateY(1px); }
 
   /* Right-hand section index */
@@ -348,7 +357,7 @@
   }
   .rail a:hover, .rail a[aria-current="true"]{ color: var(--ink); }
   .rail a:hover .txt, .rail a[aria-current="true"] .txt{ opacity: 1; transform: none; }
-  .rail a[aria-current="true"] .tick{ width: 40px; background: var(--accent); }
+  .rail a[aria-current="true"] .tick{ width: 40px; background: var(--ink); }
 
   /* Bottom-left scroll cue */
   .cue{
@@ -364,7 +373,7 @@
   .cue.gone{ opacity: 0; pointer-events: none; }
   .cue .shaft{
     display: block; width: 1px; height: 34px;
-    background: linear-gradient(180deg, transparent, var(--accent));
+    background: linear-gradient(180deg, transparent, var(--ink));
   }
   .js .cue .shaft{ animation: drop 2.2s cubic-bezier(.6,0,.3,1) infinite; transform-origin: top; }
   @keyframes drop{
@@ -384,13 +393,13 @@
   .cur{ width: 5px; height: 5px; background: var(--ink); margin: -2.5px 0 0 -2.5px; }
   .cur-ring{
     width: 34px; height: 34px; margin: -17px 0 0 -17px;
-    border: 1px solid hsl(270 70% 70% / .5);
+    border: 1px solid rgba(14,16,32,.35);
     transition: width .25s ease, height .25s ease, margin .25s ease, border-color .25s ease, background .25s ease;
   }
   .cur-ring.hot{
     width: 58px; height: 58px; margin: -29px 0 0 -29px;
-    border-color: hsl(196 92% 74% / .7);
-    background: hsl(196 92% 74% / .07);
+    border-color: hsl(262 70% 48% / .7);
+    background: hsl(262 70% 48% / .06);
   }
   @media (hover: hover) and (pointer: fine){
     .js.ready .cur, .js.ready .cur-ring{ display: block; }
@@ -413,7 +422,7 @@
     content: ""; flex: 1; height: 1px; max-width: 120px;
     background: linear-gradient(90deg, var(--line), transparent);
   }
-  .label i{ font-style: normal; color: var(--accent); }
+  .label i{ font-style: normal; color: var(--ink); }
 
   .display{
     font-weight: 600;
@@ -435,7 +444,7 @@
   .js .in .line:nth-child(4) > span{ transition-delay: .27s }
 
   .grad{
-    background: linear-gradient(96deg, var(--accent) 6%, hsl(285 78% 74%) 46%, var(--ice) 96%);
+    background: linear-gradient(96deg, var(--accent) 6%, var(--grad-mid) 46%, var(--ice) 96%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -462,7 +471,7 @@
   .hero-scrim{
     position: absolute;
     inset: -14% -20% -20% -24%;
-    background: radial-gradient(52% 60% at 24% 52%, hsl(240 40% 3% / .82), transparent 72%);
+    background: radial-gradient(52% 60% at 24% 52%, var(--scrim), transparent 72%);
     pointer-events: none;
     z-index: -1;
   }
@@ -471,15 +480,14 @@
     font-family: var(--mono); font-size: .68rem;
     letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
     border: 1px solid var(--line);
-    background: hsl(255 25% 8% / .55);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     border-radius: 999px;
     padding: 7px 15px;
   }
   .eyebrow .dot{
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 10px 1px hsl(270 80% 65% / .9);
+    background: var(--ink);
   }
   .hero h1{
     font-size: clamp(2.35rem, 7.4vw, 5.4rem);
@@ -504,11 +512,11 @@
     padding: 9px 17px; border-radius: 999px;
     color: var(--ink);
     border: 1px solid var(--line);
-    background: hsl(255 25% 9% / .5);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     transition: border-color .2s ease, background .2s ease;
   }
-  .ghost:hover{ border-color: hsl(196 70% 60% / .55); background: var(--raised); }
+  .ghost:hover{ border-color: var(--ink); background: var(--raised); }
 
   .facts{
     display: flex; flex-wrap: wrap;
@@ -560,25 +568,6 @@
     max-width: 54ch;
   }
 
-  /* --- Principle: one full-bleed statement --- */
-  #principle{ text-align: left; }
-  #principle .wrap{ max-width: 1000px; }
-  .statement{
-    font-size: clamp(1.9rem, 5.6vw, 4.1rem);
-    font-weight: 500;
-    letter-spacing: -.036em;
-    line-height: 1.02;
-    margin: 28px 0 0;
-    text-wrap: balance;
-  }
-  .statement em{ font-style: normal; }
-  .statement-sub{
-    margin: 34px 0 0;
-    color: var(--muted);
-    font-size: 1.05rem;
-    max-width: 46ch;
-  }
-
   /* --- Work --- */
   .work-list{ border-top: 1px solid var(--line-soft); }
   .entry{
@@ -607,7 +596,7 @@
   .entry .role{
     margin: 12px 0 0;
     font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--accent);
+    text-transform: uppercase; color: var(--muted);
   }
   .entry p.copy{
     margin: 20px 0 0;
@@ -631,13 +620,15 @@
     border-radius: 999px;
     color: var(--muted);
     white-space: nowrap;
-    background: hsl(255 25% 8% / .5);
+    background: var(--glass);
   }
   .chip .dot{ width: 5px; height: 5px; border-radius: 50%; background: var(--dim); flex: none; }
-  .chip.live{ color: var(--ink); border-color: hsl(270 45% 40% / .8); }
-  .chip.live .dot{ background: var(--accent); box-shadow: 0 0 8px 1px hsl(270 80% 65% / .8); }
-  .chip.build .dot{ background: hsl(38 90% 62%); box-shadow: 0 0 8px 1px hsl(38 90% 62% / .7); }
-  .chip.open .dot{ background: hsl(158 60% 55%); box-shadow: 0 0 8px 1px hsl(158 60% 55% / .7); }
+  .chip.live{ color: var(--ink); border-color: var(--ink); }
+  .chip.live .dot{ background: var(--ink); }
+  .chip.build{ color: var(--ink); }
+  .chip.build .dot{ background: transparent; border: 1px solid var(--ink); }
+  .chip.open{ color: var(--ink); }
+  .chip.open .dot{ background: transparent; border: 1px solid var(--ink); }
   .chip.tech{ color: var(--dim); background: transparent; }
 
   .proof{
@@ -648,11 +639,11 @@
     color: var(--ink);
     text-decoration: none;
     padding-bottom: 6px;
-    border-bottom: 1px solid hsl(270 70% 65% / .35);
+    border-bottom: 1px solid hsl(262 70% 48% / .4);
     transition: border-color .25s ease, color .25s ease, gap .25s ease;
   }
   .proof .arrow{ color: var(--accent); transition: transform .3s cubic-bezier(.22,1,.36,1); }
-  .proof:hover{ border-color: var(--ice); gap: 13px; }
+  .proof:hover{ border-color: var(--accent); color: var(--accent); gap: 13px; }
   .proof:hover .arrow{ transform: translate(3px,-3px); }
 
   /* --- Marquee --- */
@@ -673,7 +664,7 @@
     text-transform: uppercase; color: var(--dim);
     padding-inline: 26px;
   }
-  .marquee span b{ color: var(--accent); font-weight: 400; }
+  .marquee span b{ color: var(--dim); font-weight: 400; }
   @keyframes slide{ to{ transform: translateX(-50%) } }
 
   /* --- Infrastructure --- */
@@ -684,9 +675,10 @@
   }
   .agent{
     position: relative;
-    background: linear-gradient(165deg, hsl(255 25% 9% / .8), hsl(255 25% 6% / .6));
-    border: 1px solid var(--line-soft);
+    background: var(--panel);
+    border: 1px solid var(--line);
     border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(14,16,32,.05);
     padding: clamp(24px, 3vw, 34px);
     overflow: hidden;
     transition: border-color .3s ease, transform .4s cubic-bezier(.22,1,.36,1);
@@ -694,12 +686,12 @@
   .agent::after{
     content: "";
     position: absolute; inset: 0;
-    background: radial-gradient(70% 90% at var(--mx, 50%) var(--my, 0%), hsl(270 80% 62% / .16), transparent 62%);
+    background: radial-gradient(70% 90% at var(--mx, 50%) var(--my, 0%), hsl(262 70% 60% / .10), transparent 62%);
     opacity: 0;
     transition: opacity .4s ease;
     pointer-events: none;
   }
-  .agent:hover{ border-color: hsl(270 45% 40% / .7); transform: translateY(-3px); }
+  .agent:hover{ border-color: var(--line); transform: translateY(-3px); }
   .agent:hover::after{ opacity: 1; }
   .agent h3{
     margin: 16px 0 0;
@@ -712,20 +704,20 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
     gap: 1px;
-    background: var(--line-soft);
-    border: 1px solid var(--line-soft);
+    background: var(--line);
+    border: 1px solid var(--line);
     border-radius: 16px;
     overflow: hidden;
   }
   .stack-item{
-    background: hsl(250 25% 4% / .86);
+    background: var(--panel-2);
     padding: 26px;
     transition: background .3s ease;
   }
-  .stack-item:hover{ background: hsl(255 25% 8% / .9); }
+  .stack-item:hover{ background: var(--panel); }
   .stack-item dt{
     font-family: var(--mono); font-size: .64rem; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--accent);
+    text-transform: uppercase; color: var(--dim);
   }
   .stack-item dd{ margin: 12px 0 0; font-size: .98rem; color: var(--ink); }
 
@@ -740,7 +732,7 @@
     border-bottom: 1px solid var(--line-soft);
     transition: background .35s ease;
   }
-  .cap:hover{ background: hsl(255 30% 8% / .35); }
+  .cap:hover{ background: var(--glass); }
   .cap .n{
     font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; color: var(--dim);
     padding-top: .5em;
@@ -755,7 +747,7 @@
     display: block; margin-top: 12px;
     font-family: var(--mono); font-size: .72rem; color: var(--dim);
   }
-  .cap p .see a{ color: var(--accent); text-decoration: none; border-bottom: 1px solid hsl(270 70% 65% / .3); }
+  .cap p .see a{ color: var(--accent); text-decoration: none; border-bottom: 1px solid hsl(262 70% 48% / .35); }
   .cap p .see a:hover{ border-color: var(--accent); }
 
   /* --- Contact --- */
@@ -765,7 +757,7 @@
   .contact-inner::before{
     content: "";
     position: absolute; inset: -18% -12%;
-    background: radial-gradient(60% 60% at 50% 50%, hsl(240 40% 3% / .88), transparent 72%);
+    background: radial-gradient(60% 60% at 50% 50%, var(--scrim), transparent 72%);
     z-index: -1;
     pointer-events: none;
   }
@@ -793,13 +785,14 @@
     padding: 16px 30px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: hsl(255 25% 8% / .5);
+    background: var(--glass);
     backdrop-filter: blur(8px);
     transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
   .mail:hover{
-    border-color: hsl(270 70% 65% / .7);
-    box-shadow: 0 0 40px -10px hsl(270 80% 65% / .6);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 8px 28px -12px hsl(262 70% 48% / .5);
     transform: translateY(-2px);
   }
 
@@ -826,7 +819,7 @@
     text-transform: uppercase; color: var(--muted); text-decoration: none;
     transition: color .2s ease;
   }
-  .foot-links a:hover{ color: var(--ice); }
+  .foot-links a:hover{ color: var(--accent); }
 
   .foot-inner{
     display: flex; flex-wrap: wrap; gap: 12px 28px;
@@ -837,6 +830,40 @@
   }
   .foot-inner a{ text-decoration: none; }
   .foot-inner a:hover{ color: var(--ink); }
+
+  /* ============================================================
+     DARK VOID — the original reading, kept behind ?theme=dark.
+     ============================================================ */
+  html[data-theme="dark"]{
+    --void:        #05050a;
+    --void-2:      #0a0a12;
+    --raised:      #10101a;
+    --ink:         #f3f3f8;
+    --muted:       #9c9cb2;
+    --dim:         #62627a;
+    --line:        rgba(255,255,255,.10);
+    --line-soft:   rgba(255,255,255,.055);
+    --accent:      hsl(270 80% 65%);
+    --accent-deep: hsl(263 83% 58%);
+    --ice:         hsl(196 92% 74%);
+    --glass:       hsl(255 25% 8% / .52);
+    --scrim:       hsl(240 40% 3% / .84);
+    --panel:       hsl(255 25% 9% / .8);
+    --panel-2:     hsl(250 25% 4% / .86);
+    --chrome:      hsl(240 30% 3% / .82);
+    --grad-mid:    hsl(285 78% 74%);
+  }
+  html[data-theme="dark"] .ambient{
+    background:
+      radial-gradient(46% 38% at 22% 14%, hsl(270 80% 55% / .20), transparent 68%),
+      radial-gradient(40% 34% at 82% 62%, hsl(196 92% 60% / .11), transparent 70%);
+  }
+  html[data-theme="dark"] .grain{ opacity: .035; mix-blend-mode: normal; }
+  html[data-theme="dark"] ::selection{ background: hsl(270 80% 65% / .32); color: #fff; }
+  html[data-theme="dark"] .cta{ box-shadow: none; }
+  html[data-theme="dark"] .cta:hover{ box-shadow: 0 0 28px -6px hsl(270 80% 65% / .6); }
+  html[data-theme="dark"] .cur-ring{ border-color: rgba(255,255,255,.35); }
+  html[data-theme="dark"] .agent{ box-shadow: none; }
 
   /* ============================================================
      RESPONSIVE
@@ -934,7 +961,6 @@
 <!-- ============================ RAIL ============================ -->
 <nav class="rail" aria-label="Page index">
   <a href="#top" data-rail="top"><span class="txt">Core</span><span class="tick"></span></a>
-  <a href="#principle" data-rail="principle"><span class="txt">Principle</span><span class="tick"></span></a>
   <a href="#work" data-rail="work"><span class="txt">Work</span><span class="tick"></span></a>
   <a href="#infrastructure" data-rail="infrastructure"><span class="txt">Infrastructure</span><span class="tick"></span></a>
   <a href="#capabilities" data-rail="capabilities"><span class="txt">Capabilities</span><span class="tick"></span></a>
@@ -982,23 +1008,11 @@
     </div>
   </div>
 
-  <!-- ============================ PRINCIPLE ============================ -->
-  <section id="principle" data-section="principle" data-shard="principle">
-    <div class="wrap">
-      <p class="label rise"><i>001</i> Principle</p>
-      <h2 class="statement display">
-        <span class="line"><span>Every claim on this</span></span>
-        <span class="line"><span>page <em class="grad">opens in a new tab.</em></span></span>
-      </h2>
-      <p class="statement-sub rise">A live product, or a public repository. If a claim cannot be linked to something you can open and check for yourself, it does not go on this page.</p>
-    </div>
-  </section>
-
   <!-- ============================ WORK ============================ -->
   <section id="work" data-section="work">
     <div class="wrap">
       <div class="section-head">
-        <p class="label rise"><i>002</i> The work</p>
+        <p class="label rise"><i>001</i> The work</p>
         <h2 class="rise">Five things we designed, built, and still operate.</h2>
         <p class="rise">Where the code is public the link goes to the repository. Where it isn't, the link goes to the running product.</p>
       </div>
@@ -1104,10 +1118,10 @@
   </div>
 
   <!-- ============================ INFRASTRUCTURE ============================ -->
-  <section id="infrastructure" data-section="infrastructure" data-shard="infra">
+  <section id="infrastructure" data-section="infrastructure">
     <div class="wrap">
-      <div class="section-head">
-        <p class="label rise"><i>003</i> Infrastructure</p>
+      <div class="section-head" data-shard="infra">
+        <p class="label rise"><i>002</i> Infrastructure</p>
         <h2 class="rise">We run our own hardware, and our own agents on it.</h2>
         <p class="rise">Two systems we built for ourselves and run in production. Neither is public — this page is the only place they are described.</p>
       </div>
@@ -1150,7 +1164,7 @@
   <section id="capabilities" data-section="capabilities">
     <div class="wrap">
       <div class="section-head" data-shard="caps">
-        <p class="label rise"><i>004</i> Capabilities</p>
+        <p class="label rise"><i>003</i> Capabilities</p>
         <h2 class="rise">Three kinds of work — and where to see each one running.</h2>
       </div>
 
@@ -1181,7 +1195,7 @@
   <section id="contact" data-section="contact" data-shard="contact">
     <div class="wrap">
       <div class="contact-inner">
-        <p class="label rise"><i>005</i> Contact</p>
+        <p class="label rise"><i>004</i> Contact</p>
         <h2 class="display">
           <span class="line"><span>Tell us what you're</span></span>
           <span class="line"><span class="grad">trying to ship.</span></span>
@@ -1704,7 +1718,6 @@ if (root.classList.contains('no-webgl')) {
     boot.progress(38, 'Loading renderer');
 
     const THREE = await import('three');
-    const { mergeGeometries } = await import('three/addons/utils/BufferGeometryUtils.js');
     const { EffectComposer }  = await import('three/addons/postprocessing/EffectComposer.js');
     const { RenderPass }      = await import('three/addons/postprocessing/RenderPass.js');
     const { ShaderPass }      = await import('three/addons/postprocessing/ShaderPass.js');
@@ -1717,9 +1730,10 @@ if (root.classList.contains('no-webgl')) {
     const narrow   = window.matchMedia('(max-width: 860px)').matches;
     const lowPower = narrow || (navigator.hardwareConcurrency || 8) <= 4;
 
-    const VOID   = 0x05050a;
-    const ACCENT = new THREE.Color('#a855f7');
-    const ICE    = new THREE.Color('#7dd3fc');
+    const LIGHT  = root.getAttribute('data-theme') !== 'dark';
+    const VOID   = LIGHT ? 0xf5f5f9 : 0x05050a;
+    const ACCENT = new THREE.Color(LIGHT ? '#6d3fd6' : '#a855f7');
+    const ICE    = new THREE.Color(LIGHT ? '#1d8fb8' : '#7dd3fc');
 
     /* ---------------------------------------------------------- renderer */
     const stage = document.getElementById('stage');
@@ -1728,9 +1742,11 @@ if (root.classList.contains('no-webgl')) {
       alpha: true,
       powerPreference: 'high-performance'
     });
-    renderer.setClearColor(0x000000, 0);
+    // Light canvas: an opaque clear so refraction sees the page colour,
+    // and no filmic curve so off-white stays off-white.
+    if (LIGHT) renderer.setClearColor(VOID, 1); else renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPower ? 1 : 1.75));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMapping = LIGHT ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     stage.appendChild(renderer.domElement);
 
@@ -1792,17 +1808,24 @@ if (root.classList.contains('no-webgl')) {
         side: THREE.BackSide,
         depthWrite: false,
         fog: false,
-        uniforms: { uA: { value: ACCENT }, uB: { value: ICE } },
+        uniforms: { uA: { value: ACCENT }, uB: { value: ICE }, uLight: { value: LIGHT ? 1 : 0 } },
         vertexShader: `
           varying vec3 vPos;
           void main(){ vPos = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
         `,
         fragmentShader: `
-          uniform vec3 uA; uniform vec3 uB;
+          uniform vec3 uA; uniform vec3 uB; uniform float uLight;
           varying vec3 vPos;
           void main(){
             float a = smoothstep(-0.6, 0.9, vPos.y);
             float b = smoothstep(0.2, 1.0, vPos.x * 0.5 + 0.5);
+            if (uLight > 0.5) {
+              // Off-white with the faintest violet and cyan weather.
+              vec3 paper = vec3(0.961, 0.961, 0.976);
+              vec3 tint = mix(uA, uB, b) * 0.06 * (1.0 - a) ;
+              gl_FragColor = vec4(paper - tint * 0.5, 1.0);
+              return;
+            }
             // Barely there. The void has to stay matte black, or the
             // crystals stop being the only source of colour on the page.
             vec3 col = mix(uA * 0.020, uB * 0.011, b);
@@ -1817,7 +1840,7 @@ if (root.classList.contains('no-webgl')) {
     scene.add(backdrop);
 
     /* ---------------------------------------------------------- lights */
-    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+    scene.add(new THREE.AmbientLight(0xffffff, LIGHT ? 0.9 : 0.35));
     const keyLight = new THREE.PointLight(ACCENT, 90, 40, 2);
     keyLight.position.set(4, 3, 6);
     scene.add(keyLight);
@@ -1839,38 +1862,149 @@ if (root.classList.contains('no-webgl')) {
       };
     }
 
-    function growCrystal(seed, cells) {
-      const r = rand(seed);
-      const parts = [];
-      for (let i = 0; i < cells; i++) {
-        const g = new THREE.IcosahedronGeometry(1, 0);
-        g.scale(0.30 + r() * 0.34, 0.55 + r() * 1.05, 0.30 + r() * 0.34);
-        g.applyQuaternion(new THREE.Quaternion().setFromEuler(
-          new THREE.Euler(r() * Math.PI, r() * Math.PI, r() * Math.PI)
-        ));
-        const dir = new THREE.Vector3(r() * 2 - 1, r() * 2 - 1, r() * 2 - 1)
-          .normalize().multiplyScalar(r() * 0.72);
-        g.translate(dir.x, dir.y, dir.z);
-        parts.push(g);
-      }
-      let merged = mergeGeometries(parts, false);
-      if (merged.index) merged = merged.toNonIndexed();
-      parts.forEach(p => p.dispose());
-
-      // Jitter each facet a little so no two faces catch light the same way.
-      const pos = merged.attributes.position;
-      for (let t = 0; t < pos.count; t += 3) {
-        const jx = (r() - 0.5) * 0.05, jy = (r() - 0.5) * 0.05, jz = (r() - 0.5) * 0.05;
-        for (let k = 0; k < 3; k++) {
-          pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
+    /* Forms. Each returns a list of cells — scale, rotation, position —
+       and, for parts that turn together, a layer. The hero, the
+       capabilities and the contact crystals stay as random clusters; each
+       product gets a shape that says what it is.                        */
+    const TAU = Math.PI * 2;
+    const FORMS = {
+      cluster(r, n) {
+        const cells = [];
+        for (let i = 0; i < n; i++) {
+          const d = new THREE.Vector3(r() * 2 - 1, r() * 2 - 1, r() * 2 - 1).normalize().multiplyScalar(r() * 0.72);
+          cells.push({ s: [0.30 + r() * 0.34, 0.55 + r() * 1.05, 0.30 + r() * 0.34],
+                       rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI], p: [d.x, d.y, d.z] });
         }
+        return cells;
+      },
+      // KaziLaw — statute: a row of obelisks, tallest in the middle.
+      // Columns, or the spines of the Acts on a shelf.
+      statute(r, n) {
+        const cells = [];
+        for (let i = 0; i < n; i++) {
+          const t = n > 1 ? i / (n - 1) : 0.5;
+          const h = 0.72 + Math.sin(t * Math.PI) * 0.62 + r() * 0.18;
+          cells.push({ s: [0.21 + r() * 0.07, h, 0.30 + r() * 0.12],
+                       rot: [0, (r() - 0.5) * 0.3, (r() - 0.5) * 0.05],
+                       p: [(i - (n - 1) / 2) * 0.54, h - 1.05, (r() - 0.5) * 0.18] });
+        }
+        return cells;
+      },
+      // Dino IG — a dorsal ridge: a low back with plates that peak mid-arc.
+      spine(r, n) {
+        const cells = [{ s: [1.6, 0.34, 0.44], rot: [0, 0, 0.1], p: [0, -0.58, 0] }];
+        for (let i = 0; i < n; i++) {
+          const t = i / (n - 1);
+          const a = (t - 0.5) * 1.95;
+          const len = 0.40 + Math.sin(t * Math.PI) * 0.80;
+          const bx = Math.sin(a) * 1.30, by = Math.cos(a) * 0.55 - 0.60;
+          cells.push({ s: [0.16, len, 0.20], rot: [0, 0, -a],
+                       p: [bx + Math.sin(a) * len * 0.45, by + Math.cos(a) * len * 0.45, 0] });
+        }
+        return cells;
+      },
+      // Chuma — iron (that is what the word means): two heavy heads on a bar.
+      iron(r) {
+        const cells = [{ s: [1.1, 0.13, 0.13], rot: [0, 0, 0], p: [0, 0, 0] }];
+        for (const side of [-1, 1]) {
+          cells.push({ s: [0.52, 0.60, 0.52], rot: [r() * 0.4, r() * 0.4, r() * 0.4], p: [side * 0.95, 0, 0] });
+          cells.push({ s: [0.26, 0.42, 0.26], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
+                       p: [side * 1.28, (r() > 0.5 ? 1 : -1) * 0.28, 0.22] });
+          cells.push({ s: [0.22, 0.34, 0.22], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
+                       p: [side * 0.72, -0.34, -0.24] });
+        }
+        return cells;
+      },
+      // Sema — signal: one voice at the centre, two rings radiating out.
+      // The rings turn against each other.
+      signal(r) {
+        const cells = [{ s: [0.30, 0.52, 0.30], rot: [0, 0, 0], p: [0, 0, 0] }];
+        for (let i = 0; i < 6; i++) {
+          const a = (i / 6) * TAU;
+          cells.push({ s: [0.10, 0.28, 0.10], rot: [0, 0, a], p: [-Math.sin(a) * 0.74, Math.cos(a) * 0.74, 0], layer: 1 });
+        }
+        for (let i = 0; i < 10; i++) {
+          const a = (i / 10) * TAU + 0.3;
+          cells.push({ s: [0.07, 0.22, 0.07], rot: [0, 0, a], p: [-Math.sin(a) * 1.24, Math.cos(a) * 1.24, 0], layer: 2 });
+        }
+        return cells;
+      },
+      // routine-engine — rotor: identical teeth around a hub, turning at a
+      // constant rate. Same input, same program.
+      rotor(r, n) {
+        const cells = [{ s: [0.42, 0.42, 0.42], rot: [0.3, 0.2, 0], p: [0, 0, 0] }];
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * TAU;
+          cells.push({ s: [0.20, 0.50, 0.20], rot: [0, 0, a], p: [-Math.sin(a) * 0.88, Math.cos(a) * 0.88, 0], layer: 1 });
+        }
+        return cells;
+      },
+      // Infrastructure — rack: a lattice of near-cubes. Rows of containers.
+      rack(r, n) {
+        const cells = [];
+        const nz = n >= 18 ? 2 : 1;
+        for (let x = 0; x < 3; x++) for (let y = 0; y < 3; y++) for (let z = 0; z < nz; z++) {
+          cells.push({ box: true, s: [0.40 + r() * 0.06, 0.40 + r() * 0.06, 0.40 + r() * 0.06],
+                       rot: [(r() - 0.5) * 0.16, (r() - 0.5) * 0.16, (r() - 0.5) * 0.16],
+                       p: [(x - 1) * 0.62, (y - 1) * 0.62, (z - (nz - 1) / 2) * 0.62] });
+        }
+        return cells;
       }
-      merged.computeVertexNormals();
-      merged.center();
-      merged.computeBoundingSphere();
-      const rad = merged.boundingSphere.radius || 1;
-      merged.scale(1 / rad, 1 / rad, 1 / rad);
-      return merged;
+    };
+
+    /* Build one crystal: a body group holding every cell as its own mesh,
+       so the cells can be pushed apart under the pointer and come back.  */
+    function buildCrystal(cfg) {
+      const r = rand(cfg.seed);
+      const spec = FORMS[cfg.form || 'cluster'](r, cfg.cells);
+      const body = new THREE.Group();
+      const layers = {};
+      const cells = [];
+      let radius = 0;
+
+      for (const c of spec) {
+        let geo = c.box ? new THREE.BoxGeometry(1, 1, 1) : new THREE.IcosahedronGeometry(1, 0);
+        if (geo.index) geo = geo.toNonIndexed();
+        geo.scale(c.s[0], c.s[1], c.s[2]);
+        // Jitter each facet a little so no two faces catch light the same way.
+        const pos = geo.attributes.position, j = c.box ? 0.012 : 0.05;
+        for (let t = 0; t < pos.count; t += 3) {
+          const jx = (r() - 0.5) * j, jy = (r() - 0.5) * j, jz = (r() - 0.5) * j;
+          for (let k = 0; k < 3; k++) pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
+        }
+        geo.computeVertexNormals();
+        geo.computeBoundingSphere();
+
+        const mesh = new THREE.Mesh(geo, iceMaterial);
+        const core = new THREE.Mesh(geo, coreMaterial);
+        core.scale.setScalar(0.9);
+        core.renderOrder = -1;
+        mesh.add(core);
+        mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 24), edgeMaterial));
+        mesh.rotation.set(c.rot[0], c.rot[1], c.rot[2]);
+        mesh.position.set(c.p[0], c.p[1], c.p[2]);
+
+        let parent = body;
+        if (c.layer) {
+          if (!layers[c.layer]) { layers[c.layer] = new THREE.Group(); body.add(layers[c.layer]); }
+          parent = layers[c.layer];
+        }
+        parent.add(mesh);
+
+        const home = mesh.position.clone();
+        const dir = home.lengthSq() > 1e-4
+          ? home.clone().normalize()
+          : new THREE.Vector3(r() - 0.5, r() - 0.5, r() - 0.5).normalize();
+        cells.push({
+          mesh, home, dir,
+          out: 0.32 + r() * 0.5,
+          tilt: new THREE.Euler((r() - 0.5) * 1.3, (r() - 0.5) * 1.3, (r() - 0.5) * 1.3),
+          base: mesh.rotation.clone()
+        });
+        radius = Math.max(radius, home.length() + geo.boundingSphere.radius);
+      }
+      body.scale.setScalar(1 / radius);
+      return { body, cells, layers: Object.values(layers) };
     }
 
     const iceMaterial = new THREE.MeshPhysicalMaterial({
@@ -1887,17 +2021,17 @@ if (root.classList.contains('no-webgl')) {
       clearcoat: 1,
       clearcoatRoughness: 0.10,
       specularIntensity: 1,
-      envMapIntensity: 3.1,
-      attenuationColor: new THREE.Color('#7c4dff'),
-      attenuationDistance: 5.5,
+      envMapIntensity: LIGHT ? 1.7 : 3.1,
+      attenuationColor: new THREE.Color(LIGHT ? '#8f74ee' : '#7c4dff'),
+      attenuationDistance: LIGHT ? 4.2 : 5.5,
       side: THREE.FrontSide
     });
 
     const edgeMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#c9b6ff'),
+      color: new THREE.Color(LIGHT ? '#2a2352' : '#c9b6ff'),
       transparent: true,
-      opacity: 0.26,
-      blending: THREE.AdditiveBlending,
+      opacity: LIGHT ? 0.38 : 0.26,
+      blending: LIGHT ? THREE.NormalBlending : THREE.AdditiveBlending,
       depthWrite: false
     });
 
@@ -1908,12 +2042,13 @@ if (root.classList.contains('no-webgl')) {
       transparent: true,
       depthWrite: false,
       side: THREE.BackSide,
-      blending: THREE.AdditiveBlending,
+      blending: LIGHT ? THREE.MultiplyBlending : THREE.AdditiveBlending,
       fog: false,
       uniforms: {
-        uA: { value: new THREE.Color('#5b21b6') },
-        uB: { value: new THREE.Color('#a5f3ff') },
-        uI: { value: 1.0 }
+        uA: { value: new THREE.Color(LIGHT ? '#3b2a86' : '#5b21b6') },
+        uB: { value: new THREE.Color(LIGHT ? '#8bd3ea' : '#a5f3ff') },
+        uI: { value: 1.0 },
+        uLight: { value: LIGHT ? 1 : 0 }
       },
       vertexShader: `
         varying vec3 vN; varying vec3 vV;
@@ -1925,10 +2060,16 @@ if (root.classList.contains('no-webgl')) {
         }
       `,
       fragmentShader: `
-        uniform vec3 uA; uniform vec3 uB; uniform float uI;
+        uniform vec3 uA; uniform vec3 uB; uniform float uI; uniform float uLight;
         varying vec3 vN; varying vec3 vV;
         void main(){
           float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.0);
+          if (uLight > 0.5) {
+            // Multiply: the rim darkens toward the tint instead of glowing.
+            vec3 col = mix(vec3(1.0), mix(uA, uB, f), (0.10 + f * 0.75) * uI);
+            gl_FragColor = vec4(col, 1.0);
+            return;
+          }
           vec3 col = mix(uA, uB, f) * (0.16 + f * 1.25) * uI;
           gl_FragColor = vec4(col, 1.0);
         }
@@ -1938,16 +2079,15 @@ if (root.classList.contains('no-webgl')) {
     /* Anchor table: which element each crystal follows, and where it sits
        relative to the descent axis. Sides match the column the copy is in. */
     const PLAN = {
-      hero:      { seed:  1013, cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
-      principle: { seed:  2027, cells: lowPower ? 4 : 6,  scale: 1.05, x: -3.10, z: -2.2, spin: 0.09  },
-      kazilaw:   { seed:  3041, cells: lowPower ? 5 : 8,  scale: 1.45, x:  2.35, z: -0.5, spin: 0.07  },
-      dinoig:    { seed:  4051, cells: lowPower ? 4 : 7,  scale: 1.30, x: -2.35, z: -0.5, spin: -0.08 },
-      chuma:     { seed:  5077, cells: lowPower ? 5 : 9,  scale: 1.40, x:  2.35, z: -0.5, spin: 0.065 },
-      sema:      { seed:  6091, cells: lowPower ? 4 : 7,  scale: 1.32, x: -2.35, z: -0.5, spin: -0.07 },
-      routine:   { seed:  7103, cells: lowPower ? 4 : 6,  scale: 1.22, x:  2.35, z: -0.5, spin: 0.085 },
-      infra:     { seed:  8117, cells: lowPower ? 7 : 13, scale: 1.75, x: -3.15, z: -1.7, spin: 0.05  },
-      caps:      { seed:  9133, cells: lowPower ? 4 : 6,  scale: 1.30, x:  3.10, z: -1.6, spin: 0.075 },
-      contact:   { seed: 10151, cells: lowPower ? 6 : 11, scale: 2.40, x:  0.00, z: -4.4, spin: 0.04  }
+      hero:    { form: 'cluster', seed: 1013,  cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
+      kazilaw: { form: 'statute', seed: 3041,  cells: 5,                 scale: 1.50, x:  2.35, z: -0.5, face: [0.14, -0.55, 0.03] },
+      dinoig:  { form: 'spine',   seed: 4051,  cells: lowPower ? 5 : 7,  scale: 1.45, x: -2.35, z: -0.5, face: [0.12,  0.42, 0.02] },
+      chuma:   { form: 'iron',    seed: 5077,  cells: 7,                 scale: 1.45, x:  2.35, z: -0.5, face: [0.34, -0.62, 0.16] },
+      sema:    { form: 'signal',  seed: 6091,  cells: 17,                scale: 1.40, x: -2.35, z: -0.5, face: [0.22,  0.38, 0.00] },
+      routine: { form: 'rotor',   seed: 7103,  cells: 8,                 scale: 1.30, x:  2.35, z: -0.5, face: [0.30, -0.38, 0.00] },
+      infra:   { form: 'rack',    seed: 8117,  cells: lowPower ? 9 : 18, scale: 1.45, x:  3.10, z: -1.6, face: [0.36, -0.62, 0.10] },
+      caps:    { form: 'cluster', seed: 9133,  cells: lowPower ? 4 : 6,  scale: 1.30, x:  3.10, z: -1.6, spin: 0.075 },
+      contact: { form: 'cluster', seed: 10151, cells: lowPower ? 6 : 11, scale: 2.40, x:  0.00, z: -4.4, spin: 0.04  }
     };
 
     const shards = [];
@@ -1955,25 +2095,19 @@ if (root.classList.contains('no-webgl')) {
       const host = document.querySelector('[data-shard="' + key + '"]');
       if (!host) continue;
 
-      const geo = growCrystal(cfg.seed, cfg.cells);
-      const mesh = new THREE.Mesh(geo, iceMaterial);
-      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 24), edgeMaterial);
-      const core = new THREE.Mesh(geo, coreMaterial);
-      core.scale.setScalar(0.9);
-      core.renderOrder = -1;
-      mesh.add(core);
-      mesh.add(edges);
-
+      const { body, cells, layers } = buildCrystal(cfg);
       const group = new THREE.Group();
-      group.add(mesh);
+      group.add(body);
       const s = cfg.scale * (narrow ? 0.56 : 1);
       group.scale.setScalar(s);
       group.position.x = narrow ? (cfg.mx || 0) : cfg.x;
       group.position.z = (narrow ? cfg.z - 4.0 : cfg.z);
-      group.rotation.set(Math.random() * 0.4, cfg.seed % 6, Math.random() * 0.3);
+      if (cfg.face) group.rotation.set(cfg.face[0], cfg.face[1], cfg.face[2]);
+      else group.rotation.set(Math.random() * 0.4, cfg.seed % 6, Math.random() * 0.3);
 
       scene.add(group);
-      shards.push({ host, group, mesh, cfg, baseScale: s, anchor: 0 });
+      shards.push({ key, host, group, body, cells, layers, cfg, baseScale: s, anchor: 0,
+                    burst: 0, pulse: 0, kick: 0, pushX: 0, pushY: 0 });
     }
 
     /* ---------------------------------------------------------- dust */
@@ -1997,9 +2131,9 @@ if (root.classList.contains('no-webgl')) {
       sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85,
+      opacity: LIGHT ? 0.55 : 0.85,
       depthWrite: false,
-      blending: THREE.AdditiveBlending
+      blending: LIGHT ? THREE.NormalBlending : THREE.AdditiveBlending
     }));
     scene.add(dust);
 
@@ -2008,7 +2142,7 @@ if (root.classList.contains('no-webgl')) {
     composer.addPass(new RenderPass(scene, camera));
 
     let bloom = null;
-    if (!lowPower) {
+    if (!lowPower && !LIGHT) {
       bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.72, 0.68, 0.62);
       composer.addPass(bloom);
     }
@@ -2018,8 +2152,8 @@ if (root.classList.contains('no-webgl')) {
         tDiffuse: { value: null },
         uTime:    { value: 0 },
         uShift:   { value: 0 },
-        uGrain:   { value: lowPower ? 0.016 : 0.028 },
-        uVig:     { value: 0.55 }
+        uGrain:   { value: LIGHT ? 0.012 : (lowPower ? 0.016 : 0.028) },
+        uVig:     { value: LIGHT ? 0.12 : 0.55 }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -2089,10 +2223,16 @@ if (root.classList.contains('no-webgl')) {
     }
 
     /* ---------------------------------------------------------- loop */
-    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    const pointer = { x: 0, y: 0, tx: 0, ty: 0, px: -1e4, py: -1e4, on: false, tap: false };
     window.addEventListener('mousemove', e => {
       pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+      pointer.px = e.clientX; pointer.py = e.clientY; pointer.on = true;
+    }, { passive: true });
+    // A touch can't hover, so a tap on a crystal breaks it for a moment.
+    window.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse') return;
+      pointer.px = e.clientX; pointer.py = e.clientY; pointer.tap = true;
     }, { passive: true });
 
     let camY = 0, lastScroll = window.scrollY, velocity = 0;
@@ -2130,16 +2270,71 @@ if (root.classList.contains('no-webgl')) {
       dust.position.y = (camY * 0.35) % 4;
       if (!reduce) dust.rotation.y = t * 0.006;
 
+      const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      const scrollBurst = Math.min(0.4, Math.abs(velocity) * 0.001);
+
       for (const s of shards) {
-        const near = 1 - Math.min(1, Math.abs(s.group.position.y - camY) / 9);
+        const dy = Math.abs(s.group.position.y - camY);
+        const near = 1 - Math.min(1, dy / 9);
         const k = 0.80 + near * 0.20;
         s.group.scale.setScalar(s.baseScale * k);
-        if (!reduce) {
-          s.mesh.rotation.y += s.cfg.spin * dt * 0.9;
-          s.mesh.rotation.x = Math.sin(t * 0.18 + s.cfg.seed) * 0.10;
+
+        // Hit test in screen space. Cheap, and it works through the copy
+        // sitting on top of the canvas.
+        let hot = false;
+        if (dy < 8 && (pointer.on || pointer.tap)) {
+          const v = s.group.position.clone().project(camera);
+          const sx = (v.x + 1) / 2 * window.innerWidth;
+          const sy = (1 - v.y) / 2 * window.innerHeight;
+          const dist = camera.position.distanceTo(s.group.position);
+          const rPx = (s.baseScale * k / dist) * (window.innerHeight / 2) / tanHalf;
+          const ox = pointer.px - sx, oy = pointer.py - sy;
+          if (ox * ox + oy * oy < rPx * rPx * 1.15) {
+            hot = pointer.on;
+            if (pointer.tap) s.pulse = 1.1;
+            s.pushX = Math.max(-1, Math.min(1, ox / rPx));
+            s.pushY = Math.max(-1, Math.min(1, -oy / rPx));
+          }
         }
-        s.mesh.rotation.y += velocity * 0.00035;
+        if (s.pulse > 0) { s.pulse -= dt; hot = true; }
+
+        const target = hot ? 1 : scrollBurst;
+        s.burst += (target - s.burst) * ease(hot ? 6.5 : 3);
+        const b = s.burst;
+
+        // Cells fly out along their own axis and tumble; the whole body
+        // also shies away from the pointer.
+        for (const c of s.cells) {
+          c.mesh.position.set(c.home.x + c.dir.x * c.out * b,
+                              c.home.y + c.dir.y * c.out * b,
+                              c.home.z + c.dir.z * c.out * b);
+          c.mesh.rotation.set(c.base.x + c.tilt.x * b, c.base.y + c.tilt.y * b, c.base.z + c.tilt.z * b);
+        }
+        s.body.position.set(-s.pushX * 0.28 * b, -s.pushY * 0.28 * b, 0);
+
+        // Rings and rotors turn on their own; scrolling spins them harder.
+        s.layers.forEach((L, i) => {
+          const sign = i % 2 ? -1 : 1;
+          if (!reduce) L.rotation.z += sign * (0.22 + i * 0.1) * dt;
+          L.rotation.z += sign * velocity * 0.0005;
+        });
+
+        // Clusters spin. Shaped crystals sway, so the shape stays readable,
+        // and take a kick from the scroll that settles back.
+        s.kick += velocity * 0.00035;
+        s.kick += (0 - s.kick) * ease(1.6);
+        if (s.cfg.spin) {
+          if (!reduce) {
+            s.body.rotation.y += s.cfg.spin * dt * 0.9;
+            s.body.rotation.x = Math.sin(t * 0.18 + s.cfg.seed) * 0.10;
+          }
+          s.body.rotation.y += velocity * 0.00035;
+        } else {
+          s.body.rotation.y = (reduce ? 0 : Math.sin(t * 0.26 + s.cfg.seed) * 0.42) + s.kick;
+          s.body.rotation.x = reduce ? 0 : Math.sin(t * 0.19 + s.cfg.seed * 0.7) * 0.08;
+        }
       }
+      pointer.tap = false;
 
       keyLight.position.y = camY + 3;
       rimLight.position.y = camY - 2;
@@ -2159,7 +2354,7 @@ if (root.classList.contains('no-webgl')) {
         const v = sh.group.position.clone().project(camera);
         const r = sh.host.getBoundingClientRect();
         return {
-          key: Object.keys(PLAN).find(k => PLAN[k] === sh.cfg),
+          key: sh.key,
           screen: [Math.round((v.x + 1) / 2 * window.innerWidth), Math.round((1 - v.y) / 2 * window.innerHeight)],
           host: [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)]
         };

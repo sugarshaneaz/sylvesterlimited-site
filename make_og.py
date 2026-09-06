@@ -14,13 +14,13 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H = 1200, 630
 
-VOID = (5, 5, 10)            # --void
-INK = (243, 243, 248)        # --ink
-MUTED = (156, 156, 178)      # --muted
-DIM = (98, 98, 122)          # --dim
-ACCENT = (168, 85, 247)      # --accent   hsl(270 80% 65%)
-ICE = (125, 211, 252)        # --ice      hsl(196 92% 74%)
-LINE = (255, 255, 255, 26)   # --line
+VOID = (245, 245, 249)       # --void   off-white ground
+INK = (14, 16, 32)           # --ink    navy-charcoal
+MUTED = (74, 78, 102)        # --muted
+DIM = (124, 128, 153)        # --dim
+ACCENT = (109, 63, 214)      # --accent hsl(262 70% 48%)
+ICE = (29, 143, 184)         # --ice    hsl(198 78% 40%)
+LINE = (14, 16, 32, 33)      # --line
 
 SANS_CANDIDATES = [
     # Space Grotesk is the site face; fall back to any decent grotesk.
@@ -52,13 +52,13 @@ def font(candidates, size):
 
 card = Image.new("RGB", (W, H), VOID)
 
-# Two faint pools of light, far apart, so the ground stays matte black.
+# Two faint pools of colour, far apart, so the ground stays paper.
 glow = Image.new("RGB", (W, H), VOID)
 gd = ImageDraw.Draw(glow)
-gd.ellipse([720, -80, 1380, 520], fill=(46, 22, 96))
-gd.ellipse([-260, 380, 380, 900], fill=(14, 40, 62))
+gd.ellipse([720, -80, 1380, 520], fill=(226, 216, 250))
+gd.ellipse([-260, 380, 380, 900], fill=(216, 236, 246))
 glow = glow.filter(ImageFilter.GaussianBlur(160))
-card = Image.blend(card, glow, 0.55)
+card = Image.blend(card, glow, 0.6)
 
 # --- The crystal: a seeded shard cluster, drawn as translucent facets. ---
 random.seed(1013)
@@ -91,26 +91,27 @@ for i in range(7):
 for poly in shards:
     t = random.random()
     base = tuple(int(ACCENT[k] * (1 - t) + ICE[k] * t) for k in range(3))
-    # body: dark glass
-    ld.polygon(poly, fill=tuple(int(c * 0.30) for c in base) + (215,))
-    # one lit facet per shard
-    ld.polygon([poly[0], poly[1], poly[2]], fill=base + (74,))
+    # body: frosted glass, pale
+    ld.polygon(poly, fill=tuple(int(255 - (255 - c) * 0.32) for c in base) + (225,))
+    # one shaded facet per shard
+    ld.polygon([poly[0], poly[1], poly[2]], fill=base + (60,))
 for poly in shards:
     t = random.random()
-    edge = tuple(int(ACCENT[k] * (1 - t) + ICE[k] * t) for k in range(3)) + (120,)
+    edge = (42, 35, 82, 150)
     ld.line(poly + [poly[0]], fill=edge, width=2)
     # one internal ridge per shard
     ld.line([poly[0], poly[2]], fill=edge[:3] + (70,), width=1)
 
-# soft bloom under the edges
-bloom = layer.filter(ImageFilter.GaussianBlur(14))
-card = Image.alpha_composite(card.convert("RGBA"), bloom)
+# soft shadow under the shards
+shadow = layer.filter(ImageFilter.GaussianBlur(18))
+shadow = Image.eval(shadow, lambda v: v)  # keep alpha, colour comes from layer
+card = Image.alpha_composite(card.convert("RGBA"), Image.blend(Image.new("RGBA", (W, H), (0, 0, 0, 0)), shadow, 0.35))
 card = Image.alpha_composite(card, layer)
 
 d = ImageDraw.Draw(card)
 
 # Hairline frame, echoing the page's 1px borders.
-d.rectangle([40, 40, W - 41, H - 41], outline=(30, 30, 44), width=1)
+d.rectangle([40, 40, W - 41, H - 41], outline=(222, 222, 230), width=1)
 
 mono_s = font(MONO_CANDIDATES, 17)
 mono_xs = font(MONO_CANDIDATES, 15)
