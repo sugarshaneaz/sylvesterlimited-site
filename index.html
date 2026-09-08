@@ -1985,17 +1985,47 @@ if (root.classList.contains('no-webgl')) {
         }
         return cells;
       },
-      // Dino IG — a dorsal ridge: a low back with plates that peak mid-arc.
-      spine(r, n) {
-        const cells = [{ s: [1.6, 0.34, 0.44], rot: [0, 0, 0.1], p: [0, -0.58, 0] }];
-        for (let i = 0; i < n; i++) {
-          const t = i / (n - 1);
-          const a = (t - 0.5) * 1.95;
-          const len = 0.40 + Math.sin(t * Math.PI) * 0.80;
-          const bx = Math.sin(a) * 1.30, by = Math.cos(a) * 0.55 - 0.60;
-          cells.push({ s: [0.16, len, 0.20], rot: [0, 0, -a],
-                       p: [bx + Math.sin(a) * len * 0.45, by + Math.cos(a) * len * 0.45, 0] });
+      // Dino IG — the dinosaur itself, in glass: a tyrannosaur mid-roar,
+      // jaws open, a crest of crystal spikes down its neck and back, tail
+      // out behind. Every part its own piece, so it comes apart under the
+      // pointer and reassembles.
+      dino(r) {
+        const cells = [];
+        const ico = (sx, sy, sz, p, rot = [0, 0, 0], extra = {}) =>
+          cells.push({ geo: new THREE.IcosahedronGeometry(1, 1), s: [sx, sy, sz], p, rot, jitter: 0.03, ...extra });
+        // torso, hips, neck
+        ico(1.25, 0.66, 0.6, [0, 0, 0], [0, 0, 0.14]);
+        ico(0.55, 0.42, 0.40, [0.85, 0.42, 0], [0, 0, 0.55]);
+        for (const z of [-1, 1]) {
+          ico(0.5, 0.62, 0.32, [-0.25, -0.35, z * 0.42], [0, 0, 0.35]);
+          cells.push({ geo: new THREE.CylinderGeometry(0.11, 0.16, 0.72, 6, 1), p: [-0.28, -0.95, z * 0.45], rot: [0, 0, -0.22], jitter: 0.01 });
+          cells.push({ geo: new THREE.BoxGeometry(0.52, 0.14, 0.3), p: [-0.08, -1.34, z * 0.47], rot: [0, 0, 0], jitter: 0.012 });
+          for (let k = 0; k < 3; k++)
+            cells.push({ geo: new THREE.ConeGeometry(0.04, 0.16, 4), p: [0.3, -1.34, z * 0.47 + (k - 1) * 0.1], rot: [0, 0, -Math.PI / 2], jitter: 0.004, outScale: 0.6 });
+          // forelimbs
+          cells.push({ geo: new THREE.CylinderGeometry(0.05, 0.075, 0.42, 6, 1), p: [0.72, -0.08, z * 0.36], rot: [0, 0, 0.6], jitter: 0.008 });
         }
+        // skull: cranium, upper jaw wedge, lower jaw open, eyes
+        ico(0.46, 0.40, 0.42, [1.2, 0.72, 0], [0, 0, 0.2]);
+        cells.push({ geo: new THREE.ConeGeometry(0.33, 1.05, 4), s: [1, 1, 0.78], p: [1.72, 0.66, 0], rot: [0, Math.PI / 4, -Math.PI / 2 + 0.2], jitter: 0.02 });
+        cells.push({ geo: new THREE.ConeGeometry(0.2, 0.9, 4), s: [1, 1, 0.7], p: [1.5, 0.22, 0], rot: [0, Math.PI / 4, -Math.PI / 2 - 0.55], jitter: 0.02 });
+        for (const z of [-1, 1]) ico(0.075, 0.075, 0.075, [1.3, 0.82, z * 0.3], [0, 0, 0], { jitter: 0.01, outScale: 0.6 });
+        // teeth
+        for (let i = 0; i < 4; i++)
+          cells.push({ geo: new THREE.ConeGeometry(0.035, 0.15, 4), p: [1.42 + i * 0.19, 0.52 - i * 0.045, 0], rot: [0, 0, Math.PI + 0.2], jitter: 0.003, outScale: 0.7 });
+        for (let i = 0; i < 3; i++)
+          cells.push({ geo: new THREE.ConeGeometry(0.03, 0.13, 4), p: [1.32 + i * 0.19, 0.16 - i * 0.11, 0], rot: [0, 0, -0.55], jitter: 0.003, outScale: 0.7 });
+        // crest: crystal spikes from the neck to the tail root, tallest mid-back
+        const spine = [[1.0, 0.8], [0.62, 0.74], [0.26, 0.68], [-0.1, 0.62], [-0.46, 0.52], [-0.8, 0.38], [-1.12, 0.22]];
+        spine.forEach(([x, y], i) => {
+          const t = i / (spine.length - 1);
+          const h = 0.4 + Math.sin(t * Math.PI) * 0.5 + r() * 0.12;
+          const z = (i % 2 ? 1 : -1) * 0.07;
+          cells.push({ geo: new THREE.ConeGeometry(0.1 + r() * 0.03, h, 5), p: [x, y + h * 0.4, z], rot: [0, r() * 0.6, 0.28 + (r() - 0.5) * 0.12], jitter: 0.012, outScale: 1.3 });
+        });
+        // tail, tapering
+        const tail = [[-1.15, 0.05, 0.44, 0.26], [-1.55, 0.08, 0.38, 0.2], [-1.9, 0.16, 0.32, 0.15], [-2.2, 0.28, 0.26, 0.1]];
+        tail.forEach(([x, y, l, rr], i) => ico(l, rr, rr * 0.9, [x, y, 0], [0, 0, 0.12 + i * 0.1], { jitter: 0.02 }));
         return cells;
       },
       // Chuma — iron (that is what the word means): two heavy heads on a bar.
@@ -2180,7 +2210,7 @@ if (root.classList.contains('no-webgl')) {
     const PLAN = {
       hero:    { form: 'cluster', seed: 1013,  cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
       kazilaw: { form: 'arms',    seed: 3041,  cells: 0,                 scale: 1.78, x:  2.35, z: -0.5, face: [0.06, -0.22, 0.00], sway: 0.24 },
-      dinoig:  { form: 'spine',   seed: 4051,  cells: lowPower ? 5 : 7,  scale: 1.45, x: -2.35, z: -0.5, face: [0.12,  0.42, 0.02] },
+      dinoig:  { form: 'dino',    seed: 4051,  cells: 0,                 scale: 1.72, x: -2.35, z: -0.5, face: [0.08, -0.55, 0.00], sway: 0.2 },
       chuma:   { form: 'iron',    seed: 5077,  cells: 7,                 scale: 1.45, x:  2.35, z: -0.5, face: [0.34, -0.62, 0.16] },
       sema:    { form: 'signal',  seed: 6091,  cells: 17,                scale: 1.40, x: -2.35, z: -0.5, face: [0.22,  0.38, 0.00] },
       routine: { form: 'rotor',   seed: 7103,  cells: 8,                 scale: 1.30, x:  2.35, z: -0.5, face: [0.30, -0.38, 0.00] },
