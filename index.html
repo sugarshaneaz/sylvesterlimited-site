@@ -2005,16 +2005,41 @@ if (root.classList.contains('no-webgl')) {
           // forelimbs
           cells.push({ geo: new THREE.CylinderGeometry(0.05, 0.075, 0.42, 6, 1), p: [0.72, -0.08, z * 0.36], rot: [0, 0, 0.6], jitter: 0.008 });
         }
-        // skull: cranium, upper jaw wedge, lower jaw open, eyes
-        ico(0.46, 0.40, 0.42, [1.2, 0.72, 0], [0, 0, 0.2]);
-        cells.push({ geo: new THREE.ConeGeometry(0.33, 1.05, 4), s: [1, 1, 0.78], p: [1.72, 0.66, 0], rot: [0, Math.PI / 4, -Math.PI / 2 + 0.2], jitter: 0.02 });
-        cells.push({ geo: new THREE.ConeGeometry(0.2, 0.9, 4), s: [1, 1, 0.7], p: [1.5, 0.22, 0], rot: [0, Math.PI / 4, -Math.PI / 2 - 0.55], jitter: 0.02 });
-        for (const z of [-1, 1]) ico(0.075, 0.075, 0.075, [1.3, 0.82, z * 0.3], [0, 0, 0], { jitter: 0.01, outScale: 0.6 });
-        // teeth
-        for (let i = 0; i < 4; i++)
-          cells.push({ geo: new THREE.ConeGeometry(0.035, 0.15, 4), p: [1.42 + i * 0.19, 0.52 - i * 0.045, 0], rot: [0, 0, Math.PI + 0.2], jitter: 0.003, outScale: 0.7 });
-        for (let i = 0; i < 3; i++)
-          cells.push({ geo: new THREE.ConeGeometry(0.03, 0.13, 4), p: [1.32 + i * 0.19, 0.16 - i * 0.11, 0], rot: [0, 0, -0.55], jitter: 0.003, outScale: 0.7 });
+        // skull. The snout is a deep, blunt wedge and the lower jaw a
+        // straight bar — pointed cones read as a beak. Both hinge at the
+        // back of the skull; the jaw drops for the roar.
+        ico(0.5, 0.42, 0.44, [1.15, 0.7, 0], [0, 0, 0.2]);
+        const jaw = (rFront, rBack, len) => {
+          const geo = new THREE.CylinderGeometry(rFront, rBack, len, 4, 1);
+          geo.rotateY(Math.PI / 4);      // square the section: flat top, flat sides
+          geo.rotateZ(-Math.PI / 2);     // lay it along +x, front at +x
+          return geo;
+        };
+        const HINGE = [1.05, 0.5];
+        const UP = 0.12, DOWN = -0.55, UL = 1.05, LL = 0.98;
+        cells.push({ geo: jaw(0.2, 0.32, UL), s: [1, 1.05, 0.72],
+                     p: [HINGE[0] + Math.cos(UP) * UL * 0.5, HINGE[1] + 0.16 + Math.sin(UP) * UL * 0.5, 0],
+                     rot: [0, 0, UP], jitter: 0.015 });
+        cells.push({ geo: jaw(0.1, 0.17, LL), s: [1, 0.9, 0.66],
+                     p: [HINGE[0] + Math.cos(DOWN) * LL * 0.5, HINGE[1] - 0.06 + Math.sin(DOWN) * LL * 0.5, 0],
+                     rot: [0, 0, DOWN], jitter: 0.015 });
+        // brow and eyes
+        for (const z of [-1, 1]) {
+          ico(0.16, 0.08, 0.1, [1.28, 0.9, z * 0.24], [0, 0, 0.1], { jitter: 0.01, outScale: 0.6 });
+          ico(0.07, 0.07, 0.07, [1.32, 0.82, z * 0.3], [0, 0, 0], { jitter: 0.01, outScale: 0.6 });
+        }
+        // teeth, along the jaw lines: upper row hangs from the snout's
+        // underside, lower row stands on the jaw bar.
+        for (let i = 0; i < 5; i++) {
+          const d = 0.22 + i * 0.17;
+          const x = HINGE[0] + Math.cos(UP) * d, y = HINGE[1] + 0.16 + Math.sin(UP) * d - 0.19;
+          cells.push({ geo: new THREE.ConeGeometry(0.03, 0.14 - i * 0.012, 4), p: [x, y - 0.06, 0], rot: [0, 0, Math.PI + UP], jitter: 0.003, outScale: 0.7 });
+        }
+        for (let i = 0; i < 4; i++) {
+          const d = 0.28 + i * 0.17;
+          const x = HINGE[0] + Math.cos(DOWN) * d, y = HINGE[1] - 0.06 + Math.sin(DOWN) * d + 0.1;
+          cells.push({ geo: new THREE.ConeGeometry(0.028, 0.12, 4), p: [x, y + 0.05, 0], rot: [0, 0, DOWN], jitter: 0.003, outScale: 0.7 });
+        }
         // crest: crystal spikes from the neck to the tail root, tallest mid-back
         const spine = [[1.0, 0.8], [0.62, 0.74], [0.26, 0.68], [-0.1, 0.62], [-0.46, 0.52], [-0.8, 0.38], [-1.12, 0.22]];
         spine.forEach(([x, y], i) => {
