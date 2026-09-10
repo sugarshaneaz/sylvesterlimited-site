@@ -1877,30 +1877,180 @@ if (root.classList.contains('no-webgl')) {
         }
         return cells;
       },
-      // KaziLaw — statute: a row of obelisks, tallest in the middle.
-      // Columns, or the spines of the Acts on a shelf.
-      statute(r, n) {
+      // KaziLaw — the arms, in glass: the warrior's shield split into its
+      // fields (chief, the flag's diagonal in three, the red field, the
+      // water at the point), the spear through its centre, the crossed
+      // tools, two tusks, and the mountain beneath. No figures, no scroll,
+      // no colour — a shape a Tanzanian reader knows at once.
+      arms() {
         const cells = [];
-        for (let i = 0; i < n; i++) {
-          const t = n > 1 ? i / (n - 1) : 0.5;
-          const h = 0.72 + Math.sin(t * Math.PI) * 0.62 + r() * 0.18;
-          cells.push({ s: [0.21 + r() * 0.07, h, 0.30 + r() * 0.12],
-                       rot: [0, (r() - 0.5) * 0.3, (r() - 0.5) * 0.05],
-                       p: [(i - (n - 1) / 2) * 0.54, h - 1.05, (r() - 0.5) * 0.18] });
+
+        // Clip a polygon to the half-plane a*x + b*y + c >= 0.
+        const clip = (poly, a, b, c) => {
+          const out = [];
+          for (let i = 0; i < poly.length; i++) {
+            const P = poly[i], Q = poly[(i + 1) % poly.length];
+            const fp = a * P[0] + b * P[1] + c, fq = a * Q[0] + b * Q[1] + c;
+            if (fp >= 0) out.push(P);
+            if ((fp >= 0) !== (fq >= 0)) {
+              const t = fp / (fp - fq);
+              out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]);
+            }
+          }
+          return out;
+        };
+        const inset = (poly, k) => {
+          let cx = 0, cy = 0;
+          for (const p of poly) { cx += p[0]; cy += p[1]; }
+          cx /= poly.length; cy /= poly.length;
+          return poly.map(([x, y]) => [cx + (x - cx) * k, cy + (y - cy) * k]);
+        };
+        const slab = (poly, depth) => {
+          let area = 0;
+          for (let i = 0; i < poly.length; i++) {
+            const p = poly[i], q = poly[(i + 1) % poly.length];
+            area += p[0] * q[1] - q[0] * p[1];
+          }
+          if (area < 0) poly = poly.slice().reverse();
+          const shape = new THREE.Shape(poly.map(([x, y]) => new THREE.Vector2(x, y)));
+          const geo = new THREE.ExtrudeGeometry(shape, {
+            depth, bevelEnabled: true, bevelThickness: 0.035, bevelSize: 0.03, bevelSegments: 1
+          });
+          geo.translate(0, 0, -depth / 2);
+          return geo;
+        };
+        // The shield: an elliptical head narrowing to a point.
+        const W = 0.8, yc = 0.18, right = [];
+        for (let i = 0; i <= 12; i++) {
+          const ang = (Math.PI / 2) * (1 - i / 12);
+          right.push([W * Math.cos(ang), yc + (1 - yc) * Math.sin(ang)]);
+        }
+        for (let i = 1; i <= 16; i++) {
+          const u = i / 16;
+          right.push([W * Math.pow(1 - Math.pow(u, 1.9), 0.8), yc - u * (yc + 1)]);
+        }
+        const shield = [...right, ...right.slice(1, -1).reverse().map(([x, y]) => [-x, y])];
+        const M = 0.95;
+        const flag = clip(clip(shield, 0, -1, 0.46), 0, 1, 0.14);
+        const fields = [
+          clip(shield, 0, 1, -0.46),                                  // chief
+          clip(flag, -M, 1, -0.30),                                   // above the band
+          clip(clip(flag, M, -1, 0.30), -M, 1, 0.02),                 // the band
+          clip(flag, M, -1, -0.02),                                   // below the band
+          clip(clip(shield, 0, -1, -0.14), 0, 1, 0.54),               // the red field
+          clip(shield, 0, -1, -0.54)                                  // the water, to the point
+        ];
+        fields.forEach((poly, i) => {
+          if (poly.length < 3) return;
+          // The band stands a little proud, so the fields read without colour.
+          const depth = i === 2 ? 0.24 : 0.16;
+          cells.push({ geo: slab(inset(poly, 0.975), depth), p: [0, 0, 0], rot: [0, 0, 0], jitter: 0.012, outScale: 1.2 });
+        });
+        // the spear
+        cells.push({ geo: new THREE.CylinderGeometry(0.034, 0.034, 2.4, 6, 1), p: [0, 0.02, 0.17], rot: [0, 0, 0], jitter: 0.006 });
+        cells.push({ geo: new THREE.ConeGeometry(0.1, 0.3, 4), p: [0, 1.36, 0.17], rot: [0, Math.PI / 4, 0], jitter: 0.006 });
+        cells.push({ geo: new THREE.ConeGeometry(0.06, 0.14, 4), p: [0, -1.24, 0.17], rot: [Math.PI, Math.PI / 4, 0], jitter: 0.004 });
+        // the crossed tools
+        for (const s of [-1, 1]) {
+          const a = s * 0.72;
+          cells.push({ geo: new THREE.CylinderGeometry(0.028, 0.028, 1.02, 6, 1), p: [0, -0.26, 0.12], rot: [0, 0, a], jitter: 0.006 });
+          cells.push({ geo: new THREE.BoxGeometry(0.2, 0.13, 0.07), p: [-Math.sin(a) * 0.5 + s * 0.05, -0.26 + Math.cos(a) * 0.5, 0.12], rot: [0, 0, a], jitter: 0.01 });
+        }
+        // two tusks
+        for (const s of [-1, 1]) {
+          const curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(s * 0.98, -0.9, 0.02),
+            new THREE.Vector3(s * 1.5, 0.35, 0.06),
+            new THREE.Vector3(s * 0.32, 1.22, 0.02));
+          const SEG = 6;
+          for (let i = 0; i < SEG; i++) {
+            const t0 = i / SEG, t1 = (i + 1) / SEG;
+            const p0 = curve.getPoint(t0), p1 = curve.getPoint(t1);
+            const r0 = 0.13 * (1 - t0) + 0.035 * t0, r1 = 0.13 * (1 - t1) + 0.035 * t1;
+            const mid = p0.clone().add(p1).multiplyScalar(0.5);
+            const e = new THREE.Euler().setFromQuaternion(new THREE.Quaternion().setFromUnitVectors(
+              new THREE.Vector3(0, 1, 0), p1.clone().sub(p0).normalize()));
+            cells.push({ geo: new THREE.CylinderGeometry(r1, r0, p0.distanceTo(p1) * 1.06, 6, 1),
+                         p: [mid.x, mid.y, mid.z], rot: [e.x, e.y, e.z], jitter: 0.008, outScale: 0.8 });
+          }
+        }
+        // the mountain and its cap
+        cells.push({ geo: new THREE.ConeGeometry(1.0, 0.44, 7), p: [0, -1.4, -0.45], rot: [0, 0.35, 0], jitter: 0.05, outScale: 0.5 });
+        cells.push({ geo: new THREE.ConeGeometry(0.34, 0.14, 7), p: [0, -1.25, -0.45], rot: [0, 0.35, 0], jitter: 0.02, outScale: 0.5 });
+        // The mountain pulls the centre of mass down; lift the whole emblem
+        // so it sits level with the copy beside it.
+        for (const c of cells) {
+          if (c.p[0] === 0 && c.p[1] === 0 && c.p[2] === 0) c.geo.translate(0, 0.24, 0);
+          else c.p[1] += 0.24;
         }
         return cells;
       },
-      // Dino IG — a dorsal ridge: a low back with plates that peak mid-arc.
-      spine(r, n) {
-        const cells = [{ s: [1.6, 0.34, 0.44], rot: [0, 0, 0.1], p: [0, -0.58, 0] }];
-        for (let i = 0; i < n; i++) {
-          const t = i / (n - 1);
-          const a = (t - 0.5) * 1.95;
-          const len = 0.40 + Math.sin(t * Math.PI) * 0.80;
-          const bx = Math.sin(a) * 1.30, by = Math.cos(a) * 0.55 - 0.60;
-          cells.push({ s: [0.16, len, 0.20], rot: [0, 0, -a],
-                       p: [bx + Math.sin(a) * len * 0.45, by + Math.cos(a) * len * 0.45, 0] });
+      // Dino IG — the dinosaur itself, in glass: a tyrannosaur mid-roar,
+      // jaws open, a crest of crystal spikes down its neck and back, tail
+      // out behind. Every part its own piece, so it comes apart under the
+      // pointer and reassembles.
+      dino(r) {
+        const cells = [];
+        const ico = (sx, sy, sz, p, rot = [0, 0, 0], extra = {}) =>
+          cells.push({ geo: new THREE.IcosahedronGeometry(1, 1), s: [sx, sy, sz], p, rot, jitter: 0.03, ...extra });
+        // torso, hips, neck
+        ico(1.25, 0.66, 0.6, [0, 0, 0], [0, 0, 0.14]);
+        ico(0.55, 0.42, 0.40, [0.85, 0.42, 0], [0, 0, 0.55]);
+        for (const z of [-1, 1]) {
+          ico(0.5, 0.62, 0.32, [-0.25, -0.35, z * 0.42], [0, 0, 0.35]);
+          cells.push({ geo: new THREE.CylinderGeometry(0.11, 0.16, 0.72, 6, 1), p: [-0.28, -0.95, z * 0.45], rot: [0, 0, -0.22], jitter: 0.01 });
+          cells.push({ geo: new THREE.BoxGeometry(0.52, 0.14, 0.3), p: [-0.08, -1.34, z * 0.47], rot: [0, 0, 0], jitter: 0.012 });
+          for (let k = 0; k < 3; k++)
+            cells.push({ geo: new THREE.ConeGeometry(0.04, 0.16, 4), p: [0.3, -1.34, z * 0.47 + (k - 1) * 0.1], rot: [0, 0, -Math.PI / 2], jitter: 0.004, outScale: 0.6 });
+          // forelimbs
+          cells.push({ geo: new THREE.CylinderGeometry(0.05, 0.075, 0.42, 6, 1), p: [0.72, -0.08, z * 0.36], rot: [0, 0, 0.6], jitter: 0.008 });
         }
+        // skull. The snout is a deep, blunt wedge and the lower jaw a
+        // straight bar — pointed cones read as a beak. Both hinge at the
+        // back of the skull; the jaw drops for the roar.
+        ico(0.5, 0.42, 0.44, [1.15, 0.7, 0], [0, 0, 0.2]);
+        const jaw = (rFront, rBack, len) => {
+          const geo = new THREE.CylinderGeometry(rFront, rBack, len, 4, 1);
+          geo.rotateY(Math.PI / 4);      // square the section: flat top, flat sides
+          geo.rotateZ(-Math.PI / 2);     // lay it along +x, front at +x
+          return geo;
+        };
+        const HINGE = [1.05, 0.5];
+        const UP = 0.12, DOWN = -0.55, UL = 1.05, LL = 0.98;
+        cells.push({ geo: jaw(0.2, 0.32, UL), s: [1, 1.05, 0.72],
+                     p: [HINGE[0] + Math.cos(UP) * UL * 0.5, HINGE[1] + 0.16 + Math.sin(UP) * UL * 0.5, 0],
+                     rot: [0, 0, UP], jitter: 0.015 });
+        cells.push({ geo: jaw(0.1, 0.17, LL), s: [1, 0.9, 0.66],
+                     p: [HINGE[0] + Math.cos(DOWN) * LL * 0.5, HINGE[1] - 0.06 + Math.sin(DOWN) * LL * 0.5, 0],
+                     rot: [0, 0, DOWN], jitter: 0.015 });
+        // brow and eyes
+        for (const z of [-1, 1]) {
+          ico(0.16, 0.08, 0.1, [1.28, 0.9, z * 0.24], [0, 0, 0.1], { jitter: 0.01, outScale: 0.6 });
+          ico(0.07, 0.07, 0.07, [1.32, 0.82, z * 0.3], [0, 0, 0], { jitter: 0.01, outScale: 0.6 });
+        }
+        // teeth, along the jaw lines: upper row hangs from the snout's
+        // underside, lower row stands on the jaw bar.
+        for (let i = 0; i < 5; i++) {
+          const d = 0.22 + i * 0.17;
+          const x = HINGE[0] + Math.cos(UP) * d, y = HINGE[1] + 0.16 + Math.sin(UP) * d - 0.19;
+          cells.push({ geo: new THREE.ConeGeometry(0.03, 0.14 - i * 0.012, 4), p: [x, y - 0.06, 0], rot: [0, 0, Math.PI + UP], jitter: 0.003, outScale: 0.7 });
+        }
+        for (let i = 0; i < 4; i++) {
+          const d = 0.28 + i * 0.17;
+          const x = HINGE[0] + Math.cos(DOWN) * d, y = HINGE[1] - 0.06 + Math.sin(DOWN) * d + 0.1;
+          cells.push({ geo: new THREE.ConeGeometry(0.028, 0.12, 4), p: [x, y + 0.05, 0], rot: [0, 0, DOWN], jitter: 0.003, outScale: 0.7 });
+        }
+        // crest: crystal spikes from the neck to the tail root, tallest mid-back
+        const spine = [[1.0, 0.8], [0.62, 0.74], [0.26, 0.68], [-0.1, 0.62], [-0.46, 0.52], [-0.8, 0.38], [-1.12, 0.22]];
+        spine.forEach(([x, y], i) => {
+          const t = i / (spine.length - 1);
+          const h = 0.4 + Math.sin(t * Math.PI) * 0.5 + r() * 0.12;
+          const z = (i % 2 ? 1 : -1) * 0.07;
+          cells.push({ geo: new THREE.ConeGeometry(0.1 + r() * 0.03, h, 5), p: [x, y + h * 0.4, z], rot: [0, r() * 0.6, 0.28 + (r() - 0.5) * 0.12], jitter: 0.012, outScale: 1.3 });
+        });
+        // tail, tapering
+        const tail = [[-1.15, 0.05, 0.44, 0.26], [-1.55, 0.08, 0.38, 0.2], [-1.9, 0.16, 0.32, 0.15], [-2.2, 0.28, 0.26, 0.1]];
+        tail.forEach(([x, y, l, rr], i) => ico(l, rr, rr * 0.9, [x, y, 0], [0, 0, 0.12 + i * 0.1], { jitter: 0.02 }));
         return cells;
       },
       // Chuma — iron (that is what the word means): two heavy heads on a bar.
@@ -1963,11 +2113,11 @@ if (root.classList.contains('no-webgl')) {
       let radius = 0;
 
       for (const c of spec) {
-        let geo = c.box ? new THREE.BoxGeometry(1, 1, 1) : new THREE.IcosahedronGeometry(1, 0);
+        let geo = c.geo ? c.geo : (c.box ? new THREE.BoxGeometry(1, 1, 1) : new THREE.IcosahedronGeometry(1, 0));
         if (geo.index) geo = geo.toNonIndexed();
-        geo.scale(c.s[0], c.s[1], c.s[2]);
+        if (c.s) geo.scale(c.s[0], c.s[1], c.s[2]);
         // Jitter each facet a little so no two faces catch light the same way.
-        const pos = geo.attributes.position, j = c.box ? 0.012 : 0.05;
+        const pos = geo.attributes.position, j = c.jitter ?? (c.box ? 0.012 : 0.05);
         for (let t = 0; t < pos.count; t += 3) {
           const jx = (r() - 0.5) * j, jy = (r() - 0.5) * j, jz = (r() - 0.5) * j;
           for (let k = 0; k < 3; k++) pos.setXYZ(t + k, pos.getX(t + k) + jx, pos.getY(t + k) + jy, pos.getZ(t + k) + jz);
@@ -1992,12 +2142,16 @@ if (root.classList.contains('no-webgl')) {
         parent.add(mesh);
 
         const home = mesh.position.clone();
-        const dir = home.lengthSq() > 1e-4
-          ? home.clone().normalize()
+        // Pieces built in place (a shield's fields) sit at the origin; their
+        // own centre says which way they should fly.
+        const anchor = home.clone();
+        if (c.geo) anchor.add(geo.boundingSphere.center);
+        const dir = anchor.lengthSq() > 1e-4
+          ? anchor.clone().normalize()
           : new THREE.Vector3(r() - 0.5, r() - 0.5, r() - 0.5).normalize();
         cells.push({
           mesh, home, dir,
-          out: 0.32 + r() * 0.5,
+          out: (0.32 + r() * 0.5) * (c.outScale ?? 1),
           tilt: new THREE.Euler((r() - 0.5) * 1.3, (r() - 0.5) * 1.3, (r() - 0.5) * 1.3),
           base: mesh.rotation.clone()
         });
@@ -2080,8 +2234,8 @@ if (root.classList.contains('no-webgl')) {
        relative to the descent axis. Sides match the column the copy is in. */
     const PLAN = {
       hero:    { form: 'cluster', seed: 1013,  cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
-      kazilaw: { form: 'statute', seed: 3041,  cells: 5,                 scale: 1.50, x:  2.35, z: -0.5, face: [0.14, -0.55, 0.03] },
-      dinoig:  { form: 'spine',   seed: 4051,  cells: lowPower ? 5 : 7,  scale: 1.45, x: -2.35, z: -0.5, face: [0.12,  0.42, 0.02] },
+      kazilaw: { form: 'arms',    seed: 3041,  cells: 0,                 scale: 1.78, x:  2.35, z: -0.5, face: [0.06, -0.22, 0.00], sway: 0.24 },
+      dinoig:  { form: 'dino',    seed: 4051,  cells: 0,                 scale: 1.72, x: -2.35, z: -0.5, face: [0.08, -0.55, 0.00], sway: 0.2 },
       chuma:   { form: 'iron',    seed: 5077,  cells: 7,                 scale: 1.45, x:  2.35, z: -0.5, face: [0.34, -0.62, 0.16] },
       sema:    { form: 'signal',  seed: 6091,  cells: 17,                scale: 1.40, x: -2.35, z: -0.5, face: [0.22,  0.38, 0.00] },
       routine: { form: 'rotor',   seed: 7103,  cells: 8,                 scale: 1.30, x:  2.35, z: -0.5, face: [0.30, -0.38, 0.00] },
@@ -2330,7 +2484,7 @@ if (root.classList.contains('no-webgl')) {
           }
           s.body.rotation.y += velocity * 0.00035;
         } else {
-          s.body.rotation.y = (reduce ? 0 : Math.sin(t * 0.26 + s.cfg.seed) * 0.42) + s.kick;
+          s.body.rotation.y = (reduce ? 0 : Math.sin(t * 0.26 + s.cfg.seed) * (s.cfg.sway ?? 0.42)) + s.kick;
           s.body.rotation.x = reduce ? 0 : Math.sin(t * 0.19 + s.cfg.seed * 0.7) * 0.08;
         }
       }
