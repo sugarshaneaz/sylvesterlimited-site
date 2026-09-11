@@ -2053,16 +2053,40 @@ if (root.classList.contains('no-webgl')) {
         tail.forEach(([x, y, l, rr], i) => ico(l, rr, rr * 0.9, [x, y, 0], [0, 0, 0.12 + i * 0.1], { jitter: 0.02 }));
         return cells;
       },
-      // Chuma — iron (that is what the word means): two heavy heads on a bar.
-      iron(r) {
-        const cells = [{ s: [1.1, 0.13, 0.13], rot: [0, 0, 0], p: [0, 0, 0] }];
-        for (const side of [-1, 1]) {
-          cells.push({ s: [0.52, 0.60, 0.52], rot: [r() * 0.4, r() * 0.4, r() * 0.4], p: [side * 0.95, 0, 0] });
-          cells.push({ s: [0.26, 0.42, 0.26], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
-                       p: [side * 1.28, (r() > 0.5 ? 1 : -1) * 0.28, 0.22] });
-          cells.push({ s: [0.22, 0.34, 0.22], rot: [r() * Math.PI, r() * Math.PI, r() * Math.PI],
-                       p: [side * 0.72, -0.34, -0.24] });
-        }
+      // Chuma — iron (that is what the word means): a pair of hex
+      // dumbbells lying on the floor. Hexagonal heads with chamfered ends
+      // and a recessed label plate, collars, a knurled grip. Built with no
+      // facet jitter, so every edge stays dead straight.
+      iron() {
+        const cells = [];
+        const HR = 0.42, HL = 0.5, HX = 0.76;       // head radius, length, centre
+        const alongX = geo => { geo.rotateZ(-Math.PI / 2); return geo; };
+        const bell = (a, ox, oz) => {
+          // place a piece built along local x onto a bell lying at yaw a
+          const put = (geo, x, extra = {}) =>
+            cells.push({ geo, p: [ox + x * Math.cos(a), 0, oz - x * Math.sin(a)], rot: [0, a, 0], jitter: 0, ...extra });
+          for (const side of [-1, 1]) {
+            // hex head: flat face down, so it sits on the floor
+            put(alongX(new THREE.CylinderGeometry(HR, HR, HL, 6, 1)), side * HX, { outScale: 0.9 });
+            // chamfer ring on the outer end
+            const outer = side * (HX + HL / 2 + 0.03);
+            put(alongX(side > 0
+              ? new THREE.CylinderGeometry(HR * 0.84, HR, 0.06, 6, 1)
+              : new THREE.CylinderGeometry(HR, HR * 0.84, 0.06, 6, 1)), outer, { outScale: 0.9 });
+            // recessed label plate on the outer face
+            put(new THREE.BoxGeometry(0.02, 0.17, 0.34), side * (HX + HL / 2 + 0.07), { outScale: 0.7 });
+            // collar where the handle meets the head
+            put(alongX(new THREE.CylinderGeometry(0.115, 0.115, 0.08, 12, 1)), side * (HX - HL / 2 - 0.04), { outScale: 0.7 });
+          }
+          // knurled grip: a bar with two shallow bands
+          put(alongX(new THREE.CylinderGeometry(0.075, 0.075, 0.82, 12, 1)), 0, { outScale: 0.8 });
+          for (const x of [-0.16, 0.16])
+            put(alongX(new THREE.CylinderGeometry(0.083, 0.083, 0.07, 12, 1)), x, { outScale: 0.8 });
+        };
+        // two bells, parallel on the diagonal, one set back behind the other
+        const A = -0.62;
+        bell(A, -0.5, 0.5);
+        bell(A,  0.5, -0.5);
         return cells;
       },
       // Sema — signal: one voice at the centre, two rings radiating out.
@@ -2236,7 +2260,7 @@ if (root.classList.contains('no-webgl')) {
       hero:    { form: 'cluster', seed: 1013,  cells: lowPower ? 7 : 13, scale: 2.05, x:  2.85, z: -0.4, spin: 0.055, mx: 1.2, my: 3.4 },
       kazilaw: { form: 'arms',    seed: 3041,  cells: 0,                 scale: 1.78, x:  2.35, z: -0.5, face: [0.06, -0.22, 0.00], sway: 0.24 },
       dinoig:  { form: 'dino',    seed: 4051,  cells: 0,                 scale: 1.72, x: -2.35, z: -0.5, face: [0.08, -0.55, 0.00], sway: 0.2 },
-      chuma:   { form: 'iron',    seed: 5077,  cells: 7,                 scale: 1.45, x:  2.35, z: -0.5, face: [0.34, -0.62, 0.16] },
+      chuma:   { form: 'iron',    seed: 5077,  cells: 0,                 scale: 1.38, x:  2.15, z: -0.5, face: [0.98, -0.18, 0.00], sway: 0.16 },
       sema:    { form: 'signal',  seed: 6091,  cells: 17,                scale: 1.40, x: -2.35, z: -0.5, face: [0.22,  0.38, 0.00] },
       routine: { form: 'rotor',   seed: 7103,  cells: 8,                 scale: 1.30, x:  2.35, z: -0.5, face: [0.30, -0.38, 0.00] },
       infra:   { form: 'rack',    seed: 8117,  cells: lowPower ? 9 : 18, scale: 1.45, x:  3.10, z: -1.6, face: [0.36, -0.62, 0.10] },
